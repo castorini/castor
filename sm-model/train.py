@@ -28,6 +28,11 @@ logger.addHandler(ch)
 class Trainer(object):
     
     def __init__(self, model, eta, mom, no_loss_reg):
+        # set the random seeds for every instance of trainer. 
+        # needed to ensure reproduction of random word vectors for out of vocab terms
+        torch.manual_seed(1234)
+        np.random.seed(1234)
+
         self.reg = 1e-5
         self.no_loss_reg = no_loss_reg
         self.model = model
@@ -37,13 +42,19 @@ class Trainer(object):
 
         self.datasets = {}
         self.embeddings = {}
+        self.vec_dim = 0
+        
 
-    def load_input_data(self, dataset_root_folder, word_vectors_cache_file, train_set_folder, dev_set_folder, test_set_folder):
-        for set_folder in [train_set_folder, dev_set_folder, test_set_folder]:
+    def load_input_data(self, dataset_root_folder, word_vectors_cache_file, vec_dim, train_set_folder, dev_set_folder, test_set_folder):
+        oov_term = np.random.uniform(-0.25, 0.25, vec_dim) 
+        self.vec_dim = vec_dim
+        for set_folder in [test_set_folder, dev_set_folder, train_set_folder]:
             if set_folder:
                 self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder)
                 # NOTE: self.datasets[set_folder] = questions, sentences, labels, vocab, maxlen_q, maxlen_s, ext_feats 
-                self.embeddings[set_folder] = utils.load_cached_embeddings(word_vectors_cache_file, self.datasets[set_folder][3])
+                self.embeddings[set_folder] = utils.load_cached_embeddings(word_vectors_cache_file, 
+                    self.datasets[set_folder][3], [] if "train" in set_folder else oov_term)
+            
         
     def regularize_loss(self, loss):       
         
@@ -71,8 +82,8 @@ class Trainer(object):
         # logger.debug('loss after criterion {}'.format(loss))
 
         # NOTE: regularizing location 1
-        # if not self.no_loss_reg:
-        #     loss = self.regularize_loss(loss)
+        if not self.no_loss_reg:
+             loss = self.regularize_loss(loss)
         #     logger.debug('loss after regularizing {}'.format(loss))
         
         loss.backward()
@@ -82,8 +93,8 @@ class Trainer(object):
         # logger.debug('params grads {}'.format([p.grad for p in self.model.parameters()]))
        
         # NOTE: regularizing location 2. It would seem that location 1 is correct?
-        if not self.no_loss_reg:
-            loss = self.regularize_loss(loss)
+        #if not self.no_loss_reg:
+        #    loss = self.regularize_loss(loss)
             # logger.debug('loss after regularizing {}'.format(loss))
 
         self.optimizer.step()
@@ -110,7 +121,7 @@ class Trainer(object):
         logger.info('----- Predictions on {} '.format(set_folder))
                 
         questions, sentences, labels, vocab, maxlen_q, maxlen_s, ext_feats = self.datasets[set_folder]
-        word_vectors, vec_dim = self.embeddings[set_folder]
+        word_vectors, vec_dim = self.embeddings[set_folder], self.vec_dim
         
         self.model.eval()
 
@@ -159,7 +170,7 @@ class Trainer(object):
         train_start_time = time.time()
 
         questions, sentences, labels, vocab, maxlen_q, maxlen_s, ext_feats = self.datasets[set_folder]
-        word_vectors, vec_dim = self.embeddings[set_folder]
+        word_vectors, vec_dim = self.embeddings[set_folder], self.vec_dim
 
         # set model for training modep
         self.model.train()
