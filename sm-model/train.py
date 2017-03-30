@@ -27,11 +27,12 @@ logger.addHandler(ch)
 
 class Trainer(object):
     
-    def __init__(self, model, eta, mom, no_loss_reg):
+    def __init__(self, model, eta, mom, no_loss_reg, vec_dim):
         # set the random seeds for every instance of trainer. 
         # needed to ensure reproduction of random word vectors for out of vocab terms
         torch.manual_seed(1234)
         np.random.seed(1234)
+        self.unk_term = np.random.uniform(-0.25, 0.25, vec_dim) 
 
         self.reg = 1e-5
         self.no_loss_reg = no_loss_reg
@@ -42,18 +43,16 @@ class Trainer(object):
 
         self.datasets = {}
         self.embeddings = {}
-        self.vec_dim = 0
+        self.vec_dim = vec_dim
         
 
-    def load_input_data(self, dataset_root_folder, word_vectors_cache_file, vec_dim, train_set_folder, dev_set_folder, test_set_folder):
-        oov_term = np.random.uniform(-0.25, 0.25, vec_dim) 
-        self.vec_dim = vec_dim
+    def load_input_data(self, dataset_root_folder, word_vectors_cache_file, train_set_folder, dev_set_folder, test_set_folder):
         for set_folder in [test_set_folder, dev_set_folder, train_set_folder]:
             if set_folder:
                 self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder)
                 # NOTE: self.datasets[set_folder] = questions, sentences, labels, vocab, maxlen_q, maxlen_s, ext_feats 
                 self.embeddings[set_folder] = utils.load_cached_embeddings(word_vectors_cache_file, 
-                    self.datasets[set_folder][3], [] if "train" in set_folder else oov_term)
+                    self.datasets[set_folder][3], [] if "train" in set_folder else self.unk_term)
             
         
     def regularize_loss(self, loss):       
@@ -106,14 +105,9 @@ class Trainer(object):
         return loss.data[0], self.pred_equals_y(output, ys)
 
 
-    def pred_equals_y(self, pred, y):
-        # logger.debug('pred_equals_y:')
-        # logger.debug(pred)
-        # logger.debug(y)
-        _, best = pred.max(1)
-        # logger.debug('{} {}'.format(_, best))
-        best = best.data.long().squeeze()
-        # logger.debug(best)
+    def pred_equals_y(self, pred, y):        
+        _, best = pred.max(1)        
+        best = best.data.long().squeeze()        
         return torch.sum(y.data.long() == best)
 
 

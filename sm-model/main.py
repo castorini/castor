@@ -64,6 +64,7 @@ def compute_map_mrr(dataset_folder, set_folder, test_scores):
     pargs = shlex.split("/bin/sh run_eval.sh '{}'".format(args.dataset_folder))
     p = subprocess.Popen(pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     pout, perr = p.communicate()    
+    
     lines = pout.split('\n')
     map = float(lines[0].strip().split()[-1])
     mrr = float(lines[1].strip().split()[-1])
@@ -121,9 +122,9 @@ if __name__ == "__main__":
 
     torch.set_num_threads(args.num_threads)
     
-    trainer = Trainer(net, args.eta, args.mom, args.no_loss_reg)
+    trainer = Trainer(net, args.eta, args.mom, args.no_loss_reg, vec_dim)
     logger.info("Loading input data...")
-    trainer.load_input_data(args.dataset_folder, cache_file, vec_dim, train_set, dev_set, test_set)
+    trainer.load_input_data(args.dataset_folder, cache_file, train_set, dev_set, test_set)
 
     best_map = 0.0
     best_model = 0
@@ -134,7 +135,7 @@ if __name__ == "__main__":
         if args.debugSingleBatch: sys.exit(0)
         
         dev_scores = trainer.test(dev_set, args.batch_size)
-
+        
         dev_map, dev_mrr = compute_map_mrr(args.dataset_folder, dev_set, dev_scores)
         logger.info("------- MAP {}, MRR {}".format(dev_map, dev_mrr))
 
@@ -158,8 +159,8 @@ if __name__ == "__main__":
     logger.info('Best MAP in training phase = {:.4f}'.format(best_map))
 
     trained_model = QAModel.load(args.dataset_folder, args.model_fname)
-    evaluator = Trainer(trained_model, args.eta, args.mom, args.no_loss_reg)    
-    evaluator.load_input_data(args.dataset_folder, cache_file, vec_dim, None, None, test_set)
+    evaluator = Trainer(trained_model, args.eta, args.mom, args.no_loss_reg, vec_dim)    
+    evaluator.load_input_data(args.dataset_folder, cache_file, None, None, test_set)
     test_scores = evaluator.test(test_set, args.batch_size)
     
     map, mrr = compute_map_mrr(args.dataset_folder, test_set, test_scores)
