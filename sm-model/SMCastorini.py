@@ -45,17 +45,17 @@ class SMModelCastorini(object):
         self.vocab_dict = {w:k for k,w in enumerate(w2v_vocab_list)}
         return vec_dim
 
+
     def parser(self, q, a):
     	q_toks = TreebankWordTokenizer().tokenize(q)
         q_str = ' '.join(q_toks).lower()
-
-
         a_list = []
         for ans in a:
             ans_toks = TreebankWordTokenizer().tokenize(ans)
             a_str = ' '.join(ans_toks).lower()
             a_list.append(a_str)
         return q_str, a_list
+
 
     def compute_overlap_features(self, q_str, a_list, word2df=None, stoplist=None):
     	word2df = word2df if word2df else {}
@@ -81,6 +81,7 @@ class SMModelCastorini(object):
             df_overlap = 0.0
             for w in word_overlap:
                 df_overlap += word2df[w]
+            
             if len(q_set) == 0 and len(a_set) == 0:
                 df_overlap = 0
             else:
@@ -137,9 +138,8 @@ class SMModelCastorini(object):
         # run through the model
         scores_sentences = []
         for i in xrange(len(a_list)):
-            xq, xa, x_ext_feats = self.get_tensorized_inputs([q], [a_list[i]], [overlap_feats_vec[i]])[0]
-            
-            pred = self.model(xq, xa, x_ext_feats)   
+            xq, xa, x_ext_feats = self.get_tensorized_inputs([q], [a_list[i]], [overlap_feats_vec[i]])[0]          
+            pred = self.model(xq, xa, x_ext_feats)               
             pred = torch.exp(pred)
             scores_sentences.append( (pred.data.squeeze()[1], a_list[i]) )
         
@@ -154,9 +154,17 @@ if __name__ == "__main__":
                     'stopwords.txt',
                     'word2dfs.p')
     
-    q= "the iron lady; a biography of margaret thatcher by hugo young -lrb- farrar , straus&giroux -rrb-"
-    a=["the iron lady ; a biography of margaret asdfasdfsdafsdafsdaf thatcher by hugo young -lrb- farrar , straus & giroux -rrb-", \
-        "the iron lady ;  of margaret asdfasdfsdafsdafsdaf thatcher by hugo young -lrb- farrar , straus & giroux -rrb-"]
+    
+    q = "who is the author of the book , `` the iron lady : a biography of margaret thatcher '' ?"
+    a = [ 
+    "the iron lady ; a biography of margaret thatcher by hugo young -lrb- farrar , straus & giroux -rrb-",
+    "in this same revisionist mold , hugo young , the distinguished british journalist , has performed a brilliant dissection of the notion of thatcher as a conservative icon .",
+    "in `` the iron lady , '' young traces the winding staircase of fortune that transformed the younger daughter of a provincial english grocer into the greatest woman political leader since catherine the great .",
+    "`` he is the very essence of the classless meritocrat , '' says hugo young , thatcher 's biographer .",
+    "from her father , young argues , she inherited a `` joyless earnestness '' that combined with her early interest in science to produce the roots of her public character .",
+    "this is not the answer",
+    "asdfawe asdf sertse dgfsgsfg"
+    ]
 	
     ss = smmodel.rerank_candidate_answers(q, a)
     print 'Question:', q
