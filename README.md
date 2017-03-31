@@ -9,7 +9,8 @@ Pytorch deep learning models.
 
 You need Python 3.6 to use the models in this repository.
 
-As per [pytorch.org](pytorch.org) "Anaconda is our recommended package manager"
+As per [pytorch.org](pytorch.org) 
+> [Anaconda](https://www.continuum.io/downloads) is our recommended package manager
 
 ```conda install pytorch torchvision -c soumith```
 
@@ -22,6 +23,8 @@ We also recommend [gensim](https://radimrehurek.com/gensim/). We use some gensim
 
 Pytorch has good support for GPU computations. 
 CUDA installation guide for linux can be found [here](http://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
+
+**NOTE**: Install CUDA libraries **before** installing conda and pytorch.
 
 
 ## Castor-data
