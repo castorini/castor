@@ -98,7 +98,7 @@ class SMModelCastorini(object):
         terms = sentence.strip().split()                
         # word_embeddings = torch.zeros(max_len, vec_dim).type(torch.DoubleTensor)
         word_embeddings = torch.zeros(len(terms), self.vec_dim).type(torch.DoubleTensor)
-        for i in xrange(len(terms)):
+        for i in range(len(terms)):
             word = terms[i]        
             if word not in self.vocab_dict:
                 emb = torch.from_numpy(self.unk_term_vec)
@@ -116,7 +116,7 @@ class SMModelCastorini(object):
         assert(1 == len(batch_ques) )
         
         tensorized_inputs = []
-        for i in xrange(len(batch_ques)):
+        for i in range(len(batch_ques)):
             xq = Variable(self.make_input_matrix(batch_ques[i]) ) 
             xs = Variable(self.make_input_matrix(batch_sents[i]) )
             ext_feats = Variable(torch.FloatTensor(batch_ext_feats[i]))
@@ -137,7 +137,7 @@ class SMModelCastorini(object):
 
         # run through the model
         scores_sentences = []
-        for i in xrange(len(a_list)):
+        for i in range(len(a_list)):
             xq, xa, x_ext_feats = self.get_tensorized_inputs([q], [a_list[i]], [overlap_feats_vec[i]])[0]          
             pred = self.model(xq, xa, x_ext_feats)               
             pred = torch.exp(pred)
@@ -167,6 +167,6 @@ if __name__ == "__main__":
     ]
 	
     ss = smmodel.rerank_candidate_answers(q, a)
-    print 'Question:', q
+    print('Question:', q)
     for score, sentence in ss:
-        print score, '\t', sentence
+        print(score, '\t', sentence)
