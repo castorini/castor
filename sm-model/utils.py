@@ -99,30 +99,30 @@ def read_in_dataset(dataset_folder, set_folder):
     max_q = 0
     max_s = 0
     set_path = os.path.join(dataset_folder, set_folder)
-    len_q_list =[ len(line.strip().split()) for line in open(os.path.join(set_path, 'a.toks')).readlines() ]
-    questions = [ line.strip() for line in open(os.path.join(set_path, 'a.toks')).readlines() ]
-    len_s_list =[ len(line.strip().split()) for line in open(os.path.join(set_path, 'b.toks')).readlines() ]
-    sentences = [ line.strip() for line in open(os.path.join(set_path, 'b.toks')).readlines() ]
-    labels = [ int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines() ]
-    ext_feats = np.array([ list(map(float, line.strip().split(' '))) for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines() ])
+    len_q_list =[len(line.strip().split()) for line in open(os.path.join(set_path, 'a.toks')).readlines()]
+    questions = [line.strip() for line in open(os.path.join(set_path, 'a.toks')).readlines()]
+    len_s_list =[len(line.strip().split()) for line in open(os.path.join(set_path, 'b.toks')).readlines()]
+    sentences = [line.strip() for line in open(os.path.join(set_path, 'b.toks')).readlines()]
+    labels = [int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines()]
+    ext_feats = np.array([list(map(float, line.strip().split(' '))) for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines()])
 
     #y = torch.from_numpy(labels)
     #return questions, sentences, y
 
-    vocab = [ line.strip() for line in open(os.path.join(dataset_folder, 'vocab.txt')).readlines() ]
+    vocab = [line.strip() for line in open(os.path.join(dataset_folder, 'vocab.txt')).readlines()]
     return questions, sentences, labels, vocab, max(len_q_list), max(len_s_list), ext_feats
 
 
 def get_test_qids_labels(dataset_folder, set_folder):
     set_path = os.path.join(dataset_folder, set_folder)
-    qids = [ line.strip() for line in open(os.path.join(set_path, 'id.txt')).readlines() ]
-    labels = np.array([ int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines() ])
+    qids = [line.strip() for line in open(os.path.join(set_path, 'id.txt')).readlines()]
+    labels = np.array([int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines()])
     return qids, labels
 
 
 if __name__ == "__main__":
     
-    vocab = [ "unk", "idontreallythinkthiswordexists", "hello" ]
+    vocab = ["unk", "idontreallythinkthiswordexists", "hello"]
 
     w2v_dict, vec_dim =  load_cached_embeddings("../../data/word2vec-models/aquaint+wiki.txt.gz.ndim=50.cache", vocab)
     

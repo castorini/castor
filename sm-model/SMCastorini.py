@@ -107,7 +107,7 @@ class SMModelCastorini(object):
                 emb = torch.from_numpy(self.W[self.vocab_dict[word]])                        
             word_embeddings[i] = emb            
         input_tensor = torch.zeros(1, self.vec_dim, len(terms))
-        input_tensor[0] = torch.transpose(word_embeddings, 0 , 1)
+        input_tensor[0] = torch.transpose(word_embeddings, 0, 1)
         return input_tensor
 
 
