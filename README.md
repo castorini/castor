@@ -19,6 +19,9 @@ We also recommend [gensim](https://radimrehurek.com/gensim/). We use some gensim
 
 ```conda install gensim```
 
+Pytorch has good support for GPU computations. 
+CUDA installation guide for linux can be found [here](http://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
+
 
 ## Castor-data
 
