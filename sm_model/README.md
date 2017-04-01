@@ -40,7 +40,7 @@ $ python overlap_features.py ../../Castor-data/TrecQA --train_all
 ```
 $ python main.py  ../../Castor-data/TrecQA/sm.model
 ```
-The final model will be saved to ../../Castor-data/TrecQA/sm.model
+The final model will be saved to ```../../Castor-data/TrecQA/sm.model```
 
 To run the model for the larger training set:
 ```
