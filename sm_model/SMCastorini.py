@@ -135,7 +135,7 @@ class SMModelCastorini(object):
         # run through the model
         scores_sentences = []
         for i in range(len(a_list)):
-            xq, xa, x_ext_feats = self.get_tensorized_inputs([q], [a_list[i]], [overlap_feats_vec[i]])[0]          
+            xq, xa, x_ext_feats = self.get_tensorized_inputs([q_str], [a_list[i]], [overlap_feats_vec[i]])[0]          
             pred = self.model(xq, xa, x_ext_feats)               
             pred = torch.exp(pred)
             scores_sentences.append((pred.data.squeeze()[1], a_list[i]))
@@ -145,8 +145,8 @@ class SMModelCastorini(object):
 
 if __name__ == "__main__":
     
-    smmodel = SMModelCastorini('sm.model.py3', 
-                    '../../data/word2vec-models/aquaint+wiki.txt.gz.ndim=50.cache',
+    smmodel = SMModelCastorini('../../Castor-models/sm_model/sm.model.aquaint.castorini.train-all', 
+                    '../../Castor-data/word2vec-models/aquaint+wiki.txt.gz.ndim=50.cache',
                     'stopwords.txt',
                     'word2dfs.p')
         
