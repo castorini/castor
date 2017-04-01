@@ -145,7 +145,7 @@ class SMModelCastorini(object):
 
 if __name__ == "__main__":
     
-    smmodel = SMModelCastorini('../../Castor-models/sm_model/sm.model.aquaint.castorini.train-all', 
+    smmodel = SMModelCastorini('../../Castor-models/sm_model/sm.model.aquaint.castorini.small', 
                     '../../Castor-data/word2vec-models/aquaint+wiki.txt.gz.ndim=50.cache',
                     '../../Castor-data/TrecQA/stopwords.txt',
                     '../../Castor-data/TrecQA/word2dfs.p')
