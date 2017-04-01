@@ -38,8 +38,15 @@ $ python overlap_features.py ../../Castor-data/TrecQA --train_all
 
 ``3.`` To run the S&M model on TrecQA, please follow the same parameter setting:
 ```
-$ python main.py ../../Castor-data/word2vec-models/aquaint+wiki.txt.gz.ndim\=50.bin ../../Castor-data/TrecQA/ ../../Castor-data/TrecQA/sm.model
+$ python main.py  ../../Castor-data/TrecQA/sm.model
+```
+The final model will be saved to ../../Castor-data/TrecQA/sm.model
+
+To run the model for the larger training set:
+```
+$ python main.py  ../../Castor-data/TrecQA/sm.model --train_all
 ```
 
-Run ```python main.py -h``` for more options.
+
+Run ```python main.py -h``` for more detailed options.
 

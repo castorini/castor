@@ -70,10 +70,14 @@ def compute_map_mrr(dataset_folder, set_folder, test_scores):
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description='pytorch port of the SM model')
-    ap.add_argument('word_vectors_file', help='NOTE: a cache will be created for faster loading for word vectors')
-    ap.add_argument('dataset_folder', help='directory containing train, dev, test sets')
-    ap.add_argument('model_fname', help='model will be saved in args.dataset_folder/<model_fname>')
+    ap = argparse.ArgumentParser(description='pytorch port of the SM model', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    ap.add_argument('model_outfile', help='file to save final model')
+
+    ap.add_argument('--word_vectors_file', help='NOTE: a cache will be created for faster loading for word vectors', 
+        default="../../Castor-data/word2vec-models/aquaint+wiki.txt.gz.ndim=50.bin")
+    ap.add_argument('--dataset_folder', help='directory containing train, dev, test sets', default="../../Castor-data/TrecQA")
+    
     ap.add_argument('--classes', type=int, default=2)
 
     # system arguments
@@ -81,14 +85,14 @@ if __name__ == "__main__":
     ap.add_argument('--num_threads', help="the number of simultaneous processes to run", type=int, default=4)
 
     # training arguments
-    ap.add_argument('--batch_size', type=int, default=1)
-    ap.add_argument('--filter_width', type=int, default=5)    
+    ap.add_argument('--batch_size', type=int, default=1, help="training mini-batch size")
+    ap.add_argument('--filter_width', type=int, default=5, help="number of convolution channels")    
     ap.add_argument('--eta', help='Initial learning rate', default=0.001, type=float)
     ap.add_argument('--mom', help='SGD Momentum', default=0.0, type=float)    
     ap.add_argument('--train_all', help='switches to train-all set', action="store_true")
     
     # epoch related arguments
-    ap.add_argument('--epochs', type=int, default=25)
+    ap.add_argument('--epochs', type=int, default=25, help="number of trainin epochs")
     ap.add_argument('--patience', type=int, default=5, help="if there is no appreciable change in model after <patience> epochs, then stop")
     
     # debugging arguments
@@ -115,7 +119,7 @@ if __name__ == "__main__":
     
     # instantiate model
     net = QAModel(vec_dim, args.filter_width, args.num_conv_filters, args.no_ext_feats) #filter width is 5
-    QAModel.save(net, args.dataset_folder, args.model_fname)
+    QAModel.save(net, args.model_outfile)
 
     torch.set_num_threads(args.num_threads)
     
@@ -140,7 +144,7 @@ if __name__ == "__main__":
             best_model = i
             best_map = dev_map
 
-            QAModel.save(net, args.dataset_folder, args.model_fname)
+            QAModel.save(net, args.model_outfile)
             logger.info('Achieved better dev_map ... saved model')
 
         if args.test_on_each_epoch:            
@@ -155,7 +159,7 @@ if __name__ == "__main__":
     logger.info(' ------------ Training epochs completed! ------------')        
     logger.info('Best MAP in training phase = {:.4f}'.format(best_map))
 
-    trained_model = QAModel.load(args.dataset_folder, args.model_fname)
+    trained_model = QAModel.load(args.model_outfile)
     evaluator = Trainer(trained_model, args.eta, args.mom, args.no_loss_reg, vec_dim)    
     evaluator.load_input_data(args.dataset_folder, cache_file, None, None, test_set)
     test_scores = evaluator.test(test_set, args.batch_size)

@@ -19,7 +19,7 @@ class SMModelCastorini(object):
         np.random.seed(1234)        
 
         # load model
-        self.model = QAModel.load('', model_file)
+        self.model = QAModel.load(model_file)
         # load vectors
         self.vec_dim = self._preload_cached_embeddings(word_embeddings_cache_file)
         self.unk_term_vec = np.random.uniform(-0.25, 0.25, self.vec_dim) 
@@ -147,8 +147,8 @@ if __name__ == "__main__":
     
     smmodel = SMModelCastorini('../../Castor-models/sm_model/sm.model.aquaint.castorini.train-all', 
                     '../../Castor-data/word2vec-models/aquaint+wiki.txt.gz.ndim=50.cache',
-                    'stopwords.txt',
-                    'word2dfs.p')
+                    '../../Castor-data/TrecQA/stopwords.txt',
+                    '../../Castor-data/TrecQA/word2dfs.p')
         
     q = "who is the author of the book , `` the iron lady : a biography of margaret thatcher '' ?"
     a = [ 

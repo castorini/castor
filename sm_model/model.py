@@ -21,13 +21,13 @@ logger.addHandler(ch)
 class QAModel(nn.Module):
     
     @staticmethod
-    def save(model, out_folder, model_fname):
-        torch.save(model, os.path.join(out_folder, model_fname))
+    def save(model, model_fname):
+        torch.save(model, model_fname)
         
 
     @staticmethod
-    def load(in_folder, model_fname):
-        return torch.load(os.path.join(in_folder, model_fname))
+    def load(model_fname):
+        return torch.load(model_fname)
         
         
     def __init__(self, input_n_dim, filter_width, conv_filters=100, no_ext_feats=False, ext_feats_size=4, n_classes=2):
