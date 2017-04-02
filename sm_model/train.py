@@ -49,6 +49,7 @@ class Trainer(object):
                 self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder)
                 # NOTE: self.datasets[set_folder] = questions, sentences, labels,
                 #                                       vocab, maxlen_q, maxlen_s, ext_feats
+                print('paternal' in self.datasets[set_folder][3])
                 self.embeddings[set_folder] = utils.load_cached_embeddings( \
                     word_vectors_cache_file, self.datasets[set_folder][3], \
                     [] if "train" in set_folder else self.unk_term)

@@ -15,7 +15,7 @@ git clone [lintool/Castor-data](https://github.com/lintool/Castor-data)
 
 Castor-data contains:
 
-```word2vec-models/aquaint*```: word embeddings.
+```word2vec/aquaint*```: word embeddings.
 Note that a memory mapped cache will be created on first use on your disk.
 
 ```TrecQA/```: the directory with the input data for training the model.
