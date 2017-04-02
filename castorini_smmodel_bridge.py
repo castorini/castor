@@ -148,7 +148,7 @@ class SMModelBridge(object):
 
 if __name__ == "__main__":
 
-    smmodel = SMModelBridge('../models/sm.model.aquaint.train-all',
+    smmodel = SMModelBridge('../models/sm_model/sm.model.aquaint.train-all.2017-04-02',
                             '../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache',
                             '../data/TrecQA/stopwords.txt',
                             '../data/TrecQA/word2dfs.p')
