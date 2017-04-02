@@ -125,11 +125,11 @@ def get_test_qids_labels(dataset_folder, set_folder):
 
 
 if __name__ == "__main__":
-    
+
     vocab = ["unk", "idontreallythinkthiswordexists", "hello"]
 
-    w2v_dict, vec_dim =  load_cached_embeddings("../../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache", vocab)
-    
+    w2v_dict, vec_dim = load_cached_embeddings("../../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache", vocab)
+
     for w, v in w2v_dict.iteritems():
         print(w)
         print(v)

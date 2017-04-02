@@ -100,7 +100,7 @@ if __name__ == "__main__":
         help="if there is no appreciable change in model after <patience> epochs, then stop")
 
     # debugging arguments
-    ap.add_argument('--debugSingleBatch', action="store_true", \
+    ap.add_argument('--debug_single_batch', action="store_true", \
         help="will stop program after training 1 input batch")
     ap.add_argument('--num_conv_filters', default=100, type=int, \
         help="the number of convolution channels (lesser is faster)")
@@ -140,8 +140,8 @@ if __name__ == "__main__":
 
     for i in range(args.epochs):
         logger.info('------------- Training epoch {} --------------'.format(i+1))
-        train_accuracy = trainer.train(train_set, args.batch_size, args.debugSingleBatch)
-        if args.debugSingleBatch: sys.exit(0)
+        train_accuracy = trainer.train(train_set, args.batch_size, args.debug_single_batch)
+        if args.debug_single_batch: sys.exit(0)
 
         dev_scores = trainer.test(dev_set, args.batch_size)
 
