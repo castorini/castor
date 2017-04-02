@@ -99,12 +99,16 @@ def read_in_dataset(dataset_folder, set_folder):
     max_q = 0
     max_s = 0
     set_path = os.path.join(dataset_folder, set_folder)
-    len_q_list = [len(line.strip().split()) for line in open(os.path.join(set_path, 'a.toks')).readlines()]
+
     questions = [line.strip() for line in open(os.path.join(set_path, 'a.toks')).readlines()]
-    len_s_list = [len(line.strip().split()) for line in open(os.path.join(set_path, 'b.toks')).readlines()]
+    len_q_list = [len(q.split()) for q in questions]
+
     sentences = [line.strip() for line in open(os.path.join(set_path, 'b.toks')).readlines()]
+    len_s_list = [len(s.split()) for s in sentences]
+
     labels = [int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines()]
-    ext_feats = np.array([list(map(float, line.strip().split(' '))) for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines()])
+    ext_feats = np.array([list(map(float, line.strip().split(' '))) \
+        for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines()])
 
     #y = torch.from_numpy(labels)
     #return questions, sentences, y

@@ -48,8 +48,7 @@ class Trainer(object):
             if set_folder:
                 self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder)
                 # NOTE: self.datasets[set_folder] = questions, sentences, labels,
-                #                                       vocab, maxlen_q, maxlen_s, ext_feats
-                print('paternal' in self.datasets[set_folder][3])
+                #                                       vocab, maxlen_q, maxlen_s, ext_feats                
                 self.embeddings[set_folder] = utils.load_cached_embeddings( \
                     word_vectors_cache_file, self.datasets[set_folder][3], \
                     [] if "train" in set_folder else self.unk_term)
@@ -210,8 +209,9 @@ class Trainer(object):
 
 
     def make_input_matrix(self, sentence, word_vectors, vec_dim):
-        terms = sentence.strip().split()
-        # word_embeddings = torch.zeros(max_len, vec_dim).type(torch.DoubleTensor)
+        terms = sentence.strip().split()[:60]
+        # NOTE: we are truncating the inputs to 60 words.
+
         word_embeddings = torch.zeros(len(terms), vec_dim).type(torch.DoubleTensor)
         for i in range(len(terms)):
             word = terms[i]

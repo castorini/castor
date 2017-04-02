@@ -1,4 +1,5 @@
 import os
+import sys
 import pickle
 import string
 from collections import defaultdict
@@ -8,10 +9,12 @@ import torch
 from nltk.tokenize import TreebankWordTokenizer
 from torch.autograd import Variable
 
-from model import QAModel
+from sm_model import model
+
+sys.modules['model'] = model
 
 
-class SMModelcastorini(object):
+class SMModelBridge(object):
 
     def __init__(self, model_file, word_embeddings_cache_file, stopwords_file, word2dfs_file):
         # init torch random seeds
@@ -19,7 +22,7 @@ class SMModelcastorini(object):
         np.random.seed(1234)
 
         # load model
-        self.model = QAModel.load(model_file)
+        self.model = model.QAModel.load(model_file)
         # load vectors
         self.vec_dim = self._preload_cached_embeddings(word_embeddings_cache_file)
         self.unk_term_vec = np.random.uniform(-0.25, 0.25, self.vec_dim)
@@ -145,10 +148,10 @@ class SMModelcastorini(object):
 
 if __name__ == "__main__":
 
-    smmodel = SMModelCastorini('../../Castor-models/sm_model/sm.model.aquaint.castorini.small',
-                               '../../Castor-data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache',
-                               '../../Castor-data/TrecQA/stopwords.txt',
-                               '../../Castor-data/TrecQA/word2dfs.p')
+    smmodel = SMModelBridge('../models/sm.model.aquaint.train-all',
+                            '../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache',
+                            '../data/TrecQA/stopwords.txt',
+                            '../data/TrecQA/word2dfs.p')
 
     question = "who is the author of the book , `` the iron lady : a biography of margaret thatcher '' ?"
     answers = [

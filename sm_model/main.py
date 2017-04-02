@@ -76,9 +76,9 @@ if __name__ == "__main__":
 
     ap.add_argument('--word_vectors_file', \
         help='NOTE: a cache will be created for faster loading for word vectors',
-        default="../../Castor-data/word2vec/aquaint+wiki.txt.gz.ndim=50.bin")
+        default="../../data/word2vec/aquaint+wiki.txt.gz.ndim=50.bin")
     ap.add_argument('--dataset_folder', help='directory containing train, dev, test sets', \
-        default="../../Castor-data/TrecQA")
+        default="../../data/TrecQA")
 
     ap.add_argument('--classes', type=int, default=2)
 

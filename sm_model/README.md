@@ -8,20 +8,28 @@
 1. figure out if the L2 regularization is correct
 2. Batch size of 50 (current batch_size = 1)
 
+#### Requirements
+gensim==1.0.1
+nltk==3.2.2
+numpy==1.11.3
+pandas==0.19.2
+torch==0.1.11+b13b701
 
 #### Getting the data
 
-git clone [lintool/Castor-data](https://github.com/lintool/Castor-data)
+git clone [castorini/data](https://github.com/castorini/data)
 
-Castor-data contains:
+castorini/data contains:
 
-```word2vec/aquaint*```: word embeddings.
-Note that a memory mapped cache will be created on first use on your disk.
+```word2vec/aquaint+wiki.txt.gz.ndim=50.bin```: word embeddings.
+Note that a memory mapped cache will be created on first use on your disk, when you run ```main.py``` (below).
 
 ```TrecQA/```: the directory with the input data for training the model.
 
+Follow instructions in castorini/data/TrecQA/README.md to preprocess data for it to be ingestable by the model.
 
-#### Running it
+
+#### Running the model
 
 ``1.`` Make TrecEval:
 ```
@@ -30,23 +38,11 @@ $ make clean
 $ make
 ```
 
-``2.`` Get the Overlapping features for Q and A:
+``2.`` To run the S&M model on TrecQA, please follow the same parameter setting:
 ```
-$ python overlap_features.py ../../Castor-data/TrecQA
-$ python overlap_features.py ../../Castor-data/TrecQA --train_all
+$ python main.py  ../../model/sm.model.aquaint.train-all --train_all
 ```
+The final model will be saved to ```../../model/sm.model.aquaint.train-all```
 
-``3.`` To run the S&M model on TrecQA, please follow the same parameter setting:
-```
-$ python main.py  ../../Castor-data/TrecQA/sm.model
-```
-The final model will be saved to ```../../Castor-data/TrecQA/sm.model```
-
-To run the model for the larger training set:
-```
-$ python main.py  ../../Castor-data/TrecQA/sm.model --train_all
-```
-
-
-Run ```python main.py -h``` for more detailed options.
+Run ```python main.py -h``` for more default options.
 
