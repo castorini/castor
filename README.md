@@ -27,6 +27,6 @@ CUDA installation guide for linux can be found [here](http://docs.nvidia.com/cud
 **NOTE**: Install CUDA libraries **before** installing conda and pytorch.
 
 
-## Castor-data
+## data for models
 
 Sourcing and pre-processing of input data for each model is described in respective ```model/README.md```'s

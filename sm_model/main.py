@@ -76,9 +76,9 @@ if __name__ == "__main__":
 
     ap.add_argument('--word_vectors_file', \
         help='NOTE: a cache will be created for faster loading for word vectors',
-        default="../../Castor-data/word2vec/aquaint+wiki.txt.gz.ndim=50.bin")
+        default="../../data/word2vec/aquaint+wiki.txt.gz.ndim=50.bin")
     ap.add_argument('--dataset_folder', help='directory containing train, dev, test sets', \
-        default="../../Castor-data/TrecQA")
+        default="../../data/TrecQA")
 
     ap.add_argument('--classes', type=int, default=2)
 
@@ -100,7 +100,11 @@ if __name__ == "__main__":
         help="if there is no appreciable change in model after <patience> epochs, then stop")
 
     # debugging arguments
+<<<<<<< HEAD:sm_model/main.py
     ap.add_argument('--debugSingleBatch', action="store_true", \
+=======
+    ap.add_argument('--debug_single_batch', action="store_true", \
+>>>>>>> a54a4a3ff098e9a0d151a59d61821ab95a7439bc:sm_model/main.py
         help="will stop program after training 1 input batch")
     ap.add_argument('--num_conv_filters', default=100, type=int, \
         help="the number of convolution channels (lesser is faster)")
@@ -140,8 +144,13 @@ if __name__ == "__main__":
 
     for i in range(args.epochs):
         logger.info('------------- Training epoch {} --------------'.format(i+1))
+<<<<<<< HEAD:sm_model/main.py
         train_accuracy = trainer.train(train_set, args.batch_size, args.debugSingleBatch)
         if args.debugSingleBatch: sys.exit(0)
+=======
+        train_accuracy = trainer.train(train_set, args.batch_size, args.debug_single_batch)
+        if args.debug_single_batch: sys.exit(0)
+>>>>>>> a54a4a3ff098e9a0d151a59d61821ab95a7439bc:sm_model/main.py
 
         dev_scores = trainer.test(dev_set, args.batch_size)
 

@@ -49,7 +49,6 @@ class Trainer(object):
                 self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder)
                 # NOTE: self.datasets[set_folder] = questions, sentences, labels,
                 #                                       vocab, maxlen_q, maxlen_s, ext_feats
-                print('paternal' in self.datasets[set_folder][3])
                 self.embeddings[set_folder] = utils.load_cached_embeddings( \
                     word_vectors_cache_file, self.datasets[set_folder][3], \
                     [] if "train" in set_folder else self.unk_term)
@@ -162,7 +161,7 @@ class Trainer(object):
         return y_pred
 
 
-    def train(self, set_folder, batch_size, debugSingleBatch):
+    def train(self, set_folder, batch_size, debug_single_batch):
         train_start_time = time.time()
 
         questions, sentences, labels, vocab, maxlen_q, maxlen_s, ext_feats = \
@@ -197,7 +196,8 @@ class Trainer(object):
             # logger.debug('batch_loss {}, batch_correct {}'.format(batch_loss, batch_correct))
             train_loss += batch_loss
             # train_correct += batch_correct
-            if debugSingleBatch: break
+            if debug_single_batch: 
+                break
 
         # logger.info('train_correct {}'.format(train_correct))
         logger.info('train_loss {}'.format(train_loss))
@@ -210,8 +210,9 @@ class Trainer(object):
 
 
     def make_input_matrix(self, sentence, word_vectors, vec_dim):
-        terms = sentence.strip().split()
-        # word_embeddings = torch.zeros(max_len, vec_dim).type(torch.DoubleTensor)
+        terms = sentence.strip().split()[:60]
+        # NOTE: we are truncating the inputs to 60 words.
+
         word_embeddings = torch.zeros(len(terms), vec_dim).type(torch.DoubleTensor)
         for i in range(len(terms)):
             word = terms[i]
