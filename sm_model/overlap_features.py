@@ -114,7 +114,7 @@ def compute_dfs(docs):
 
 if __name__ == '__main__':
   ap = argparse.ArgumentParser(description="compute overlap features for SM model")
-  ap.add_argument("dataset", help="path/to/dataset-directory", default="../../data/TrecQA")
+  ap.add_argument("dataset", help="path/to/dataset-directory")
   ap.add_argument("--train_all", help="will generate overlap features for the train-all dataset", action="store_true")
   args = ap.parse_args()
 
