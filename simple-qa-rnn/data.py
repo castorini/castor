@@ -3,7 +3,7 @@ import string
 import pickle
 import numpy as np
 import torch
-import torch.autograd as autograd
+from torch.autograd import Variable
 
 def get_all_lines(data_filename):
     all_lines = []
@@ -46,3 +46,11 @@ def label_to_vector(label_ix, num_labels):
     y_vec = np.zeros(num_labels, dtype=np.int32)
     y_vec[label_ix] = 1
     return y_vec
+
+def create_tensorized_data(sentence, label, w2v_map, label_to_ix):
+    # x.shape: |S| X |D| - sentence length can vary between examples, dimension is fixed
+    x = text_to_vector(sentence, w2v_map)
+    y = label_to_ix[label]
+    inputs = Variable(torch.Tensor(x))
+    targets = Variable(torch.LongTensor([y]))
+    return inputs, targets
