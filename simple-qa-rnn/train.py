@@ -15,13 +15,13 @@ args = get_args()
 
 # ---- Load Datasets ------
 train_file = "datasets/SimpleQuestions_v2/annotated_fb_data_train.txt"
-valid_file = "datasets/SimpleQuestions_v2/annotated_fb_data_valid.txt"
+val_file = "datasets/SimpleQuestions_v2/annotated_fb_data_valid.txt"
 test_file = "datasets/SimpleQuestions_v2/annotated_fb_data_test.txt"
 
 train_set = data.create_rp_dataset(train_file)
-valid_set = data.create_rp_dataset(valid_file)
+val_set = data.create_rp_dataset(val_file)
 # test_set = data.create_rp_dataset(test_file)
-dev_set = train_set[:1000]  # work with few examples first
+dev_set = train_set[:20]  # work with few examples first
 
 # ---- Build Vocabulary ------
 w2v_map = data.load_map("resources/w2v_map_SQ.pkl")
@@ -43,6 +43,9 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 # ---- Train Model ------
 iter = 0
+best_val_acc = -1
+train_accs = []
+val_accs = []
 losses = [] # for plotting later
 for epoch in range(args.epochs):
     # shuffle the dataset and create batches
@@ -50,6 +53,7 @@ for epoch in range(args.epochs):
     batch_indices = np.split(shuffled_indices,
                              list(range(args.batch_size, len(shuffled_indices), args.batch_size)))
     epoch_loss = 0.0
+    n_correct, n_total, train_acc = 0, 0, 0
     for batch_ix in batch_indices:
         batch = dev_set[batch_ix]
         batch_loss = 0.0
@@ -67,6 +71,10 @@ for epoch in range(args.epochs):
             x_var = Variable(torch.Tensor(x))
             rel_scores = model(x_var)
 
+            # keep count train accuracy
+            n_correct += (rel_scores.data.numpy().argmax() == y)
+            n_total += 1
+
             # compute the loss, gradients, and update the parameters
             targets = Variable(torch.LongTensor( [y] ))
             loss = loss_function(rel_scores, targets)
@@ -76,6 +84,8 @@ for epoch in range(args.epochs):
 
         epoch_loss += batch_loss
         losses.append(epoch_loss)
+        train_acc = (100.0 * n_correct) / n_total
+        train_accs.append(train_acc)
 
-    if (epoch % args.log_every) == 0:
-        print("epoch {:4d} loss {}".format(epoch, epoch_loss))
+    if ((epoch+1) % args.log_every) == 0:
+        print("epoch {:4d} loss {:.3f} train_acc {:.1f}%".format(epoch+1, epoch_loss, train_acc))
