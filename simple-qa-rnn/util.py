@@ -3,13 +3,13 @@ from argparse import ArgumentParser
 
 def get_args():
     parser = ArgumentParser(description='Simple QA BiGRU model - Ferhan')
-    parser.add_argument('--epochs', type=int, default=1)
-    parser.add_argument('--batch_size', type=int, default=3)
+    parser.add_argument('--epochs', type=int, default=200)
+    parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--d_embedding', type=int, default=300)
-    parser.add_argument('--d_hidden', type=int, default=1000)
+    parser.add_argument('--d_hidden', type=int, default=100)
     parser.add_argument('--n_layers', type=int, default=1)
     parser.add_argument('--not_bidirectional', action='store_false', dest='birnn')
-    parser.add_argument('--log_every', type=int, default=50)
+    parser.add_argument('--log_every', type=int, default=1)
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--dev_every', type=int, default=1000)
     parser.add_argument('--save_every', type=int, default=1000)

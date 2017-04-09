@@ -41,7 +41,8 @@ def text_to_vector(text, w2v_map):
         vec.append( w2v_map[token] )
     return np.array(vec)
 
-def prepare_sequence(seq, word_to_ix):
-    idxs = list(map(lambda w: word_to_ix[w], seq))
-    tensor = torch.LongTensor(idxs)
-    return autograd.Variable(tensor)
+def label_to_vector(label_ix, num_labels):
+    # create one-hot vector label representation
+    y_vec = np.zeros(num_labels, dtype=np.int32)
+    y_vec[label_ix] = 1
+    return y_vec
