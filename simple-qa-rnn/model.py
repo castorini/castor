@@ -3,10 +3,10 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torch.nn.functional as F
 
-class BiLSTM1(nn.Module):
+class BiLSTM(nn.Module):
 
     def __init__(self, config):
-        super(BiLSTM1, self).__init__()
+        super(BiLSTM, self).__init__()
         self.config = config
 
         self.lstm = nn.LSTM(input_size=config.d_embedding, hidden_size=config.d_hidden,

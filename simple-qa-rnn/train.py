@@ -6,7 +6,7 @@ import torch
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.optim as optim
-from model import BiLSTM1
+from model import BiLSTM
 from util import get_args
 import data
 
@@ -21,7 +21,10 @@ def evaluate_dataset(data_set, model, w2v_map, label_to_ix):
     for sentence, label in data_set:
         inputs, targets = data.create_tensorized_data(sentence, label, w2v_map, label_to_ix)
         scores = model(inputs)
-        n_correct += (scores.data.numpy()[0].argmax() == label_to_ix[label])
+        pred_label_ix = scores.data.numpy()[0].argmax()
+        correct_label_ix = label_to_ix[label]
+        # print("pred_label: {}, correct_label: {}".format(pred_label_ix, correct_label_ix))
+        n_correct += (pred_label_ix == correct_label_ix)
     acc = (100.0 * n_correct) / n_total
     return acc
 
@@ -33,7 +36,7 @@ test_file = "datasets/SimpleQuestions_v2/annotated_fb_data_test.txt"
 train_set = data.create_rp_dataset(train_file)
 val_set = data.create_rp_dataset(val_file)
 # test_set = data.create_rp_dataset(test_file)
-dev_set = train_set[:20]  # work with few examples first
+dev_set = train_set[:20] # work with few examples first
 
 # ---- Build Vocabulary ------
 w2v_map = data.load_map("resources/w2v_map_SQ.pkl")
@@ -46,7 +49,7 @@ num_classes = len(label_to_ix)
 config = args
 config.d_out = num_classes
 # config.n_layers = 2
-model = BiLSTM1(config)
+model = BiLSTM(config)
 loss_function = nn.NLLLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
@@ -54,12 +57,12 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr)
 iter = 0
 for epoch in range(args.epochs):
     # shuffle the dataset and create batches
-    shuffled_indices = np.random.permutation(len(dev_set))
+    shuffled_indices = np.random.permutation(len(train_set))
     batch_indices = np.split(shuffled_indices,
                              list(range(args.batch_size, len(shuffled_indices), args.batch_size)))
     epoch_loss = 0.0
     for batch_ix in batch_indices:
-        batch = dev_set[batch_ix]
+        batch = train_set[batch_ix]
         for sentence, label in batch:
             iter += 1
             inputs, targets = data.create_tensorized_data(sentence, label, w2v_map, label_to_ix)
@@ -77,7 +80,7 @@ for epoch in range(args.epochs):
             loss.backward()
             optimizer.step()
 
-        # log after every epoch
-        train_acc = evaluate_dataset(dev_set, model, w2v_map, label_to_ix)
-        print("epoch {:4d} loss {:6.3f} train_acc {:3.1f}%".format(epoch+1, epoch_loss, train_acc))
+    # log after every epoch
+    val_acc = evaluate_dataset(val_set, model, w2v_map, label_to_ix)
+    print("epoch {:2d}, loss {:6f}, val_acc {:.1f}%".format(epoch+1, epoch_loss, val_acc))
 
