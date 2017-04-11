@@ -28,15 +28,29 @@ def tokenize_text(text):
     tokens = nltk.word_tokenize(processed_text)
     return tokens
 
+def add_padding_tokens(text_tokens, max_length, pad_type='both', pad_token='<pad>'):
+    num_pads = max_length - len(text_tokens)
+    right_pad = int(num_pads / 2)
+    left_pad = num_pads - right_pad
+    if pad_type == "both":
+        padded_tokens = [pad_token]*left_pad + text_tokens + [pad_token]*right_pad
+    elif pad_type == "right":
+        padded_tokens = text_tokens + [pad_token]*num_pads
+    else:
+        padded_tokens = [pad_token]*num_pads + text_tokens
+    return padded_tokens
+
 def load_map(pname):
     ret_map = None
     with open(pname, 'rb') as fh:
         ret_map = pickle.load(fh)
     return ret_map
 
-def text_to_vector(text, w2v_map):
+def text_to_vector(text, w2v_map, pad=False, max_length=None):
     vec = []
     tokens = tokenize_text(text)
+    if pad and (max_length != None):
+        tokens = add_padding_tokens(tokens, max_length)
     for token in tokens:
         vec.append( w2v_map[token] )
     return np.array(vec)
@@ -53,4 +67,14 @@ def create_tensorized_data(sentence, label, w2v_map, label_to_ix):
     y = label_to_ix[label]
     inputs = Variable(torch.Tensor(x))
     targets = Variable(torch.LongTensor([y]))
+    return inputs, targets
+
+def create_tensorized_batch(batch, max_sent_length, w2v_map, label_to_ix):
+    X = []
+    y = []
+    for sent, label in batch:
+        X.append( text_to_vector(sent, w2v_map, pad=True, max_length=max_sent_length) )
+        y.append( label_to_ix[label] )
+    inputs = Variable(torch.Tensor(X))
+    targets = Variable(torch.LongTensor(y))
     return inputs, targets
