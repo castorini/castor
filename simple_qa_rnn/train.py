@@ -28,7 +28,7 @@ def evaluate_dataset_batch(data_set, max_sent_length, model, w2v_map, label_to_i
         batch = data_set[batch_indices[batch_ix]]
         inputs, targets = data.create_tensorized_batch(batch, max_sent_length, w2v_map, label_to_ix)
         scores = model(inputs)
-        pred_label_ix = np.argmax(scores.data.numpy(), axis=1)
+        pred_label_ix = np.argmax(scores.data.numpy(), axis=1) # check this properly
         correct_label_ix = targets.data.numpy()
         n_correct += (pred_label_ix == correct_label_ix).sum()
     acc = n_correct / n_total
