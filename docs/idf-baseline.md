@@ -1,11 +1,18 @@
 # IDF scorer 
 
-[comment]: <> (Update this to a new location once the data is uploaded)
-Download the TrecQA, WikiQA, and SQuAD data from 
-[here](https://github.com/gauravbaruah/finding-nugget-representations/tree/master/data/TrecQA)
+Download the TrecQA, WikiQA, and SQuAD data from [here](https://github.com/castorini/data.git)
 
-After downloading the data you should have the following directory 
-structure:
+Switch to appropriate directory and run the following scripts:
+
+```
+python3 parse.py
+
+python3 overlap_features.py
+
+python3 build_vocab.py
+```
+
+After running the script you should have the following directory structure:
 
 ```
 ├── clean-dev
