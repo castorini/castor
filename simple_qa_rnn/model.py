@@ -17,7 +17,7 @@ class BiLSTM(nn.Module):
         self.hidden2label = nn.Linear(config.n_layers*config.n_directions*config.d_hidden, config.d_out)
         self.hidden = self.init_hidden()
         # self.dropout = nn.Dropout(p=config.dropout_prob)
-        self.log_softmax = nn.LogSoftmax()
+        # self.log_softmax = nn.LogSoftmax()
 
 
     def init_hidden(self):
@@ -30,8 +30,7 @@ class BiLSTM(nn.Module):
     def forward(self, embeds):
         batch_size = embeds.data.size()[0]
         sequence_length = embeds.data.size()[1]
-        lstm_out, self.hidden = self.lstm(embeds.view(batch_size, sequence_length, -1), self.hidden)
-        ht = self.hidden[0] # hidden = (ht, ct)
+        lstm_out, self.hidden = self.lstm(embeds, self.hidden)
         # print("ht size: {}".format(ht.size()))
-        rel_space = self.hidden2label(ht.transpose(0, 1).contiguous().view(batch_size, -1)) # size - (|B|, |K|)
+        rel_space = self.hidden2label(self.hidden[0].transpose(0, 1).contiguous().view(batch_size, -1)) # size - (|B|, |K|)
         return rel_space

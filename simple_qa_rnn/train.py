@@ -30,11 +30,6 @@ def evaluate_dataset_batch(data_set, max_sent_length, model, w2v_map, label_to_i
         scores = model(inputs)
         pred_label_ix = np.argmax(scores.data.numpy(), axis=1) # check this properly
         correct_label_ix = targets.data.numpy()
-
-        print("scores size: {}".format(scores.size()))
-        print("pred_label_ix shape: {}".format(pred_label_ix.shape))
-
-
         n_correct += (pred_label_ix == correct_label_ix).sum()
     acc = n_correct / n_total
     return acc
@@ -75,7 +70,7 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr)
 start = time.time()
 best_val_acc = -1
 iter = 0
-header = '  Time Epoch Iteration     Loss  Train/Accuracy   Val/Accuracy'
+header = '  Time Epoch Iteration     Loss   Train/Acc.  Val/Acc.'
 print(header)
 log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>9.6f}'.split(','))
 dev_log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>9.6f},{:9.6f},{:9.6f}'.split(','))
@@ -110,7 +105,7 @@ for epoch in range(args.epochs):
 
         # log at intervals
         if iter % args.dev_every == 0:
-            train_acc = evaluate_dataset_batch(train_set, max_sent_length, model, w2v_map, label_to_ix)
+            train_acc = evaluate_dataset_batch(train_set[:2000], max_sent_length, model, w2v_map, label_to_ix)
             val_acc = evaluate_dataset_batch(val_set, max_sent_length, model, w2v_map, label_to_ix)
             print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
             if val_acc > best_val_acc:
