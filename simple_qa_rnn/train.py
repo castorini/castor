@@ -70,10 +70,10 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr)
 start = time.time()
 best_val_acc = -1
 iter = 0
-header = '  Time Epoch Iteration     Loss   Train/Acc.  Val/Acc.'
+header = '  Time Epoch Iteration     Loss   Train/Acc.   Val/Acc.'
 print(header)
 log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>9.6f}'.split(','))
-dev_log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>9.6f},{:9.6f},{:9.6f}'.split(','))
+dev_log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>9.6f},{:9.6f},{:11.6f}'.split(','))
 
 model.train()
 for epoch in range(args.epochs):
