@@ -33,4 +33,5 @@ class BiLSTM(nn.Module):
         lstm_out, self.hidden = self.lstm(embeds, self.hidden)
         # print("ht size: {}".format(ht.size()))
         rel_space = self.hidden2label(self.hidden[0].transpose(0, 1).contiguous().view(batch_size, -1)) # size - (|B|, |K|)
-        return rel_space
+        scores = F.log_softmax(rel_space)
+        return scores

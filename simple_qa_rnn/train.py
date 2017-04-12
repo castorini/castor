@@ -34,9 +34,14 @@ def evaluate_dataset_batch(data_set, max_sent_length, model, w2v_map, label_to_i
     acc = n_correct / n_total
     return acc
 
+def repackage_hidden(h):
+    """Wraps hidden states in new Variables, to detach them from their history."""
+    if type(h) == Variable:
+        return Variable(h.data)
+    else:
+        return tuple(repackage_hidden(v) for v in h)
 
-
-# ---- Load Datasets ------
+#Load Datasets ------
 train_file = "datasets/SimpleQuestions_v2/annotated_fb_data_train.txt"
 val_file = "datasets/SimpleQuestions_v2/annotated_fb_data_valid.txt"
 test_file = "datasets/SimpleQuestions_v2/annotated_fb_data_test.txt"
@@ -63,7 +68,7 @@ config.birnn = False
 config.n_directions = 2 if config.birnn else 1
 print(config)
 model = BiLSTM(config)
-loss_function = nn.CrossEntropyLoss()
+loss_function = nn.NLLLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 # ---- Train Model ------
@@ -82,6 +87,7 @@ for epoch in range(args.epochs):
     num_batches = len(shuffled_indices) // args.batch_size
     batch_indices = np.split(shuffled_indices,
                                 range(args.batch_size, len(shuffled_indices), args.batch_size))
+    model.hidden = model.init_hidden()
     for batch_ix in range(num_batches):
         iter += 1
         batch = train_set[batch_indices[batch_ix]]
@@ -91,7 +97,7 @@ for epoch in range(args.epochs):
 
         # clear out gradients and hidden states of the model
         model.zero_grad()
-        model.hidden = model.init_hidden()
+        model.hidden = repackage_hidden(model.hidden)
 
         # prepare inputs for LSTM model and run forward pass
         scores = model(inputs)
@@ -105,7 +111,7 @@ for epoch in range(args.epochs):
 
         # log at intervals
         if iter % args.dev_every == 0:
-            train_acc = evaluate_dataset_batch(train_set[:2000], max_sent_length, model, w2v_map, label_to_ix)
+            train_acc = evaluate_dataset_batch(train_set[:8000], max_sent_length, model, w2v_map, label_to_ix)
             val_acc = evaluate_dataset_batch(val_set, max_sent_length, model, w2v_map, label_to_ix)
             print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
             if val_acc > best_val_acc:
