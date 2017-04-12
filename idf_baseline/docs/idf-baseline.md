@@ -1,8 +1,8 @@
 # IDF scorer 
 
-Download the TrecQA, WikiQA, and SQuAD data from [here](https://github.com/castorini/data.git)
+Download the TrecQA and WikiQA data (question-answer pairs) from[here](https://github.com/castorini/data.git)
 
-Switch to appropriate directory and run the following scripts:
+Switch to an appropriate directory and run the following scripts:
 
 ```
 python3 parse.py
@@ -12,7 +12,7 @@ python3 overlap_features.py
 python3 build_vocab.py
 ```
 
-After running the script you should have the following directory structure:
+After running the script, you should have the following directory structure:
 
 ```
 ├── raw-dev
@@ -29,6 +29,51 @@ and each directory should have the following files:
 ├── numrels.txt
 └── sim.txt
 ```
+ 
+Clone and compile[Anserini](https://github.com/castorini/Anserini.git)
+
+```
+git clone https://github.com/castorini/Anserini.git
+cd Anserini
+mvn clean package appassembler:assemble
+``` 
+ 
+### Indexing WikiQA collection
+
+First, download the Wikipedia dump by running the following command:
+
+```
+mkdir WikiQACollection
+for line in $(cat idf_baseline/src/main/resources/WikiQA/wikidump-list.txt); do wget $line -P WikiQACollection; done
+```
+
+To index the collection:
+```
+cd Anserini
+nohup sh target/appassembler/bin/IndexCollection -collection WikipediaCollection -input ../WikiQACollection
+-generator JsoupGenerator -index lucene.index.wikipedia.pos.docvectors -threads 32 -storePositions 
+-storeDocvectors -optimize > log.wikipedia.pos.docvectors & 
+```
+
+### Indexing TrecQA collection
+
+Create a new directory called TrecQACollection
+```
+mkdir TrecQACollection
+```
+
+Copy the contents of disk1, disk2, disk3, disk4, and AQUAINT to TrecQACollection
+
+To index the collection:
+
+```
+cd Anserini
+nohup sh target/appassembler/bin/IndexCollection -collection TrecCollection -input [path of TrecQACollection]
+-generator JsoupGenerator -index lucene.index.trecQA.pos.docvectors -threads 32 -storePositions 
+-storeDocvectors -optimize > log.trecQA.pos.docvectors & 
+```
+
+### Calculating IDF overlap
 
 Run the following command to score each answer with an IDF value:
 
