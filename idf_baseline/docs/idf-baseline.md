@@ -15,8 +15,6 @@ python3 build_vocab.py
 After running the script you should have the following directory structure:
 
 ```
-├── clean-dev
-├── clean-test
 ├── raw-dev
 ├── raw-test
 ├── train
