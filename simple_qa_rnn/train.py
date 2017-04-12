@@ -63,8 +63,6 @@ max_sent_length = 36  # set from the paper
 # ---- Define Model, Loss, Optim ------
 config = args
 config.d_out = num_classes
-config.n_layers = 1
-config.birnn = False
 config.n_directions = 2 if config.birnn else 1
 print(config)
 model = BiLSTM(config)
