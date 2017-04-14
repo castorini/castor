@@ -1,36 +1,42 @@
 # IDF scorer 
 
-Download the TrecQA and WikiQA data (question-answer pairs) from[here](https://github.com/castorini/data.git)
+Implements a IDF baselines for QA datasets.
 
-Switch to an appropriate directory and run the following scripts:
+### Getting the data
 
-```
-python3 parse.py
+Git clone [castorini/data](https://github.com/castorini/data) to get TrecQA and WikiQA datasets.
 
-python3 overlap_features.py
+Follow instructions in ``TrecQA/README.txt`` and ``WikiQA/README.txt`` to process the data into a _standard_ format.
 
-python3 build_vocab.py
-```
-
-After running the script, you should have the following directory structure:
-
+After running the respectve scripts, you should have the following directories structure in ``castorini/data/TrecQA``
 ```
 ├── raw-dev
 ├── raw-test
 ├── train
 └── train-all
 ```
-and each directory should have the following files:
+
+and, the following directories in ``castorini/data/WikiQA``.
 ```
-├── a.toks
-├── b.toks
-├── boundary.txt
-├── id.txt
-├── numrels.txt
-└── sim.txt
+├── dev
+├── test
+├── train
 ```
+
+Each directory will have the following files:
+``├── a.toks``: question[i]
+``├── b.toks``: answer[i]
+``├── id.txt``: question_id[i]
+``└── sim.txt``: label[i]
+where 1 <= i <= (number of QA pairs in respective splits of the data)
  
-Clone and compile[Anserini](https://github.com/castorini/Anserini.git)
+
+### Creating indexes for source corpora
+
+We need to index the source corpus from which the question-answer pairs are derived in order to get the IDF weights of the terms.
+
+
+#### 1. Clone and compile[Anserini](https://github.com/castorini/Anserini.git)
 
 ```
 git clone https://github.com/castorini/Anserini.git
@@ -38,7 +44,7 @@ cd Anserini
 mvn clean package appassembler:assemble
 ``` 
  
-### Indexing WikiQA collection
+#### 2. Indexing WikiQA collection
 
 First, download the Wikipedia dump by running the following command:
 
@@ -55,9 +61,9 @@ nohup sh target/appassembler/bin/IndexCollection -collection WikipediaCollection
 -storeDocvectors -optimize > log.wikipedia.pos.docvectors & 
 ```
 
-### Indexing TrecQA collection
+#### 3. Indexing TrecQA collection
 
-Create a new directory called TrecQACollection
+Create a new directories called TrecQACollection
 ```
 mkdir TrecQACollection
 ```
@@ -73,13 +79,23 @@ nohup sh target/appassembler/bin/IndexCollection -collection TrecCollection -inp
 -storeDocvectors -optimize > log.trecQA.pos.docvectors & 
 ```
 
-### Calculating IDF overlap
+### Computing the IDF overlap baseline
+
+Build the IDF scorer
+```
+cd castorini/Castor/idf_baseline
+mvn clean package appassembler:assemble
+```
 
 Run the following command to score each answer with an IDF value:
 
 ```
-sh target/appassembler/bin/GetIDF
+sh target/appassembler/bin/GetIDF -index ~/large-local-work/indices/index.wikipedia.pos.docvectors -config ../../data/WikiQA/test -output WikiQA.test.scores
 ```
+The above command will create a run file in the `trec_eval` format and a qrel file
+at a location specified by `-output`.
+
+
 
 Possible parameters are:
 
@@ -90,25 +106,22 @@ Possible parameters are:
 Path of the index
 
 ```
--config (requiered)
+-config (required)
 ```
 Configuration of this experiment i.e., dev, train, train-all, test etc.
 
 ```
--output (optional: file path)
+-output (required)
 ```
-
 Path of the run file to be created
 
 ```
 -analyze 
 ```
-If specified, the scorer uses  `EnglishAnalyzer` for removing stopwords and stemming. In addtion to 
+If specified, the scorer uses  `EnglishAnalyzer` for removing stopwords and performing stemming. In addition to 
 the default list, the analyzer uses NLTK's stopword list obtained 
 from[here](https://gist.github.com/sebleier/554280)
 
-The above command will create a run file in the `trec_eval` format and a qrel file
-at a location specified by `-output`.
 
 ### Evaluating the system:
 

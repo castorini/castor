@@ -137,7 +137,7 @@ public class IDFScorer {
 
       // 32.1 0 0 0 0.6212325096130371 smmodel
       // 32.1 0 1 0 0.13309887051582336 smmodel
-      outputFile.write(id + " 0 " + i + " " + calcIDF(question, answer, args.analyze) + " smmodel\n");
+      outputFile.write(id + " 0 " + i + " 0 " + calcIDF(question, answer, args.analyze) + " idfbaseline\n");
       i++;
     }
     outputFile.close();
