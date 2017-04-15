@@ -1,0 +1,26 @@
+Baseline_method	condition	idf	dataset	train_MAP	dev_MAP	test_MAP
+idf_sum_similarity	ignore_test_set_for_idf_computation	Dataset – test	TrecQA	0.6383	0.6795	0.615
+idf_sum_similarity	use_complete_data_for_idf	dataset	TrecQA	0.6384	0.6795	0.6268
+idf_sum_similarity	ignore_test_set_for_idf_computation	Dataset – test	WikiQA	0.0002	0	0.0016
+idf_sum_similarity	use_complete_data_for_idf	dataset	WikiQA	0.0002	0	0.0016
+						
+idf_sum_similarity	no_stopping + no_stemming	Corpus	TrecQA			
+idf_sum_similarity	with_stopping + with_stemming	Corpus	TrecQA			
+idf_sum_similarity	no_stopping + no_stemming	Corpus	WikiQA			
+idf_sum_similarity	with_stopping + with_stemming	Corpus	WikiQA			
+						
+sm_model	with_no_idf_overlap_features	NA	TrecQA			
+sm_model	with_corrected_idf_overlap_features	Dataset – test	TrecQA			
+sm_model	with_corrected_idf_overlap_features	Dataset 	TrecQA			
+sm_model	with_corrected_idf_overlap_features	Corpus	TrecQA			
+sm_model	with_fractional_idf_overlap_features	Dataset – test	TrecQA			
+sm_model	with_fractional_idf_overlap_features	Dataset	TrecQA			
+sm_model	with_fractional_idf_overlap_features	Corpus	TrecQA			
+						
+						
+						
+						
+log_reg_baseline						
+log_reg_baseline						
+log_reg_baseline						
+log_reg_baseline						

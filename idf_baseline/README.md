@@ -1,6 +1,6 @@
 # IDF scorer 
 
-Implements a IDF baselines for QA datasets.
+Implements IDF baselines for QA datasets.
 
 ### Getting the data
 
@@ -79,7 +79,9 @@ nohup sh target/appassembler/bin/IndexCollection -collection TrecCollection -inp
 -storeDocvectors -optimize > log.trecQA.pos.docvectors & 
 ```
 
-### Computing the IDF overlap baseline
+### Computing the IDF sum similarity baseline
+
+#### 1. IDF sum similarity using the entire source corpus to compute IDF of terms
 
 Build the IDF scorer
 ```
@@ -90,7 +92,7 @@ mvn clean package appassembler:assemble
 Run the following command to score each answer with an IDF value:
 
 ```
-sh target/appassembler/bin/GetIDF -index ~/large-local-work/indices/index.wikipedia.pos.docvectors -config ../../data/WikiQA/test -output WikiQA.test.scores
+sh target/appassembler/bin/GetIDF -index ~/large-local-work/indices/index.wikipedia.pos.docvectors -config ../../data/WikiQA/test -output WikiQA.test.idfsim
 ```
 The above command will create a run file in the `trec_eval` format and a qrel file
 at a location specified by `-output`.
@@ -123,7 +125,8 @@ the default list, the analyzer uses NLTK's stopword list obtained
 from[here](https://gist.github.com/sebleier/554280)
 
 
-### Evaluating the system:
+
+#### 2. Evaluating the system:
 
 To calculate MAP/MRR for the above run file:
 
@@ -142,3 +145,14 @@ For the TrecQA dataset
 ```
 ../../Anserini/eval/trec_eval.9.0/trec_eval -m map ../../data/TrecQA/$set.qrel TrecQA.$set.idfsim
 ```
+
+#### 3. IDF sum similarity  using only the QA dataset to compute IDF of terms
+
+```
+python qa-data-idf-only.py ../../data/TrecQA TrecQA
+python qa-data-only-idf.py ../../data/WikiQA WikiQA
+```
+Evaluate these using step 2.
+
+### Baseline results
+Baseline results are saved in ``Castor/baseline_results.tsv``
