@@ -3,10 +3,10 @@ idf_sum_similarity	Dataset – test		TrecQA	0.6383	0.6795	0.615
 idf_sum_similarity	dataset		TrecQA	0.6384	0.6795	0.6268
 idf_sum_similarity	Dataset – test		WikiQA	0.0002	0	0.0016
 idf_sum_similarity	dataset		WikiQA	0.0002	0	0.0016
-idf_sum_similarity	Corpus	no_stopping + no_stemming	TrecQA			
-idf_sum_similarity	Corpus	with_stopping + with_stemming	TrecQA			
-idf_sum_similarity	Corpus	no_stopping + no_stemming	WikiQA			
-idf_sum_similarity	Corpus	with_stopping + with_stemming	WikiQA			
+idf_sum_similarity	Corpus	no_stopping + no_stemming	TrecQA	0.6736	0.728	0.6377
+idf_sum_similarity	Corpus	with_stopping + with_stemming	TrecQA	0.7032	0.7281	0.672
+idf_sum_similarity	Corpus	no_stopping + no_stemming	WikiQA	0.0002	0	0.0008
+idf_sum_similarity	Corpus	with_stopping + with_stemming	WikiQA	0.0005	0	0.0016
 sm_model	NA	no_idf_overlap_features	TrecQA			
 sm_model	Dataset – test	with_corrected_idf_overlap_features	TrecQA			
 sm_model	Dataset 	with_corrected_idf_overlap_features	TrecQA			
