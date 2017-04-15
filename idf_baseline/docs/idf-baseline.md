@@ -132,3 +132,13 @@ To calculate MAP/MRR for the above run file:
 ```
 eval/trec_eval.9.0/trec_eval -m map -m recip_rank <qrel-file> <run-file>
 ```
+
+For the WikiQA dataset
+```
+../../Anserini/eval/trec_eval.9.0/trec_eval -m map ../../data/WikiQA/WikiQACorpus/WikiQA-$set.ref WikiQA.$set.idfsim 
+```
+
+For the TrecQA dataset
+```
+../../Anserini/eval/trec_eval.9.0/trec_eval -m map ../../data/TrecQA/$set.qrel TrecQA.$set.idfsim
+```
