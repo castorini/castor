@@ -3,26 +3,25 @@ import os
 import numpy as np
 from collections import defaultdict
 
-def read_in_data(data, set, file):
-    sentences = []
-    with open(os.path.join(data, set, file)) as inf:
-        sentences = [line.strip() for line in inf.readlines()]
-    return sentences
+def read_in_data(datapath, set_name, file):
+    data = []
+    with open(os.path.join(datapath, set_name, file)) as inf:
+        data = [line.strip() for line in inf.readlines()]
+    return data
 
 
 def compute_idfs(data):
     term_idfs = defaultdict(float)
-    for doc in data:
+    for doc in list(data):
         for term in list(set(doc.split())):
             term_idfs[term] += 1.0
     N = len(data)
     for term, n_t in term_idfs.items():
-        term_idfs[term] = np.log(N/1+n_t)
+        term_idfs[term] = np.log(N/(1+n_t))
     return term_idfs
 
 
 def compute_idf_sum_similarity(questions, answers, term_idfs):
-
     # compute IDF sums for common_terms
     idf_sum_similarity = np.zeros(len(questions))
     for i in range(len(questions)):
@@ -76,7 +75,7 @@ if __name__ == "__main__":
         all_data += test_que
 
     # compute inverse document frequencies for terms
-    term_idfs = compute_idfs(all_data)
+    term_idfs = compute_idfs(set(all_data))
 
     # write out in trec_eval format
     write_out_idf_sum_similarities(read_in_data(args.qa_data, train_data, 'id.txt'),

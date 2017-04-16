@@ -1,8 +1,8 @@
 Baseline_method	idf	condition	dataset	train_MAP	dev_MAP	test_MAP	Notes/Comments
-idf_sum_similarity	Dataset – test		TrecQA	0.6383	0.6795	0.615	IDF is computed over terms in the train and dev sets only
-idf_sum_similarity	dataset		TrecQA	0.6384	0.6795	0.6268	IDF is computed over terms in the train, dev and test sets
+idf_sum_similarity	Dataset – test		TrecQA	0.7743	0.7668	0.6735	IDF is computed over terms in the train and dev sets only
+idf_sum_similarity	dataset		TrecQA	0.7744	0.7668	0.7014	IDF is computed over terms in the train, dev and test sets
 idf_sum_similarity	Dataset – test		WikiQA	0.0002	0	0.0016	There is less overlap between questions and answers in the WikiQA dataset
-idf_sum_similarity	dataset		WikiQA	0.0002	0	0.0016	Also, only 1/3 of the WikiQA dataset has positive answers.
+idf_sum_similarity	dataset		WikiQA	0.0002	0	0.0008	Also, only 1/3 of the WikiQA dataset has positive answers.
 idf_sum_similarity	Corpus	no_stopping + no_stemming	TrecQA	0.6736	0.728	0.6377	IDF is computed over terms in disks1-5 and aquaint
 idf_sum_similarity	Corpus	with_stopping + with_stemming	TrecQA	0.7032	0.7281	0.672	
 idf_sum_similarity	Corpus	no_stopping + no_stemming	WikiQA	0.0002	0	0.0008	IDF is computed over terms in Wikipedia
@@ -14,3 +14,10 @@ sm_model	Corpus	with_corrected_idf_overlap_features	TrecQA
 sm_model	Dataset – test	with_fractional_idf_overlap_features	TrecQA				
 sm_model	Dataset	with_fractional_idf_overlap_features	TrecQA				
 sm_model	Corpus	with_fractional_idf_overlap_features	TrecQA				
+sm_model	NA	no_idf_overlap_features	WikiQA				
+sm_model	Dataset – test	with_corrected_idf_overlap_features	WikiQA				
+sm_model	Dataset 	with_corrected_idf_overlap_features	WikiQA				
+sm_model	Corpus	with_corrected_idf_overlap_features	WikiQA				
+sm_model	Dataset – test	with_fractional_idf_overlap_features	WikiQA				
+sm_model	Dataset	with_fractional_idf_overlap_features	WikiQA				
+sm_model	Corpus	with_fractional_idf_overlap_features	WikiQA				
