@@ -126,6 +126,7 @@ public class IDFScorer {
     BufferedWriter outputFile = new BufferedWriter(new FileWriter(args.output));
     int i = 0;
 
+    String old_id = "0";    
     while (true) {
       String question = questionFile.readLine();
       String answer = answerFile.readLine();
@@ -133,6 +134,12 @@ public class IDFScorer {
 
       if (question == null || answer == null || id == null) {
         break;
+      }
+
+      // we need new lines here
+      if (args.config.contains("WikiQA") && old_id != id) {
+        old_id = id;
+        i = 0;
       }
 
       // 32.1 0 0 0 0.6212325096130371 smmodel
