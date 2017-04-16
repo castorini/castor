@@ -35,12 +35,18 @@ def compute_idf_sum_similarity(questions, answers, term_idfs):
     return idf_sum_similarity
 
 
-def write_out_idf_sum_similarities(qids, questions, answers, term_idfs, outfile):
+def write_out_idf_sum_similarities(qids, questions, answers, term_idfs, outfile, dataset):
     with open(outfile, 'w') as outf:
         idf_sum_similarity = compute_idf_sum_similarity(questions, answers, term_idfs)
+        old_qid = 0
+        docid_c = 0
         for i in range(len(questions)):
-            print('{} 0 {} 0 {} data_only_idfbaseline'.format(qids[i], i, idf_sum_similarity[i]),
+            if qids[i] != old_qid and dataset.endswith('WikiQA'):
+                docid_c = 0
+                old_qid = qids[i]
+            print('{} 0 {} 0 {} data_only_idfbaseline'.format(qids[i], docid_c, idf_sum_similarity[i]),
                   file=outf)
+            docid_c += 1
 
 
 if __name__ == "__main__":
@@ -80,13 +86,16 @@ if __name__ == "__main__":
     # write out in trec_eval format
     write_out_idf_sum_similarities(read_in_data(args.qa_data, train_data, 'id.txt'),
                                    train_que, train_ans, term_idfs,
-                                   '{}.{}.idfsim'.format(args.outfile_prefix, train_data))
+                                   '{}.{}.idfsim'.format(args.outfile_prefix, train_data),
+                                   args.qa_data)
 
     write_out_idf_sum_similarities(read_in_data(args.qa_data, dev_data, 'id.txt'),
                                    dev_que, dev_ans, term_idfs,
-                                   '{}.{}.idfsim'.format(args.outfile_prefix, dev_data))
+                                   '{}.{}.idfsim'.format(args.outfile_prefix, dev_data),
+                                   args.qa_data)
 
     write_out_idf_sum_similarities(read_in_data(args.qa_data, test_data, 'id.txt'),
                                    test_que, test_ans, term_idfs,
-                                   '{}.{}.idfsim'.format(args.outfile_prefix, test_data))
+                                   '{}.{}.idfsim'.format(args.outfile_prefix, test_data),
+                                   args.qa_data)
 
