@@ -3,10 +3,23 @@ import os
 import numpy as np
 from collections import defaultdict
 
-def read_in_data(datapath, set_name, file):
+import nltk
+nltk.download('stopwords')
+
+from nltk.stem.porter import PorterStemmer
+from nltk.corpus import stopwords
+
+def read_in_data(datapath, set_name, file, stop_and_stem=False):
     data = []
     with open(os.path.join(datapath, set_name, file)) as inf:
         data = [line.strip() for line in inf.readlines()]
+        if stop_and_stem:
+            stemmer = PorterStemmer()
+            stoplist = set(stopwords.words('english'))
+            def stop_stem(sentence):
+                return ' '.join([stemmer.stem(word) for word in sentence.split() \
+                                                        if word not in stoplist])
+            data = [stop_stem(sentence) for sentence in data]
     return data
 
 
@@ -36,7 +49,7 @@ def compute_idf_sum_similarity(questions, answers, term_idfs):
 
 
 def write_out_idf_sum_similarities(qids, questions, answers, term_idfs, outfile, dataset):
-    with open(outfile, 'w') as outf:
+    with open(outfile, 'w') as outf:        
         idf_sum_similarity = compute_idf_sum_similarity(questions, answers, term_idfs)
         old_qid = 0
         docid_c = 0
@@ -44,7 +57,8 @@ def write_out_idf_sum_similarities(qids, questions, answers, term_idfs, outfile,
             if qids[i] != old_qid and dataset.endswith('WikiQA'):
                 docid_c = 0
                 old_qid = qids[i]
-            print('{} 0 {} 0 {} data_only_idfbaseline'.format(qids[i], docid_c, idf_sum_similarity[i]),
+            print('{} 0 {} 0 {} data_only_idfbaseline'.format(qids[i], docid_c, 
+                  idf_sum_similarity[i]),
                   file=outf)
             docid_c += 1
 
@@ -57,6 +71,7 @@ if __name__ == "__main__":
     ap.add_argument('outfile_prefix', help="output file prefix")
     ap.add_argument('--ignore-test', help="does not consider test data when computing IDF of terms",
                     action="store_true")
+    ap.add_argument("--stop-and-stem", help='performs stopping and stemming', action="store_true")
 
     args = ap.parse_args()
 
@@ -65,14 +80,14 @@ if __name__ == "__main__":
     if args.qa_data.endswith('TrecQA'):
         train_data, dev_data, test_data = 'train-all', 'raw-dev', 'raw-test'
 
-    train_que = read_in_data(args.qa_data, train_data, 'a.toks')
-    train_ans = read_in_data(args.qa_data, train_data, 'b.toks')
+    train_que = read_in_data(args.qa_data, train_data, 'a.toks', args.stop_and_stem)
+    train_ans = read_in_data(args.qa_data, train_data, 'b.toks', args.stop_and_stem)    
 
-    dev_que = read_in_data(args.qa_data, dev_data, 'a.toks')
-    dev_ans = read_in_data(args.qa_data, dev_data, 'b.toks')
+    dev_que = read_in_data(args.qa_data, dev_data, 'a.toks', args.stop_and_stem)
+    dev_ans = read_in_data(args.qa_data, dev_data, 'b.toks', args.stop_and_stem)
 
-    test_que = read_in_data(args.qa_data, test_data, 'a.toks')
-    test_ans = read_in_data(args.qa_data, test_data, 'b.toks')
+    test_que = read_in_data(args.qa_data, test_data, 'a.toks', args.stop_and_stem)
+    test_ans = read_in_data(args.qa_data, test_data, 'b.toks', args.stop_and_stem)
 
     all_data = train_que + dev_que + train_ans + dev_ans
 
