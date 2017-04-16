@@ -137,7 +137,7 @@ public class IDFScorer {
       }
 
       // we need new lines here
-      if (args.config.contains("WikiQA") && old_id != id) {
+      if (args.config.contains("WikiQA") && !old_id.equals(id)) {
         old_id = id;
         i = 0;
       }
