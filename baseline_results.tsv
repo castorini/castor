@@ -7,7 +7,7 @@ idf_sum_similarity	Corpus	no_stopping + no_stemming	TrecQA	0.6736	0.728	0.6377	I
 idf_sum_similarity	Corpus	with_stopping + with_stemming	TrecQA	0.7032	0.7281	0.672	
 idf_sum_similarity	Corpus	no_stopping + no_stemming	WikiQA	0.2432	0.244	0.2206	IDF is computed over documents in Wikipedia
 idf_sum_similarity	Corpus	with_stopping + with_stemming	WikiQA	0.2212	0.2461	0.2005	
-sm_model	NA	no_idf_overlap_features	TrecQA				
+sm_model	NA	no_idf_overlap_features	TrecQA	0.597	0.6918	0.6445	
 sm_model	Dataset 	with_corrected_idf_overlap_features	TrecQA				
 sm_model	Corpus	with_corrected_idf_overlap_features	TrecQA				
 sm_model	Dataset	with_fractional_idf_overlap_features	TrecQA				
