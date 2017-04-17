@@ -20,7 +20,7 @@ def stopped(sentences):
     remove stop words from given sentences (questions|answers)
     """
     stoplist = set(stopwords.words('english'))
-    stoplist.update(set(string.punctuation))
+    #stoplist.update(set(string.punctuation))
     def stop(sentence):
         return ' '.join([word for word in sentence.split() if word not in stoplist])
     return [stop(sentence) for sentence in sentences]
@@ -38,10 +38,10 @@ def get_qadata_only_idf(all_data):
     """
     returns idf weights computed over all question answer pairs in the dataset
     """
-    if not type(all_data) is set:
-        all_data = set(all_data)
+    if not type(all_data) is list:
+        all_data = list(all_data)
     term_idfs = defaultdict(float)
-    for doc in list(all_data):
+    for doc in all_data:
         for term in list(set(doc.split())):
             term_idfs[term] += 1.0
     N = len(all_data)
@@ -95,9 +95,15 @@ def set_external_features_as_per_paper(trainer):
         all_answers.extend(answers)
 
     all_data = set(all_questions + all_answers)
-    idf_weights = get_qadata_only_idf(all_data)
+    idf_weights = get_qadata_only_idf(list(all_data))
 
     external_features = {}
+
+    # NOTE: expected external features as per paper are
+    # 1. overlap(q, a),
+    # 2. idf_overlap(q, a),
+    # 3. overlap(stopped(q), stopped(a)),
+    # 4. idf_over(stopped(q), stopped(a))
 
     for split in trainer.data_splits.keys():
         questions, answers, labels, max_q_len, max_a_len, default_ext_feats = \
@@ -109,6 +115,55 @@ def set_external_features_as_per_paper(trainer):
             compute_overlap(stopped(questions), stopped(answers))
         idf_weighted_overlap_no_stopwords =\
             compute_idf_weighted_overlap(stopped(questions), stopped(answers), idf_weights)
+        ext_feats = [np.array(feats) for feats in zip(overlap, idf_weighted_overlap,\
+                    overlap_no_stopwords, idf_weighted_overlap_no_stopwords)]
+        trainer.data_splits[split][-1] = ext_feats
+        external_features[split] = ext_feats
+    return external_features
+
+
+def set_external_features_as_per_paper_and_stem(trainer):
+    """
+    computes external features as per the paper but performs stemming before computing IDF.
+    features are saved into the trainer.data_splits
+    """
+    all_questions, all_answers = [], []
+    for split in trainer.data_splits.keys():
+        questions, answers, labels, max_q_len, max_a_len, default_ext_feats = \
+            trainer.data_splits[split]
+        all_questions.extend(questions)
+        all_answers.extend(answers)
+
+    all_data = set(all_questions + all_answers)
+
+    # stem all words except stopwords to compute idf (required for feature number 2.)
+    stoplist = set(stopwords.words('english'))
+    stemmer = PorterStemmer()
+    def stem_non_stop_words(sentence):
+        return ' '.join([stemmer.stem(word) if word not in stoplist else word \
+                    for word in sentence.split()])
+    all_but_stopwords_stemmed = [stem_non_stop_words(sentence) for sentence in list(all_data)]
+    idf_weights = get_qadata_only_idf(all_but_stopwords_stemmed)
+
+    external_features = {}
+
+    for split in trainer.data_splits.keys():
+        questions, answers, labels, max_q_len, max_a_len, default_ext_feats = \
+            trainer.data_splits[split]
+
+        que_stem_all_but_stopwords = [stem_non_stop_words(que) for que in questions]
+        ans_stem_all_but_stopwords = [stem_non_stop_words(ans) for ans in answers]
+
+        overlap = compute_overlap(que_stem_all_but_stopwords, ans_stem_all_but_stopwords)
+        idf_weighted_overlap = compute_idf_weighted_overlap(que_stem_all_but_stopwords,\
+                                                            ans_stem_all_but_stopwords, idf_weights)
+
+        que_stopped_stemmed = stemmed(stopped(questions))
+        ans_stopped_stemmed = stemmed(stopped(answers))
+
+        overlap_no_stopwords = compute_overlap(que_stopped_stemmed, ans_stopped_stemmed)
+        idf_weighted_overlap_no_stopwords =\
+            compute_idf_weighted_overlap(que_stopped_stemmed, ans_stopped_stemmed, idf_weights)
         ext_feats = [np.array(feats) for feats in zip(overlap, idf_weighted_overlap,\
                     overlap_no_stopwords, idf_weighted_overlap_no_stopwords)]
         trainer.data_splits[split][-1] = ext_feats

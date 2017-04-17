@@ -11,7 +11,8 @@ import torch
 
 import utils
 from external_features import stopped, stemmed, compute_idf_weighted_overlap, compute_overlap,\
-    get_qadata_only_idf, set_external_features_as_per_paper
+    get_qadata_only_idf, set_external_features_as_per_paper,\
+    set_external_features_as_per_paper_and_stem
 from train import Trainer
 from model import QAModel
 
@@ -87,6 +88,8 @@ if __name__ == "__main__":
         help="will not include external features in the model")
     ap.add_argument('--paper-ext-feats', action="store_true", \
         help="external features as per the paper")
+    ap.add_argument('--paper-ext-feats-stem', action="store_true", \
+        help="external features as per the paper")
     # system arguments
     # TODO: add arguments for CUDA
     ap.add_argument('--num_threads', help="the number of simultaneous processes to run", \
@@ -138,9 +141,14 @@ if __name__ == "__main__":
     trainer.load_input_data(args.dataset_folder, cache_file, train_set, dev_set, test_set)
     logger.info("Setting up external features...")
     # setup external features
+    # TODO: remember to update args.* in testing loop below
     if args.paper_ext_feats:
+        logger.info("--paper-ext-feats")
         ext_feats_for_splits = set_external_features_as_per_paper(trainer)
         # ^^ we are saving the features to be used while testing at the end of training
+    elif args.paper_ext_feats_stem:
+        logger.info("--paper-ext-feats-stem")
+        ext_feats_for_splits = set_external_features_as_per_paper_and_stem(trainer)
 
     if not args.skip_training:
         best_map = 0.0
@@ -181,7 +189,7 @@ if __name__ == "__main__":
 
     for split in [test_set, dev_set, train_set]:
         evaluator.load_input_data(args.dataset_folder, cache_file, None, None, split)
-        if args.paper_ext_feats:
+        if args.paper_ext_feats or args.paper_ext_feats_stem:
             evaluator.data_splits[split][-1] = ext_feats_for_splits[split]
             #set_external_features_as_per_paper(evaluator)
         split_scores = evaluator.test(split, args.batch_size)
