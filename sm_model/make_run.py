@@ -10,13 +10,15 @@ if __name__ == "__main__":
     ap.add_argument('model')
     ap.add_argument('--word_embeddings_cache',
                     default='../../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache')
-    ap.add_argument('---ext_feats', help="file with the precomputed external overlap features")
+    ap.add_argument('--paper-ext-feats', action="store_true", \
+        help="external features as per the paper")
     ap.add_argument('dataset_folder', help="the QA dataset folder",
                     choices=['../../data/TrecQA', '../../data/WikQA'])
     ap.add_argument('set_split', help="train, dev or test split as the data_folder")
     ap.add_argument("batch_size", help="the number of pairs to compare in each batch.\
                      should be same as during training")
     ap.add_argument('out_scorefile', help='output file in trec_eval format')
+
 
     args = ap.parse_args()
 
@@ -31,7 +33,7 @@ if __name__ == "__main__":
     test_scores = evaluator.test(args.set_split, args.batch_size)
 
     questions, sentences, labels, vocab, maxlen_q, maxlen_s, ext_feats = \
-            evaluator.datasets[args.set_split]
+            evaluator.data_splits[args.set_split]
 
     qids = [id.strip() for id in open(os.path.join(args.dataset_folder, args.set_split, 'id.txt'))\
             .readlines()]
