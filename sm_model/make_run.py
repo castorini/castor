@@ -9,7 +9,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Makes a run in trec_eval run format, given a model and a train|dev|test set" )
     ap.add_argument('model')
     ap.add_argument('--word_embeddings_cache',
-                    default='../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache')
+                    default='../../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache')
     ap.add_argument('---ext_feats', help="file with the precomputed external overlap features")
     ap.add_argument('dataset_folder', help="the QA dataset folder",
                     choices=['../../data/TrecQA', '../../data/WikQA'])
@@ -23,6 +23,7 @@ if __name__ == "__main__":
     vocab_size, vec_dim = utils.load_embedding_dimensions(args.word_embeddings_cache)
 
     trained_model = QAModel.load(args.model)
+    trained_model.no_ext_feats = True
     evaluator = Trainer(trained_model, 0, 0, False, vec_dim) # 0, 0, False are dummy arguments
     evaluator.load_input_data(args.dataset_folder, args.word_embeddings_cache,
                               None, None, args.set_split,

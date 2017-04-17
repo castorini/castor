@@ -108,7 +108,7 @@ def read_in_dataset(dataset_folder, set_folder, load_ext_features = True):
 
     labels = [int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines()]
 
-    ext_feats = np.zeros(len(questions))
+    ext_feats = [np.zeros(4)] * len(questions)
     if load_ext_features:
         ext_feats = np.array([list(map(float, line.strip().split(' '))) \
             for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines()])
