@@ -43,10 +43,11 @@ class Trainer(object):
 
 
     def load_input_data(self, dataset_root_folder, word_vectors_cache_file, \
-            train_set_folder, dev_set_folder, test_set_folder):
+            train_set_folder, dev_set_folder, test_set_folder, load_ext_feats=True):
         for set_folder in [test_set_folder, dev_set_folder, train_set_folder]:
             if set_folder:
-                self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder)
+                self.datasets[set_folder] = utils.read_in_dataset(dataset_root_folder, set_folder,
+                                                                   load_ext_feats)
                 # NOTE: self.datasets[set_folder] = questions, sentences, labels,
                 #                                       vocab, maxlen_q, maxlen_s, ext_feats
                 self.embeddings[set_folder] = utils.load_cached_embeddings( \

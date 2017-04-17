@@ -91,7 +91,7 @@ def load_cached_embeddings(cache_file, vocab_list, oov_vec=[]):
     return w2v_dict
 
 
-def read_in_dataset(dataset_folder, set_folder):
+def read_in_dataset(dataset_folder, set_folder, load_ext_features = True):
     """
     read in the data to return (question, sentence, label)
     set_folder = {train|dev|test}
@@ -107,8 +107,11 @@ def read_in_dataset(dataset_folder, set_folder):
     len_s_list = [len(s.split()) for s in sentences]
 
     labels = [int(line.strip()) for line in open(os.path.join(set_path, 'sim.txt')).readlines()]
-    ext_feats = np.array([list(map(float, line.strip().split(' '))) \
-        for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines()])
+
+    ext_feats = np.zeros(len(questions))
+    if load_ext_features:
+        ext_feats = np.array([list(map(float, line.strip().split(' '))) \
+            for line in open(os.path.join(set_path, 'overlap_feats.txt')).readlines()])
 
     #y = torch.from_numpy(labels)
     #return questions, sentences, y
