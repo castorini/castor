@@ -21,8 +21,10 @@ simple_qa_rnn
   ├── train.py
   └── util.py
 ```
-5. Run this command to train the model. Make sure you have PyTorch and other Python dependencies installed.
+5. Please take a look at the arguments in utils.py and set them accordingly to train the model.
+6. Run this command to train the model. Make sure you have PyTorch and other Python dependencies installed.
 ```
 python train.py 
 ```
-6. Please take a look at the arguments in utils.py and set them accordingly.
+
+NOTE: There are pre-trained models saved in the 'finished_checkpoints' directory. They can be loaded up using PyTorch.
