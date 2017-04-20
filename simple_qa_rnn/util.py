@@ -7,6 +7,7 @@ def get_args():
     parser.add_argument('--d_embedding', type=int, default=300)
     parser.add_argument('--d_hidden', type=int, default=300)
     parser.add_argument('--n_layers', type=int, default=1)
+    parser.add_argument('--test', action='store_true', dest='test', help='turn on test mode; no training.')
     parser.add_argument('--not_bidirectional', action='store_false', dest='birnn')
     parser.add_argument('--clip', type=float, default=0.25, help='gradient clipping')
     parser.add_argument('--log_every', type=int, default=50)

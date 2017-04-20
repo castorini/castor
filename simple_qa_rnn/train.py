@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import glob
 import numpy as np
@@ -69,6 +70,16 @@ model = BiLSTM(config)
 loss_function = nn.NLLLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
+# ---- Test Model ------
+if args.test:
+    print("Test Mode: loading pre-trained model and testing on test set...")
+    # model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage.cuda(args.gpu))
+    model.load_state_dict(torch.load(args.resume_snapshot))
+    test_acc = evaluate_dataset_batch(val_set[:200], max_sent_length, model, w2v_map, label_to_ix)
+    print("Accuracy: {}".format(test_acc))
+    sys.exit(0)
+
+
 # ---- Train Model ------
 start = time.time()
 best_val_acc = -1
@@ -116,7 +127,7 @@ for epoch in range(args.epochs):
                 best_val_acc = val_acc
                 snapshot_prefix = os.path.join(args.save_path, 'best_snapshot')
                 snapshot_path = snapshot_prefix + '_valacc_{:6.4f}__iter_{}_model.pt'.format(val_acc, iter)
-                torch.save(model, snapshot_path)
+                torch.save(model.state_dict(), snapshot_path)
                 for f in glob.glob(snapshot_prefix + '*'):
                     if f != snapshot_path:
                         os.remove(f)
