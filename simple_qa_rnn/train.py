@@ -49,7 +49,7 @@ test_file = "datasets/SimpleQuestions_v2/annotated_fb_data_test.txt"
 
 train_set = data.create_rp_dataset(train_file)
 val_set = data.create_rp_dataset(val_file)
-# test_set = data.create_rp_dataset(test_file)
+test_set = data.create_rp_dataset(test_file)
 # train_set = train_set[:4]  # work with few examples first
 
 # ---- Build Vocabulary ------
@@ -75,7 +75,7 @@ if args.test:
     print("Test Mode: loading pre-trained model and testing on test set...")
     # model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage.cuda(args.gpu))
     model.load_state_dict(torch.load(args.resume_snapshot))
-    test_acc = evaluate_dataset_batch(val_set[:200], max_sent_length, model, w2v_map, label_to_ix)
+    test_acc = evaluate_dataset_batch(test_set, max_sent_length, model, w2v_map, label_to_ix)
     print("Accuracy: {}".format(test_acc))
     sys.exit(0)
 
