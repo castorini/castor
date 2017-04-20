@@ -28,3 +28,7 @@ python train.py
 ```
 
 NOTE: There are pre-trained models saved in the 'finished_checkpoints' directory. They can be loaded up using PyTorch.
+You can run a pre-trained model on the test dataset:
+```
+python train.py --not_bidirectional --resume_snapshot finished_checkpoints/lstm1/[model_filename] --test 
+```
