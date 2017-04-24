@@ -25,19 +25,18 @@ class Example(Configurable):
       self.sent = {}
       self.sent["words"] = sent[2:]
       self.sent["targets"] = sent[0]
-    if self.dataset_type == "MR" or self.dataset_type == "SST-1" or self.dataset_type == "SST-2":
+    else:
       self.data = {}
       self.sent = {}
       self.sent["words"] = sent[1:]
       self.sent["targets"] = sent[0]
 
   def convert(self, vocabs):
-    if self.dataset_type == "TREC" or self.dataset_type == "MR" or self.dataset_type == "SST-1" or self.dataset_type == "SST-2":
-      words, target = vocabs
-      self.data["words"] = []
-      self.data["targets"] = target[self.sent["targets"]]
-      for word in self.sent["words"]:
-        self.data["words"].append(words[word])
+    words, target = vocabs
+    self.data["words"] = []
+    self.data["targets"] = target[self.sent["targets"]]
+    for word in self.sent["words"]:
+      self.data["words"].append(words[word])
 
 
 

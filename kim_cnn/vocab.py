@@ -47,7 +47,6 @@ class Vocab(Configurable):
   def add_train_file(self):
     if self.dataset_type == 'TREC':
       with open(self.train_file) as f:
-        buff = []
         for line_num, line in enumerate(f):
           line = clean_str(line).split()
           if line:
@@ -56,9 +55,8 @@ class Vocab(Configurable):
             if self.name == 'Words':
               for word in line[2:]:
                 self.add(word)
-    if self.dataset_type == 'MR':
+    else:
       with open(self.train_file) as f:
-        buff = []
         for line_num, line in enumerate(f):
           line = clean_str(line).split()
           if line:
@@ -67,17 +65,7 @@ class Vocab(Configurable):
             if self.name == 'Words':
               for word in line[1:]:
                 self.add(word)
-    if self.dataset_type == 'SST-1' or self.dataset_type == 'SST-2':
-      with open(self.train_file) as f:
-        buff = []
-        for line_num, line in enumerate(f):
-          line = clean_str_sst(line).split()
-          if line:
-            if self.name == 'Targets':
-              self.add(line[0])
-            if self.name == 'Words':
-              for word in line[1:]:
-                self.add(word)
+
     self.index_vocab()
 
   def add(self, item):

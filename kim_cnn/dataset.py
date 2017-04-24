@@ -48,20 +48,20 @@ class Dataset(Configurable):
     :param filename:
     :return:
     """
-    if self.dataset_type == 'TREC' or self.dataset_type == 'MR':
-      with open(filename) as f:
-        buff = []
-        for line_num, line in enumerate(f):
-          line = clean_str(line).split()
-          if line:
-            buff.append(line)
-        self._process_buff(buff)
     if self.dataset_type == 'SST-1' or self.dataset_type == 'SST-2':
       with open(filename) as f:
         buff = []
         for line_num, line in enumerate(f):
           line = clean_str_sst(line).split()
           if len(line) > 1:
+            buff.append(line)
+        self._process_buff(buff)
+    else:
+      with open(filename) as f:
+        buff = []
+        for line_num, line in enumerate(f):
+          line = clean_str(line).split()
+          if line:
             buff.append(line)
         self._process_buff(buff)
     return

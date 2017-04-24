@@ -50,7 +50,7 @@ to get dataset.
 To run the model on [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) dataset on [rand](Model Type), just run the following code.
 
 ```
-python main.py --config_file config/classification.cfg --model_type CNNText --train
+python main.py --config_file config/trec.cfg --model_type CNNText --train
 ```
 
 The file will be saved in 
@@ -63,7 +63,7 @@ You can modify these parameters under these [instructions](Configurable File)
 To test the model, you can use the following command.
 
 ```
-python main.py --config_file config/classification.cfg --model_type CNNText --test --restore_from saves/trec/model_file
+python main.py --config_file config/trec.cfg --model_type CNNText --test --restore_from saves/trec/model_file
 ```
 
 You need to specify the config file and the path to model file here. Note: The path need to be the same as the declaration in the config file.
@@ -104,6 +104,18 @@ We experiment the model on the following three datasets.
 - SST-2: Same as above.
 
 Furthermore, we filter the word embeddings to fit specific dataset. These file can be found in dir *data*.
+
+For self-defined data, please keep the format as
+
+```
+label1 sentence
+label2 sentence
+```
+
+And you can use [this](http://ocp59jkku.bkt.clouddn.com/filterVec.py) script to filter the pre-trained word embeddings.
+
+Or you can modify the *reading_dataset* in *dataset.py*, *add_train_file* in *vocab.py* and *example.py* to fit your own dataset.
+
 
 ## Results
 
