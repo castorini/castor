@@ -92,7 +92,7 @@ mvn clean package appassembler:assemble
 Run the following command to score each answer with an IDF value:
 
 ```
-sh target/appassembler/bin/GetIDF -index ~/large-local-work/indices/index.wikipedia.pos.docvectors -config ../../data/WikiQA/test -output WikiQA.test.idfsim
+sh target/appassembler/bin/GetIDFSumSimilarity -index ~/large-local-work/indices/index.wikipedia.pos.docvectors -config ../../data/WikiQA/test -output WikiQA.test.idfsim
 ```
 The above command will create a run file in the `trec_eval` format and a qrel file
 at a location specified by `-output`.

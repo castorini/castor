@@ -5,7 +5,7 @@ from collections import defaultdict
 import string
 
 import nltk
-nltk.download('stopwords')
+nltk.download('stopwords', quiet=True)
 
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
