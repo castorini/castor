@@ -1,8 +1,12 @@
 import argparse
 import os
+import sys
+import re
 import numpy as np
 from collections import defaultdict
 import string
+import subprocess
+import shlex
 
 import nltk
 nltk.download('stopwords', quiet=True)
@@ -26,15 +30,46 @@ def read_in_data(datapath, set_name, file, stop_and_stem=False):
 
 
 def compute_idfs(data):
+    regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
     term_idfs = defaultdict(float)
     for doc in list(data):
         for term in list(set(doc.split())):
-            term_idfs[term] += 1.0
+            for t in regex.sub(' ', term).strip().split():
+                if t not in term_idfs:
+                    term_idfs[t] += 1.0
     N = len(data)
     for term, n_t in term_idfs.items():
         term_idfs[term] = np.log(N/(1+n_t))
     return term_idfs
 
+def fetch_idfs_from_index(data, indexPath):
+    regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
+    term_idfs = defaultdict(float)
+    all_terms = set([term for doc in list(data) for term in doc.split()])
+    with open('dataset.vocab', 'w') as vf:
+        for term in list(all_terms):
+            for t in regex.sub(' ', term).strip().split():
+                if t not in term_idfs:
+                    term_idfs[t] = 0.0
+                    print(t, file=vf)
+
+    fetchIDF_cmd = "sh ../idf_baseline/target/appassembler/bin/FetchTermIDF -index {} -vocabFile {}".format(indexPath, 'dataset.vocab')
+    pargs = shlex.split(fetchIDF_cmd)
+    p = subprocess.Popen(pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, \
+                             bufsize=1, universal_newlines=True)
+    pout, perr = p.communicate()
+
+    lines = str(pout).split('\n')
+    for line in lines:
+        if not line:
+            continue
+        fields = line.strip().split("\t")
+        term, weight = fields[0], fields[-1]
+        term_idfs[term] = float(weight)
+
+    for line in str(perr).split('\n'):
+        print('Warning: '+line)
+    return term_idfs
 
 def compute_idf_sum_similarity(questions, answers, term_idfs):
     # compute IDF sums for common_terms
@@ -74,6 +109,8 @@ if __name__ == "__main__":
     ap.add_argument('--ignore-test', help="does not consider test data when computing IDF of terms",
                     action="store_true")
     ap.add_argument("--stop-and-stem", help='performs stopping and stemming', action="store_true")
+    ap.add_argument("--index-for-corpusIDF", help="fetches idf from Index. provide index path. will\
+    generate a vocabFile")
 
     args = ap.parse_args()
 
@@ -98,8 +135,11 @@ if __name__ == "__main__":
         all_data += test_que
 
     # compute inverse document frequencies for terms
-    term_idfs = compute_idfs(set(all_data))
-
+    if not args.index_for_corpusIDF:
+        term_idfs = compute_idfs(set(all_data))
+    else:
+        term_idfs = fetch_idfs_from_index(set(all_data), args.index_for_corpusIDF)
+        
     # write out in trec_eval format
     write_out_idf_sum_similarities(read_in_data(args.qa_data, train_data, 'id.txt'),
                                    train_que, train_ans, term_idfs,

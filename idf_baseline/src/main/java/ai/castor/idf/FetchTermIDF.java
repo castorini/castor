@@ -69,7 +69,7 @@ public class FetchTermIDF {
         ClassicSimilarity similarity = new ClassicSimilarity();
 
         String esTerm = qp.escape(term);        
-        double termIDF = -1.0;
+        double termIDF = 0.0;
         try {
             TermQuery q = (TermQuery) qp.parse(esTerm);
             Term t = q.getTerm();
