@@ -14,14 +14,15 @@ nltk.download('stopwords', quiet=True)
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 
-def read_in_data(datapath, set_name, file, stop_and_stem=False):
+def read_in_data(datapath, set_name, file, stop_and_stem=False, stop_punct=False):
     data = []
     with open(os.path.join(datapath, set_name, file)) as inf:
         data = [line.strip() for line in inf.readlines()]
         if stop_and_stem:
             stemmer = PorterStemmer()
             stoplist = set(stopwords.words('english'))
-            stoplist.update(set(string.punctuation))
+            if stop_punct:
+                stoplist.update(set(string.punctuation))
             def stop_stem(sentence):
                 return ' '.join([stemmer.stem(word) for word in sentence.split() \
                                                         if word not in stoplist])
@@ -29,29 +30,35 @@ def read_in_data(datapath, set_name, file, stop_and_stem=False):
     return data
 
 
-def compute_idfs(data):
+def compute_idfs(data, dash_split=False):
     regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
     term_idfs = defaultdict(float)
     for doc in list(data):
         for term in list(set(doc.split())):
-            for t in regex.sub(' ', term).strip().split():
-                if t not in term_idfs:
-                    term_idfs[t] += 1.0
+            if dash_split:
+                for t in regex.sub(' ', term).strip().split():
+                    if t not in term_idfs:
+                        term_idfs[t] += 1.0
+            else:
+                term_idfs[term] += 1.0
     N = len(data)
     for term, n_t in term_idfs.items():
         term_idfs[term] = np.log(N/(1+n_t))
     return term_idfs
 
-def fetch_idfs_from_index(data, indexPath):
+def fetch_idfs_from_index(data, dash_split, indexPath):
     regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
     term_idfs = defaultdict(float)
     all_terms = set([term for doc in list(data) for term in doc.split()])
     with open('dataset.vocab', 'w') as vf:
         for term in list(all_terms):
-            for t in regex.sub(' ', term).strip().split():
-                if t not in term_idfs:
-                    term_idfs[t] = 0.0
-                    print(t, file=vf)
+            if dash_split:
+                for t in regex.sub(' ', term).strip().split():
+                    if t not in term_idfs:
+                        term_idfs[t] = 0.0
+                        print(t, file=vf)
+            else:
+                print(term, file=vf)
 
     fetchIDF_cmd = "sh ../idf_baseline/target/appassembler/bin/FetchTermIDF -index {} -vocabFile {}".format(indexPath, 'dataset.vocab')
     pargs = shlex.split(fetchIDF_cmd)
@@ -109,6 +116,8 @@ if __name__ == "__main__":
     ap.add_argument('--ignore-test', help="does not consider test data when computing IDF of terms",
                     action="store_true")
     ap.add_argument("--stop-and-stem", help='performs stopping and stemming', action="store_true")
+    ap.add_argument("--stop-punct", help='removes punctuation', action="store_true")
+    ap.add_argument("--dash-split", help="split words containing hyphens", action="store_true")
     ap.add_argument("--index-for-corpusIDF", help="fetches idf from Index. provide index path. will\
     generate a vocabFile")
 
@@ -119,14 +128,14 @@ if __name__ == "__main__":
     if args.qa_data.endswith('TrecQA'):
         train_data, dev_data, test_data = 'train-all', 'raw-dev', 'raw-test'
 
-    train_que = read_in_data(args.qa_data, train_data, 'a.toks', args.stop_and_stem)
-    train_ans = read_in_data(args.qa_data, train_data, 'b.toks', args.stop_and_stem)
+    train_que = read_in_data(args.qa_data, train_data, 'a.toks', args.stop_and_stem, args.stop_punct)
+    train_ans = read_in_data(args.qa_data, train_data, 'b.toks', args.stop_and_stem, args.stop_punct)
 
-    dev_que = read_in_data(args.qa_data, dev_data, 'a.toks', args.stop_and_stem)
-    dev_ans = read_in_data(args.qa_data, dev_data, 'b.toks', args.stop_and_stem)
+    dev_que = read_in_data(args.qa_data, dev_data, 'a.toks', args.stop_and_stem, args.stop_punct)
+    dev_ans = read_in_data(args.qa_data, dev_data, 'b.toks', args.stop_and_stem, args.stop_punct)
 
-    test_que = read_in_data(args.qa_data, test_data, 'a.toks', args.stop_and_stem)
-    test_ans = read_in_data(args.qa_data, test_data, 'b.toks', args.stop_and_stem)
+    test_que = read_in_data(args.qa_data, test_data, 'a.toks', args.stop_and_stem, args.stop_punct)
+    test_ans = read_in_data(args.qa_data, test_data, 'b.toks', args.stop_and_stem, args.stop_punct)
 
     all_data = train_que + dev_que + train_ans + dev_ans
 
@@ -136,9 +145,9 @@ if __name__ == "__main__":
 
     # compute inverse document frequencies for terms
     if not args.index_for_corpusIDF:
-        term_idfs = compute_idfs(set(all_data))
+        term_idfs = compute_idfs(set(all_data), args.dash_split)
     else:
-        term_idfs = fetch_idfs_from_index(set(all_data), args.index_for_corpusIDF)
+        term_idfs = fetch_idfs_from_index(set(all_data), args.dash_split, args.index_for_corpusIDF)
         
     # write out in trec_eval format
     write_out_idf_sum_similarities(read_in_data(args.qa_data, train_data, 'id.txt'),
