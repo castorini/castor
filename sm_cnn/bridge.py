@@ -182,6 +182,5 @@ if __name__ == "__main__":
                 docid_counter += 1
             if 'WikiQA' in args.dataset_folder:
                 docid_counter = 0
-            break
 
         outfile.close()
