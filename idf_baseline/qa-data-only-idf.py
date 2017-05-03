@@ -14,15 +14,35 @@ nltk.download('stopwords', quiet=True)
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 
-def read_in_data(datapath, set_name, file, stop_and_stem=False, stop_punct=False):
+def read_in_data(datapath, set_name, file, stop_and_stem=False, stop_punct=False, dash_split=False):
     data = []
     with open(os.path.join(datapath, set_name, file)) as inf:
         data = [line.strip() for line in inf.readlines()]
+
+        if dash_split:
+            def split_hyphenated_words(sentence):
+                rtokens = []
+                for term in sentence.split():
+                    for t in term.split('-'):
+                        if t:
+                            rtokens.append(t)
+                return ' '.join(rtokens)
+            data = [split_hyphenated_words(sentence) for sentence in data]
+
+        if stop_punct:
+            regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
+            def remove_punctuation(sentence):
+                rtokens = []
+                for term in sentence.split():
+                    for t in regex.sub(' ', term).strip().split():
+                        if t:
+                            rtokens.append(t)
+                return ' '.join(rtokens)
+            data = [remove_punctuation(sentence) for sentence in data]
+
         if stop_and_stem:
             stemmer = PorterStemmer()
             stoplist = set(stopwords.words('english'))
-            if stop_punct:
-                stoplist.update(set(string.punctuation))
             def stop_stem(sentence):
                 return ' '.join([stemmer.stem(word) for word in sentence.split() \
                                                         if word not in stoplist])
@@ -30,17 +50,13 @@ def read_in_data(datapath, set_name, file, stop_and_stem=False, stop_punct=False
     return data
 
 
-def compute_idfs(data, dash_split=False):
-    regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
+def compute_idfs(data, dash_split=False):    
     term_idfs = defaultdict(float)
     for doc in list(data):
         for term in list(set(doc.split())):
             if dash_split:
-                for t in regex.sub(' ', term).strip().split():
-                    if t not in term_idfs:
-                        term_idfs[t] += 1.0
-            else:
-                term_idfs[term] += 1.0
+                assert('-' not in term)
+            term_idfs[term] += 1.0
     N = len(data)
     for term, n_t in term_idfs.items():
         term_idfs[term] = np.log(N/(1+n_t))
@@ -53,14 +69,12 @@ def fetch_idfs_from_index(data, dash_split, indexPath):
     with open('dataset.vocab', 'w') as vf:
         for term in list(all_terms):
             if dash_split:
-                for t in regex.sub(' ', term).strip().split():
-                    if t not in term_idfs:
-                        term_idfs[t] = 0.0
-                        print(t, file=vf)
-            else:
-                print(term, file=vf)
+                assert('-' not in term)
+            print(term, file=vf)
 
-    fetchIDF_cmd = "sh ../idf_baseline/target/appassembler/bin/FetchTermIDF -index {} -vocabFile {}".format(indexPath, 'dataset.vocab')
+    fetchIDF_cmd = \
+        "sh ../idf_baseline/target/appassembler/bin/FetchTermIDF -index {} -vocabFile {}".\
+            format(indexPath, 'dataset.vocab')
     pargs = shlex.split(fetchIDF_cmd)
     p = subprocess.Popen(pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, \
                              bufsize=1, universal_newlines=True)
@@ -93,7 +107,7 @@ def compute_idf_sum_similarity(questions, answers, term_idfs):
 
 
 def write_out_idf_sum_similarities(qids, questions, answers, term_idfs, outfile, dataset):
-    with open(outfile, 'w') as outf:        
+    with open(outfile, 'w') as outf:
         idf_sum_similarity = compute_idf_sum_similarity(questions, answers, term_idfs)
         old_qid = 0
         docid_c = 0
@@ -101,7 +115,7 @@ def write_out_idf_sum_similarities(qids, questions, answers, term_idfs, outfile,
             if qids[i] != old_qid and dataset.endswith('WikiQA'):
                 docid_c = 0
                 old_qid = qids[i]
-            print('{} 0 {} 0 {} data_only_idfbaseline'.format(qids[i], docid_c,
+            print('{} 0 {} 0 {} idfbaseline'.format(qids[i], docid_c,
                                                               idf_sum_similarity[i]),
                   file=outf)
             docid_c += 1
@@ -128,14 +142,20 @@ if __name__ == "__main__":
     if args.qa_data.endswith('TrecQA'):
         train_data, dev_data, test_data = 'train-all', 'raw-dev', 'raw-test'
 
-    train_que = read_in_data(args.qa_data, train_data, 'a.toks', args.stop_and_stem, args.stop_punct)
-    train_ans = read_in_data(args.qa_data, train_data, 'b.toks', args.stop_and_stem, args.stop_punct)
+    train_que = read_in_data(args.qa_data, train_data, 'a.toks',
+                             args.stop_and_stem, args.stop_punct, args.dash_split)
+    train_ans = read_in_data(args.qa_data, train_data, 'b.toks',
+                             args.stop_and_stem, args.stop_punct, args.dash_split)
 
-    dev_que = read_in_data(args.qa_data, dev_data, 'a.toks', args.stop_and_stem, args.stop_punct)
-    dev_ans = read_in_data(args.qa_data, dev_data, 'b.toks', args.stop_and_stem, args.stop_punct)
+    dev_que = read_in_data(args.qa_data, dev_data, 'a.toks',
+                           args.stop_and_stem, args.stop_punct, args.dash_split)
+    dev_ans = read_in_data(args.qa_data, dev_data, 'b.toks',
+                           args.stop_and_stem, args.stop_punct, args.dash_split)
 
-    test_que = read_in_data(args.qa_data, test_data, 'a.toks', args.stop_and_stem, args.stop_punct)
-    test_ans = read_in_data(args.qa_data, test_data, 'b.toks', args.stop_and_stem, args.stop_punct)
+    test_que = read_in_data(args.qa_data, test_data, 'a.toks',
+                            args.stop_and_stem, args.stop_punct, args.dash_split)
+    test_ans = read_in_data(args.qa_data, test_data, 'b.toks',
+                            args.stop_and_stem, args.stop_punct, args.dash_split)
 
     all_data = train_que + dev_que + train_ans + dev_ans
 
@@ -148,7 +168,7 @@ if __name__ == "__main__":
         term_idfs = compute_idfs(set(all_data), args.dash_split)
     else:
         term_idfs = fetch_idfs_from_index(set(all_data), args.dash_split, args.index_for_corpusIDF)
-        
+
     # write out in trec_eval format
     write_out_idf_sum_similarities(read_in_data(args.qa_data, train_data, 'id.txt'),
                                    train_que, train_ans, term_idfs,
