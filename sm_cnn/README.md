@@ -29,30 +29,8 @@ This should generate:
 ```
 ├── Castor
 │   ├── idf_baseline
-│   │   └── src
-│   │       └── main
-│   │           ├── java
-│   │           │   └── ai
-│   │           │       └── castor
-│   │           │           └── idf
-│   │           └── resources
-│   │               └── ai
-│   │                   └── castor
-│   │                       └── qa
 │   ├── kim_cnn
-│   │   ├── config
-│   │   ├── etc
-│   │   ├── model
-│   │   │   └── cnnText
-│   │   └── network
-│   ├── simple_qa_rnn
-│   │   ├── finished_checkpoints
-│   │   │   ├── bilstm1
-│   │   │   ├── bilstm2
-│   │   │   └── lstm1
-│   │   └── scripts
 │   └── sm_cnn
-│       └── trec_eval-8.0
 ├── data
 │   ├── README.md
 │   ├── TrecQA/
