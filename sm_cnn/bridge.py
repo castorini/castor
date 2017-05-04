@@ -9,7 +9,7 @@ import torch
 from nltk.tokenize import TreebankWordTokenizer
 from torch.autograd import Variable
 
-from sm_model import model
+from sm_cnn import model
 
 sys.modules['model'] = model
 
@@ -163,12 +163,11 @@ if __name__ == "__main__":
     args = ap.parse_args()
 
     smmodel = SMModelBridge(
-            #'../models/sm_model/sm_model.TrecQA.TRAIN-ALL.2017-04-02.castor',
-            args.model,
-            args.word_embeddings_cache,
-            args.stopwords_file,
-            args.wordDF_file)
-    
+        args.model,
+        args.word_embeddings_cache,
+        args.stopwords_file,
+        args.wordDF_file)
+
     # if args.no_ext_feats:
     #     smmodel.model.no_ext_feats = True
 
@@ -197,6 +196,6 @@ if __name__ == "__main__":
         for score, sentence in ss:
             #print(score, '\t', sentence)
             #print('{}\t{}'.format(labels[i], score))
-            print('{} {} {} {} {} {}'.format(qids[i], '0', i, 0, score, 'sm_model.'+args.dataset), file=scoref)
+            print('{} {} {} {} {} {}'.format(qids[i], '0', i, 0, score, 'sm_cnn.'+args.dataset), file=scoref)
             if args.out_qrels:
                 print('{} {} {} {}'.format(qids[i], '0', i, labels[i]), file=qrelf)

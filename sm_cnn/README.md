@@ -30,7 +30,8 @@ This should generate:
 ├── Castor
 │   ├── idf_baseline
 │   ├── kim_cnn
-│   └── sm_cnn
+│   ├── simple_qa_rnn
+│   └── sm_cnn/
 ├── data
 │   ├── README.md
 │   ├── TrecQA/

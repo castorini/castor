@@ -1,4 +1,4 @@
-# module to compute various external features for the sm_model.
+# module to compute various external features for the sm cnn model.
 # TODO: add more external features like:
 # word mover distance, cosine sim in tf.idf space, cosine sim in word embedding space
 # overlap based on parts of speech: noun, verb, adj (POS tag)
