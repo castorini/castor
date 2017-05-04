@@ -28,6 +28,7 @@ git clone https://github.com/castorini/Castor.git
 This should generate:
 ```
 ├── Castor
+│   ├── README.md
 │   ├── idf_baseline
 │   ├── kim_cnn
 │   ├── simple_qa_rnn
