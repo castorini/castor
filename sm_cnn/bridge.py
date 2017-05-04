@@ -1,22 +1,24 @@
+import json
 import os
 import sys
-import pickle
-import string
-from collections import defaultdict
+from collections import Counter
+import argparse
 
 import numpy as np
 import torch
 from nltk.tokenize import TreebankWordTokenizer
 from torch.autograd import Variable
+from py4j.java_gateway import JavaGateway
 
 from sm_cnn import model
+from sm_cnn.external_features import compute_overlap, compute_idf_weighted_overlap, stopped
 
 sys.modules['model'] = model
 
 
 class SMModelBridge(object):
 
-    def __init__(self, model_file, word_embeddings_cache_file, stopwords_file, word2dfs_file):
+    def __init__(self, model_file, word_embeddings_cache_file, index_path):
         # init torch random seeds
         torch.manual_seed(1234)
         np.random.seed(1234)
@@ -27,13 +29,7 @@ class SMModelBridge(object):
         self.vec_dim = self._preload_cached_embeddings(word_embeddings_cache_file)
         self.unk_term_vec = np.random.uniform(-0.25, 0.25, self.vec_dim)
 
-        # stopwords
-        self.stoplist = set([line.strip() for line in open(stopwords_file)])
-
-        # word dfs
-        if os.path.isfile(word2dfs_file):
-            with open(word2dfs_file, "rb") as w2dfin:
-                self.word2dfs = pickle.load(w2dfin)
+        self.index = index_path
 
 
     def _preload_cached_embeddings(self, cache_file):
@@ -50,49 +46,10 @@ class SMModelBridge(object):
         return vec_dim
 
 
-    def parser(self, q, a):
-        q_toks = TreebankWordTokenizer().tokenize(q)
-        q_str = ' '.join(q_toks).lower()
-        a_list = []
-        for ans in a:
-            ans_toks = TreebankWordTokenizer().tokenize(ans)
-            a_str = ' '.join(ans_toks).lower()
-            a_list.append(a_str)
-        return q_str, a_list
-
-
-    def compute_overlap_features(self, q_str, a_list, word2df=None, stoplist=None):
-        word2df = word2df if word2df else {}
-        stoplist = stoplist if stoplist else set()
-        feats_overlap = []
-        for a in a_list:
-            question = q_str.split()
-            answer = a.split()
-            # q_set = set(question)
-            # a_set = set(answer)
-            q_set = set([q for q in question if q not in stoplist])
-            a_set = set([a for a in answer if a not in stoplist])
-            word_overlap = q_set.intersection(a_set)
-            # overlap = float(len(word_overlap)) / (len(q_set) * len(a_set) + 1e-8)
-            if len(q_set) == 0 and len(a_set) == 0:
-                overlap = 0
-            else:
-                overlap = float(len(word_overlap)) / (len(q_set) + len(a_set))
-
-            # q_set = set([q for q in question if q not in stoplist])
-            # a_set = set([a for a in answer if a not in stoplist])
-            word_overlap = q_set.intersection(a_set)
-            df_overlap = 0.0
-            for w in word_overlap:
-                df_overlap += word2df[w]
-
-            if len(q_set) == 0 and len(a_set) == 0:
-                df_overlap = 0
-            else:
-                df_overlap /= (len(q_set) + len(a_set))
-
-            feats_overlap.append(np.array([overlap, df_overlap]))
-        return np.array(feats_overlap)
+    def parse(self, sentence):
+        s_toks = TreebankWordTokenizer().tokenize(sentence)
+        s_str = ' '.join(s_toks).lower()
+        return s_str
 
 
     def make_input_matrix(self, sentence):
@@ -122,80 +79,108 @@ class SMModelBridge(object):
             tensorized_inputs.append((xq, xs, ext_feats))
         return tensorized_inputs
 
-
-    def rerank_candidate_answers(self, question, answers):
-        # tokenize
-        q_str, a_list = self.parser(question, answers)
-
-        # calculate overlap features
-        overlap_feats = self.compute_overlap_features(q_str, a_list, \
-            stoplist=None, word2df=self.word2dfs)
-        overlap_feats_stoplist = self.compute_overlap_features(q_str, a_list, \
-            stoplist=self.stoplist, word2df=self.word2dfs)
-        overlap_feats_vec = np.hstack([overlap_feats, overlap_feats_stoplist])
-
+    def rerank_candidate_answers(self, question, answers, idf_json):
         # run through the model
         scores_sentences = []
-        for i in range(len(a_list)):
-            xq, xa, x_ext_feats = self.get_tensorized_inputs([q_str], [a_list[i]], \
-                [overlap_feats_vec[i]])[0]
+        question = self.parse(question)
+        term_idfs = json.loads(idf_json)
+        term_idfs = dict((k, float(v)) for k, v in term_idfs.items())
+
+        for answer in answers:
+            answer = self.parse(answer)
+
+            overlap = compute_overlap([question], [answer])
+            idf_weighted_overlap = compute_idf_weighted_overlap([question], [answer], term_idfs)
+            overlap_no_stopwords =\
+                compute_overlap(stopped([question]), stopped([answer]))
+            idf_weighted_overlap_no_stopwords =\
+                compute_idf_weighted_overlap(stopped([question]), stopped([answer]), term_idfs)
+            ext_feats = [np.array(feats) for feats in zip(overlap, idf_weighted_overlap,\
+                        overlap_no_stopwords, idf_weighted_overlap_no_stopwords)]
+
+            xq, xa, x_ext_feats = self.get_tensorized_inputs([question], [answer], \
+                ext_feats)[0]
             pred = self.model(xq, xa, x_ext_feats)
             pred = torch.exp(pred)
-            scores_sentences.append((pred.data.squeeze()[1], a_list[i]))
+            scores_sentences.append((pred.data.squeeze()[1], answer))
 
         return scores_sentences
 
+def get_term_idf_json_list(index_path, sent_list):
+    gateway = JavaGateway()
+    index = gateway.jvm.java.lang.String(index_path)
+    pyserini = gateway.jvm.io.anserini.py4j.PyseriniEntryPoint()
+    pyserini.initializeWithIndex(index_path)
+    java_list = gateway.jvm.java.util.ArrayList()
+
+    for l in sent_list:
+        java_list.add(l)
+
+    json_object = pyserini.getTermIdfJSONs(java_list)
+    return json_object
 
 if __name__ == "__main__":
-
-    ap = argparse.ArgumentParser(description="Bridge Demo. Produces scores in trec_eval format")
-    ap.add_argument('model')
-    ap.add_argument('--word_embeddings_cache', default='../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache')
-    ap.add_argument('--stopwords_file', default='../data/TrecQA/stopwords.txt')
-    ap.add_argument('--wordDF_file', default='../data/TrecQA/word2dfs.p')
-    ap.add_argument('--no_ext_feats', action="store_true", help="This argument has no effect because the model saves its members")
-    ap.add_argument('--use_pre_ext_feats', action="store_true", help="use the precomputed external overlap features")
-    ap.add_argument('--data_folder', default='../data/TrecQA/')
-    ap.add_argument('dataset', choices=['train-all', 'raw-test', 'raw-dev', 'train'])
-    ap.add_argument('out_scorefile', help='file in trec_eval format')
-    ap.add_argument('--out_qrels', help='will also output qrels trec_eval format')
+    ap = argparse.ArgumentParser(description="Bridge Demo. Produces scores in trec_eval format",
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    ap.add_argument('model', help="the path to the saved model file")
+    ap.add_argument('--word-embeddings-cache', help="the embeddings 'cache' file",\
+        default='../data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache')
+    ap.add_argument('index_path', help="the path to the source corpus index")
+    # ap.add_argument('--paper-ext-feats', action="store_true", \
+    #     help="external features as per the paper")
+    ap.add_argument('--dataset-folder', help="the QA dataset folder {TrecQA|WikiQA}",
+                    default='../data/TrecQA/')
 
     args = ap.parse_args()
 
     smmodel = SMModelBridge(
         args.model,
         args.word_embeddings_cache,
-        args.stopwords_file,
-        args.wordDF_file)
+        args.index_path
+        )
 
-    # if args.no_ext_feats:
-    #     smmodel.model.no_ext_feats = True
+    train_set, dev_set, test_set = 'train', 'dev', 'test'
+    if 'TrecQA' in args.dataset_folder:
+        train_set, dev_set, test_set = 'train-all', 'raw-dev', 'raw-test'
 
 
-    allque = [q.strip() for q in open(os.path.join('../data/TrecQA/', args.dataset+'/a.toks')).readlines()]
-    allans = [a.strip() for a in open(os.path.join('../data/TrecQA/', args.dataset+'/b.toks')).readlines()]
-    labels = [y.strip() for y in open(os.path.join('../data/TrecQA/', args.dataset+'/sim.txt')).readlines()]
-    qids = [id.strip() for id in open(os.path.join('../data/TrecQA/', args.dataset+'/id.txt')).readlines()]
 
-    pre_ext_feats = None
-    if args.use_pre_ext_feats:
-        pre_ext_feats = [ [float(e) for e in x.split() ] for x in open(os.path.join('../data/TrecQA/', args.dataset+'/overlap_feats.txt')).readlines()]
-    
-    scoref = open(args.out_scorefile, 'w')
-    if args.out_qrels:
-        qrelf = open(args.out_qrels, 'w')
+    for split in [dev_set, test_set]:
+        outfile = open('bridge.{}.scores'.format(split), 'w')
 
-    for i in range(len(allque)):
-        question = allque[i]
-        answers = [allans[i]]
-        ext_feats = None
-        if args.use_pre_ext_feats:
-            ext_feats = [pre_ext_feats[i]]
-        ss = smmodel.rerank_candidate_answers(question, answers, ext_feats)
-        # print('Question:', question)
-        for score, sentence in ss:
-            #print(score, '\t', sentence)
-            #print('{}\t{}'.format(labels[i], score))
-            print('{} {} {} {} {} {}'.format(qids[i], '0', i, 0, score, 'sm_cnn.'+args.dataset), file=scoref)
-            if args.out_qrels:
-                print('{} {} {} {}'.format(qids[i], '0', i, labels[i]), file=qrelf)
+        questions = [q.strip() for q in \
+                        open(os.path.join(args.dataset_folder, split, 'a.toks')).readlines()]
+        answers = [q.strip() for q in \
+                        open(os.path.join(args.dataset_folder, split, 'b.toks')).readlines()]
+        labels = [q.strip() for q in \
+                        open(os.path.join(args.dataset_folder, split, 'sim.txt')).readlines()]
+        qids = [q.strip() for q in \
+                        open(os.path.join(args.dataset_folder, split, 'id.txt')).readlines()]
+
+        qid_question = dict(zip(qids, questions))
+        q_counts = Counter(questions)
+
+        answers_offset = 0
+        docid_counter = 0
+
+        all_questions_answers = questions + answers
+        idf_json = get_term_idf_json_list(args.index_path, all_questions_answers)
+
+        for qid, question in sorted(qid_question.items(), key=lambda x: float(x[0])):
+            num_answers = q_counts[question]
+            q_answers = answers[answers_offset: answers_offset + num_answers]
+            answers_offset += num_answers
+            sentence_scores = smmodel.rerank_candidate_answers(question, q_answers, idf_json)
+
+            for score, sentence in sentence_scores:
+                print('{} Q0 {} 0 {} sm_cnn_bridge.{}.run'.format(
+                    qid,
+                    docid_counter,
+                    score,
+                    os.path.basename(args.dataset_folder)
+                ), file=outfile)
+                docid_counter += 1
+            if 'WikiQA' in args.dataset_folder:
+                docid_counter = 0
+
+        outfile.close()
