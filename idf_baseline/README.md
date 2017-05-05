@@ -154,5 +154,10 @@ python qa-data-only-idf.py ../../data/WikiQA WikiQA
 ```
 Evaluate these using step 2.
 
+The same script can now also be used to comput idf sum similarity based on corpus idf statistics
+```
+python qa-data-only-idf.py ../../data/TrecQA TrecQA --index-for-corpusIDF ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ 
+```
+
 ### Baseline results
 Baseline results are saved in ``Castor/baseline_results.tsv``

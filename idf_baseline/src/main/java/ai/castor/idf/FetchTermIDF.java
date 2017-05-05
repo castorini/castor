@@ -68,7 +68,7 @@ public class FetchTermIDF {
         QueryParser qp = new QueryParser(FIELD_BODY, analyzer);
         ClassicSimilarity similarity = new ClassicSimilarity();
 
-        String esTerm = qp.escape(term);        
+        String esTerm = qp.escape(term);
         double termIDF = 0.0;
         try {
             TermQuery q = (TermQuery) qp.parse(esTerm);

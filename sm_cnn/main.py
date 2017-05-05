@@ -148,11 +148,13 @@ if __name__ == "__main__":
     # TODO: remember to update args.* in testing loop below
     if args.paper_ext_feats:
         logger.info("--paper-ext-feats")
-        ext_feats_for_splits = set_external_features_as_per_paper(trainer)
+        ext_feats_for_splits = \
+            set_external_features_as_per_paper(trainer, args.index_for_corpusIDF)
         # ^^ we are saving the features to be used while testing at the end of training
     elif args.paper_ext_feats_stem:
         logger.info("--paper-ext-feats-stem")
-        ext_feats_for_splits = set_external_features_as_per_paper_and_stem(trainer)
+        ext_feats_for_splits = \
+            set_external_features_as_per_paper_and_stem(trainer, args.index_for_corpusIDF)
 
     
     if not args.skip_training:
