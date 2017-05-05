@@ -48,17 +48,6 @@
               <mainClass>ai.castor.idf.IDFScorer</mainClass>
               <name>GetIDFSumSimilarity</name>
             </program>
-          </programs>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>appassembler-maven-plugin</artifactId>
-        <version>1.10</version>
-        <configuration>
-          <extraJvmArguments>-Xms512M -Xmx24576M</extraJvmArguments>
-          <programs>
             <program>
               <mainClass>ai.castor.idf.FetchTermIDF</mainClass>
               <name>FetchTermIDF</name>
@@ -66,7 +55,6 @@
           </programs>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -80,7 +68,6 @@
           </descriptorRefs>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 
