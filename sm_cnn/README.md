@@ -67,7 +67,7 @@ cd ..
 
 To train the S&M model on TrecQA
 ```
-python main.py ../../models/sm_model/sm_model.TrecQA.TRAIN-ALL.2017-04-02.castor
+python main.py ../../models/sm_model/sm_model.TrecQA.TRAIN-ALL.2017-04-02.castor --paper-ext-features
 ```
 The final model will be saved to ```../../models/sm_model/sm_model.TrecQA.TRAIN-ALL.2017-04-02.castor```
 
