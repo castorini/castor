@@ -28,7 +28,8 @@ class Experiments(object):
         self.combinations = []
         self.qa_data = qa_dataset
         self.w2v_file = word_embeddings_file
-        self.cmd_root = "python main.py --dataset_folder {} --word_vectors_file {} --run-name-prefix run --epochs 1 --num_conv_filters 5 --skip-training".format(self.qa_data, self.w2v_file)
+        #self.cmd_root = "python main.py --dataset_folder {} --word_vectors_file {} --run-name-prefix run --epochs 1 --num_conv_filters 5".format(self.qa_data, self.w2v_file)
+        self.cmd_root = "python main.py --dataset_folder {} --word_vectors_file {} --run-name-prefix run  --paper-ext-feats".format(self.qa_data, self.w2v_file)
         self.eval_cmd_root = "../../Anserini/eval/trec_eval.9.0/trec_eval -m map -m recip_rank -m bpref"
         self.rbp_cmd_root = "rbp_eval"
 

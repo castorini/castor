@@ -148,7 +148,8 @@ def read_in_dataset(dataset_folder, set_folder, stop_punct=False, dash_split=Fal
     labels = [int(lbl) for lbl in read_in_data(dataset_folder, set_folder, "sim.txt")]
 
     #vocab = [line.strip() for line in open(os.path.join(dataset_folder, 'vocab.txt')).readlines()]
-    all_data = list(set(questions)) + list(set(sentences))
+    #all_data = list(set(questions)) + list(set(sentences))
+    all_data = questions + sentences
     vocab_set = set()
     for sentence in all_data:
         for term in sentence.split():
