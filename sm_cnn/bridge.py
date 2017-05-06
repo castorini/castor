@@ -116,9 +116,16 @@ class SMModelBridge(object):
         term_idfs = json.loads(idf_json)
         term_idfs = dict((k, float(v)) for k, v in term_idfs.items())
 
+        for term in question.split():
+            if term not in term_idfs:
+                term_idfs[term] = 0.
+
         for answer in answers:
             answer = self.parse(answer)
-
+            for term in answer.split():
+                if term not in term_idfs:
+                    term_idfs[term] = 0.
+    
             overlap = compute_overlap([question], [answer])
             idf_weighted_overlap = compute_idf_weighted_overlap([question], [answer], term_idfs)
             overlap_no_stopwords =\
