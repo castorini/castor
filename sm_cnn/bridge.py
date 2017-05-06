@@ -4,6 +4,8 @@ import sys
 from collections import Counter
 import argparse
 
+import re
+import string
 import numpy as np
 import torch
 from nltk.tokenize import TreebankWordTokenizer
