@@ -62,7 +62,8 @@ class Experiments(object):
             metrics = []
             scores = []
             for line in str(out).split('\n'):
-                if not line.strip().split(): continue
+                if not line.strip().split():
+                    continue
                 fields = line.strip().split()
                 metrics.append(fields[0])
                 scores.append(fields[-1])
@@ -72,7 +73,8 @@ class Experiments(object):
                                                        self.qa_data, split, split)
             out, err = self._run_cmd(cmd)
             for line in str(out).split('\n'):
-                if not line.startswith('p= 0.50'): continue
+                if not line.startswith('p= 0.50'):
+                    continue
                 metrics.append('rbp_p0.5')
                 scores.append(' '.join(line.strip().split()[-2:]))
             
@@ -118,7 +120,7 @@ if __name__ == "__main__":
     ap.add_argument("--run", help='runs experimenal setting combination NUMBER(s)', 
                     nargs="+", type=int)
     ap.add_argument("--runall", help="runs all experiments in order", action="store_true")
-    ap.add_argument("indexPath", help="required for some combination of experiments")
+    ap.add_argument("index_path", help="required for some combination of experiments")
     ap.add_argument('qa_data', help="path to the QA dataset",
                     choices=['../../data/TrecQA', '../../data/WikiQA'])
 
@@ -128,7 +130,7 @@ if __name__ == "__main__":
 
     experiments.add_setting(Setting('idf_source', {
         'qa-data':'',
-        'corpus-index': '--index-for-corpusIDF {}'.format(args.indexPath)
+        'corpus-index': '--index-for-corpusIDF {}'.format(args.index_path)
     }))
 
     experiments.add_setting(Setting('stop_stem', {
@@ -153,89 +155,3 @@ if __name__ == "__main__":
     
     if args.runall:
         experiments.run_all()
-
-    
-
-# setup experimental settings ---------
-# import itertools
-# idf_sets = ['idf_source:qa-data', 'idf_source:corpus-index']
-# stop_stem_sets = ['stop_stem:yes', 'stop_stem:no']
-# punc_sets = ['punctuation:keep', 'punctuation:remove']
-# dash_sets = ['dash_words:keep', 'dash_words:split']
-
-# for c in itertools.product(idf_sets, stop_stem_sets, punc_sets, dash_sets):    
-#     print(c)
-
-# runeval()
-# {
-#     echo "$1"
-#     eval "$1"
-#     for split in train-all raw-dev raw-test; 
-#     do 
-#         ../sm_model/trec_eval-8.0/trec_eval ../../data/TrecQA/$split.qrel run.$split.idfsim | grep map; 
-#     done
-# }
-
-# ('idf_source:qa-data', 'stop_stem:yes', 'punctuation:keep', 'dash_words:keep')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --stop-and-stem"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:yes', 'punctuation:keep', 'dash_words:split')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --stop-and-stem --dash-split"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:yes', 'punctuation:remove', 'dash_words:keep')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --stop-and-stem --stop-punct"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:yes', 'punctuation:remove', 'dash_words:split')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --stop-and-stem --stop-punct --dash-split"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:no', 'punctuation:keep', 'dash_words:keep')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:no', 'punctuation:keep', 'dash_words:split')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --dash-split"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:no', 'punctuation:remove', 'dash_words:keep')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --stop-punct"
-#runeval "$cmd"
-
-# ('idf_source:qa-data', 'stop_stem:no', 'punctuation:remove', 'dash_words:split')
-#cmd="python qa-data-only-idf.py ../../data/TrecQA run --stop-punct --dash-split"
-#runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:yes', 'punctuation:keep', 'dash_words:keep')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --stop-and-stem"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:yes', 'punctuation:keep', 'dash_words:split')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --stop-and-stem --dash-split"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:yes', 'punctuation:remove', 'dash_words:keep')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --stop-and-stem --stop-punct"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:yes', 'punctuation:remove', 'dash_words:split')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --stop-and-stem --stop-punct --dash-split"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:no', 'punctuation:keep', 'dash_words:keep')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:no', 'punctuation:keep', 'dash_words:split')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --dash-split"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:no', 'punctuation:remove', 'dash_words:keep')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --stop-punct"
-# runeval "$cmd"
-
-# # ('idf_source:corpus-index', 'stop_stem:no', 'punctuation:remove', 'dash_words:split')
-# cmd="python qa-data-only-idf.py ../../data/TrecQA run --index ../../data/indices/index.qadata.pos.docvectors.keepstopwords/ --stop-punct --dash-split"
-# runeval "$cmd"
