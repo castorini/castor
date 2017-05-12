@@ -83,7 +83,7 @@ class SMModelBridge(object):
 
 
     def make_input_matrix(self, sentence):
-        terms = sentence.strip().split()
+        terms = sentence.strip().split()[:60]
         # word_embeddings = torch.zeros(max_len, vec_dim).type(torch.DoubleTensor)
         word_embeddings = torch.zeros(len(terms), self.vec_dim).type(torch.DoubleTensor)
         for i in range(len(terms)):
