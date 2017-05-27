@@ -137,8 +137,8 @@ for epoch in range(args.epochs):
         iter += 1
         batch_questions = train_dataset["questions"][batch_indices[batch_ix]]
         batch_relations = train_dataset["rel_labels"][batch_indices[batch_ix]]
-        inputs = read_text_var(batch_questions, word_vocab, cuda=args.cuda)
-        targets = read_labels_var(batch_relations, rel_vocab, cuda=args.cuda)
+        inputs = read_text_var(batch_questions, word_vocab)
+        targets = read_labels_var(batch_relations, rel_vocab)
         if args.cuda:
             inputs.data = inputs.data.cuda()
             targets.data = targets.data.cuda()
