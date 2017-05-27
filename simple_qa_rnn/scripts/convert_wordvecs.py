@@ -6,8 +6,7 @@ import six
 
 try:
     path = sys.argv[1]
-    vocabpath = sys.argv[2]
-    outpath = sys.argv[3]
+    outpath = sys.argv[2]
 except:
     print("ERROR: the command line arguments passed in were not valid.\n");
     print("USAGE: python scripts/convert_wordvecs.py [input_file] [output_file]");
@@ -24,7 +23,6 @@ wv_tokens = []
 wv_arr = array.array('d')
 wv_size = None # dimension of the word vectors
 vocab_size = 0 # counts the number of words saved
-vocabfile = open(vocabpath, 'w')
 if lines is not None:
     for i in tqdm(range(len(lines)), desc="loading word vectors from {}".format(path)):
         entries = lines[i].strip().split()
@@ -45,10 +43,8 @@ if lines is not None:
             continue
         wv_arr.extend(float(x) for x in entries)
         wv_tokens.append(word)
-        vocabfile.write(word + "\n")
         vocab_size += 1
 
-vocabfile.close()
 print("vocab size: {}".format(vocab_size))
 print("dim: {}".format(wv_size))
 
