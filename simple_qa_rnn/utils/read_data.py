@@ -40,7 +40,7 @@ def read_text_var(batch_text, word_vocab):
         for i in range(S, max_len):
             sent.append( word_vocab.pad_index )
         out_text.append(sent)
-    return Variable(torch.Tensor(out_text))
+    return Variable(torch.LongTensor(out_text))
 
 def read_labels_var(rel_labels, rel_vocab):
     N = len(rel_labels)
