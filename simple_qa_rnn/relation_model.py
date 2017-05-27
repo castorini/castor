@@ -45,11 +45,11 @@ class RelationPredictor(nn.Module):
         num_in_features = config.n_layers * config.n_directions * config.d_hidden
         self.hidden2label = nn.Sequential (
                         nn.Linear(num_in_features, num_in_features),
-                        # add batch norm here
+                        nn.BatchNorm1d(num_in_features),
                         self.relu,
                         self.dropout,
                         nn.Linear(num_in_features, num_in_features),
-                        # add batch norm here
+                        nn.BatchNorm1d(num_in_features),
                         self.relu,
                         self.dropout,
                         nn.Linear(num_in_features, config.d_out)
@@ -59,7 +59,7 @@ class RelationPredictor(nn.Module):
     def forward(self, batch_input):
         batch_input_embed = self.embed(batch_input) # size - (|B|, |S|, |D|)
         # size - (|B|, |X|) where |X| = n_layers * n_directions * d_hidden
-        encoded = self.encoder(batch_input_embed) 
-        rel_space = self.hidden2label(encode) # size - (|B|, |K|)
+        encoded = self.encoder(batch_input_embed)
+        rel_space = self.hidden2label(encoded) # size - (|B|, |K|)
         scores = F.log_softmax(rel_space)
         return scores
