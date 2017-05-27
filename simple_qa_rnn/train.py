@@ -14,7 +14,6 @@ from utils.vocab import Vocab
 from utils.read_data import *
 
 args = get_args()
-
 # Set the random seed manually for reproducibility.
 torch.manual_seed(args.seed)
 if torch.cuda.is_available():
@@ -24,7 +23,7 @@ if torch.cuda.is_available():
         torch.cuda.manual_seed(args.seed)
 
 # ---- helper methods ------
-def evaluate_dataset_batch(data_set, max_sent_length, model, w2v_map, label_to_ix):
+def evaluate_dataset_batch(data_set, model):
     n_total = len(data_set)
     n_correct = 0
     num_batches = len(data_set) // args.batch_size
@@ -32,8 +31,13 @@ def evaluate_dataset_batch(data_set, max_sent_length, model, w2v_map, label_to_i
                                 range(args.batch_size, n_total, args.batch_size))
     model.eval()
     for batch_ix in range(num_batches):
-        batch = data_set[batch_indices[batch_ix]]
-        inputs, targets = data.create_tensorized_batch(batch, max_sent_length, w2v_map, label_to_ix)
+        batch_questions = data_set["questions"][batch_indices[batch_ix]]
+        batch_relations = data_set["rel_labels"][batch_indices[batch_ix]]
+        inputs = read_text_var(batch_questions, word_vocab)
+        targets = read_labels_var(batch_relations, rel_vocab)
+        if args.cuda:
+            inputs.data = inputs.data.cuda()
+            targets.data = targets.data.cuda()
         scores = model(inputs)
         pred_label_ix = np.argmax(scores.data.numpy(), axis=1) # check this properly
         correct_label_ix = targets.data.numpy()
@@ -159,18 +163,18 @@ for epoch in range(args.epochs):
         optimizer.step()
 
         # log at intervals
-        # if iter % args.dev_every == 0:
-        #     train_acc = evaluate_dataset_batch(train_set[:8000], max_sent_length, model, w2v_map, label_to_ix)
-        #     val_acc = evaluate_dataset_batch(val_set, max_sent_length, model, w2v_map, label_to_ix)
-        #     print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
-        #     if val_acc > best_val_acc:
-        #         best_val_acc = val_acc
-        #         snapshot_prefix = os.path.join(args.save_path, 'best_snapshot')
-        #         snapshot_path = snapshot_prefix + '_valacc_{:6.4f}__iter_{}_model.pt'.format(val_acc, iter)
-        #         torch.save(model.state_dict(), snapshot_path)
-        #         for f in glob.glob(snapshot_prefix + '*'):
-        #             if f != snapshot_path:
-        #                 os.remove(f)
+        if iter % args.dev_every == 0:
+            train_acc = evaluate_dataset_batch(train_dataset, model)
+            val_acc = evaluate_dataset_batch(val_dataset, model)
+            print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
+            if val_acc > best_val_acc:
+                best_val_acc = val_acc
+                snapshot_prefix = os.path.join(args.save_path, 'best_snapshot')
+                snapshot_path = snapshot_prefix + '_valacc_{:6.4f}__iter_{}_model.pt'.format(val_acc, iter)
+                torch.save(model.state_dict(), snapshot_path)
+                for f in glob.glob(snapshot_prefix + '*'):
+                    if f != snapshot_path:
+                        os.remove(f)
 
         if iter == 1 or iter % args.log_every == 0:
             print(log_template.format(time.time() - start, epoch, iter, loss.data[0]))
