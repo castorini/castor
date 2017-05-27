@@ -28,10 +28,14 @@ vocab_size = 0 # counts the number of words saved
 vocabfile = open(vocabpath, 'w')
 if lines is not None:
     for i in tqdm(range(len(lines)), desc="loading word vectors from {}".format(path)):
-        entries = lines[i].strip().split(" ")
+        entries = lines[i].strip().split()
         word, entries = entries[0], entries[1:]
         if wv_size is None:
             wv_size = len(entries)
+        else:
+            # safety check that the dimension is the same
+            if len(entries) != wv_size:
+                continue
         try:
             if isinstance(word, six.binary_type):
                 word = word.decode('utf-8')
@@ -52,5 +56,5 @@ wv_arr = torch.Tensor(wv_arr).view(vocab_size, wv_size) # word embeddings in Ten
 ret = (wv_dict, wv_arr, wv_size) # save all three info in a tuple
 
 print("saving word vectors to {}".format(outpath))
-torch.save(ret, outpath + '.pt')
+torch.save(ret, outpath)
 
