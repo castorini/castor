@@ -117,17 +117,17 @@ dev_log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>9.6f},{:9.6f},{:11.6f
 model.train()
 for epoch in range(args.epochs):
     # shuffle the dataset and create batches (truncate the last batch if not of equal size)
-    shuffled_indices = np.random.permutation(len(train_set))
+    shuffled_indices = np.random.permutation(train_dataset["size"])
     num_batches = len(shuffled_indices) // args.batch_size
     batch_indices = np.split(shuffled_indices,
                                 range(args.batch_size, len(shuffled_indices), args.batch_size))
-    model.hidden = model.init_hidden()
+    model.encoder.hidden = model.encoder.init_hidden()
     for batch_ix in range(num_batches):
         iter += 1
-        batch = train_set[batch_indices[batch_ix]]
-        inputs, targets = data.create_tensorized_batch(batch, max_sent_length, w2v_map, label_to_ix)
-        # print("inputs size: {}".format(inputs.size()))
-        # print("targets size: {}".format(targets.size()))
+        batch_questions = train_dataset["questions"][batch_indices[batch_ix]]
+        batch_relations = train_dataset["rel_labels"][batch_indices[batch_ix]]
+        inputs = read_text_var(batch_questions, word_vocab)
+        targets = read_labels_var(batch_relations, rel_vocab)
 
         # clear out gradients and hidden states of the model
         model.zero_grad()
@@ -139,25 +139,26 @@ for epoch in range(args.epochs):
         # compute the loss, gradients, and update the parameters
         loss = loss_function(scores, targets)
         loss.backward()
+
         # `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.
         torch.nn.utils.clip_grad_norm(model.parameters(), args.clip)
         optimizer.step()
 
         # log at intervals
-        if iter % args.dev_every == 0:
-            train_acc = evaluate_dataset_batch(train_set[:8000], max_sent_length, model, w2v_map, label_to_ix)
-            val_acc = evaluate_dataset_batch(val_set, max_sent_length, model, w2v_map, label_to_ix)
-            print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
-            if val_acc > best_val_acc:
-                best_val_acc = val_acc
-                snapshot_prefix = os.path.join(args.save_path, 'best_snapshot')
-                snapshot_path = snapshot_prefix + '_valacc_{:6.4f}__iter_{}_model.pt'.format(val_acc, iter)
-                torch.save(model.state_dict(), snapshot_path)
-                for f in glob.glob(snapshot_prefix + '*'):
-                    if f != snapshot_path:
-                        os.remove(f)
+        # if iter % args.dev_every == 0:
+        #     train_acc = evaluate_dataset_batch(train_set[:8000], max_sent_length, model, w2v_map, label_to_ix)
+        #     val_acc = evaluate_dataset_batch(val_set, max_sent_length, model, w2v_map, label_to_ix)
+        #     print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
+        #     if val_acc > best_val_acc:
+        #         best_val_acc = val_acc
+        #         snapshot_prefix = os.path.join(args.save_path, 'best_snapshot')
+        #         snapshot_path = snapshot_prefix + '_valacc_{:6.4f}__iter_{}_model.pt'.format(val_acc, iter)
+        #         torch.save(model.state_dict(), snapshot_path)
+        #         for f in glob.glob(snapshot_prefix + '*'):
+        #             if f != snapshot_path:
+        #                 os.remove(f)
 
-        elif iter == 1 or iter % args.log_every == 0:
+        if iter == 1 or iter % args.log_every == 0:
             print(log_template.format(time.time() - start, epoch, iter, loss.data[0]))
 
 
