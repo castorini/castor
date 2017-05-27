@@ -39,9 +39,8 @@ def evaluate_dataset_batch(data_set, model):
             inputs.data = inputs.data.cuda()
             targets.data = targets.data.cuda()
         scores = model(inputs)
-        pred_label_ix = np.argmax(scores.data.numpy(), axis=1) # check this properly
-        correct_label_ix = targets.data.numpy()
-        n_correct += (pred_label_ix == correct_label_ix).sum()
+        pred_score, pred_label_ix = torch.max(scores, dim=1) # check this properly
+        n_correct += torch.sum(torch.eq(pred_label_ix, targets))
     acc = n_correct / n_total
     return acc
 
