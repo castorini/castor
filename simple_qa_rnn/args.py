@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 def get_args():
     parser = ArgumentParser(description='Simple QA BiGRU model - Ferhan')
     parser.add_argument('--epochs', type=int, default=30)
-    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--d_embedding', type=int, default=300)
     parser.add_argument('--d_hidden', type=int, default=300)
     parser.add_argument('--n_layers', type=int, default=1)

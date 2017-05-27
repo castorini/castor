@@ -1,7 +1,7 @@
-from .vocab import Vocab
 import torch
 import nltk
 import string
+from torch.autograd import Variable
 
 ## functions for loading data from disk
 
@@ -26,28 +26,28 @@ def find_max_seq_length(text):
     return max_len
 
 
-def read_text_tensor(text, word_vocab):
+def read_text_var(batch_text, word_vocab):
     out_text = []
-    max_len = find_max_seq_length(text)
-    for tokens in text:
-        S = len(tokens)
+    max_len = find_max_seq_length(batch_text)
+    for sent_tokens in batch_text:
+        S = len(sent_tokens)
         sent = []
         for i in range(S):
-            token = tokens[i]
+            token = sent_tokens[i]
             sent.append( word_vocab.get_index(token) )
         # pad the right end till the max length of the mini batch
         for i in range(S, max_len):
             sent.append( word_vocab.pad_index )
         out_text.append(sent)
-    return torch.LongTensor(out_text)
+    return Variable(torch.Tensor(out_text))
 
-def read_labels_tensor(rel_labels, rel_vocab):
+def read_labels_var(rel_labels, rel_vocab):
     N = len(rel_labels)
-    label_tensor = torch.IntTensor(N)
+    labels_list = []
     for i in range(N):
         token = rel_labels[i]
-        label_tensor[i] = rel_vocab.get_index(token)
-    return label_tensor
+        labels_list.append( rel_vocab.get_index(token) )
+    return Variable(torch.LongTensor([labels_list]))
 
 def read_dataset(datapath, word_vocab, rel_vocab):
     questions = []
