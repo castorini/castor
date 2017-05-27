@@ -17,7 +17,6 @@ args = get_args()
 
 # Set the random seed manually for reproducibility.
 torch.manual_seed(args.seed)
-args.cuda = True
 if torch.cuda.is_available():
     if not args.cuda:
         print("WARNING: You have a CUDA device, so you should probably run with --cuda")
@@ -110,6 +109,8 @@ config.d_out = num_classes
 config.n_directions = 2 if config.birnn else 1
 print(config)
 model = RelationPredictor(config)
+# initialize the embedding layer with the word vectors
+model.embed.weight.data = vecs
 if args.cuda:
     model.cuda()
 loss_function = nn.NLLLoss()
