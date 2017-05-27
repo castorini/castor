@@ -38,14 +38,10 @@ def read_labels(rel_labels, rel_vocab):
         label_tensor[i] = rel_vocab.index(token)
     return label_tensor
 
-def read_dataset(datapath, vocab_pt_filepath):
-    vocab_tuple = torch.load(vocab_pt_filepath)
-    w2i_dict, rel2i_dict = vocab_tuple
-
+def read_dataset(datapath, word_vocab, rel_vocab):
     questions = []
     rel_labels = []
     # read questions and label from the datapath - could be train, dev, testls
-
     with open(datapath) as f:
         for line in f:
             line_items = line.split("\t")
@@ -57,9 +53,6 @@ def read_dataset(datapath, vocab_pt_filepath):
             tokens = process_tokenize_text(qText)
             questions.append(tokens)
 
-    word_vocab = Vocab(w2i_dict)
-    word_vocab.add_unk_token("<UNK>")
-    rel_vocab = Vocab(rel2i_dict)
     questions_tensor = read_text(questions, word_vocab)
     rel_labels_tensor = read_labels(rel_labels, rel_vocab)
 

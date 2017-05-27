@@ -28,9 +28,9 @@ def build_vocab_SQ(data_dir):
                 tokens = process_tokenize_text(qText)
                 word_vocab |= set(tokens)
 
-    wv_dict = {word: i for i, word in enumerate(sorted(word_vocab))}  # word to index dictionary
-    relation_dict = {relation: i for i, relation in enumerate(sorted(relation_vocab))}  # relation to index dictionary
-    return (wv_dict, relation_dict)
+    word2index_dict = {word: i for i, word in enumerate(sorted(word_vocab))}  # word to index dictionary
+    rel2index_dict = {relation: i for i, relation in enumerate(sorted(relation_vocab))}  # relation to index dictionary
+    return (word2index_dict, rel2index_dict)
 
 
 print("WARNING: This script is dataset specific. Please change it to fit your own dataset.")

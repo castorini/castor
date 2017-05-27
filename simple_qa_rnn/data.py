@@ -28,7 +28,7 @@ def tokenize_text(text):
     tokens = nltk.word_tokenize(processed_text)
     return tokens
 
-def add_padding_tokens(text_tokens, max_length, pad_type='both', pad_token='<pad>'):
+def add_padding_tokens(text_tokens, max_length, pad_type='both', pad_token='<PAD>'):
     num_pads = max_length - len(text_tokens)
     right_pad = int(num_pads / 2)
     left_pad = num_pads - right_pad
@@ -41,7 +41,6 @@ def add_padding_tokens(text_tokens, max_length, pad_type='both', pad_token='<pad
     return padded_tokens
 
 def load_map(pname):
-    ret_map = None
     with open(pname, 'rb') as fh:
         ret_map = pickle.load(fh)
     return ret_map
