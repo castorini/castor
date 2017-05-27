@@ -1,3 +1,4 @@
+import sys
 import os
 import glob
 
@@ -13,7 +14,15 @@ def build_vocab(filepaths, dst_path, lowercase=True):
         for w in sorted(vocab):
             f.write(w + '\n')
 
-data_dir = 'data/kaggle/'
+try:
+    data_dir = sys.argv[1]
+except:
+    print("ERROR: the command line arguments passed in were not valid.\n");
+    print("USAGE: python scripts/build_vocab.py [data_dir]");
+    print("EXAMPLE: python scripts/build_vocab.py data/SimpleQuestions_v2/");
+    sys.exit(1);
+
+data_dir = 'data/SimpleQuestions_v2/'
 build_vocab(
         glob.glob(os.path.join(data_dir, '*/*.toks')),
         os.path.join(data_dir, 'vocab.txt'), False)

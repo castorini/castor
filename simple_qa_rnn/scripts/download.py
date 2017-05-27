@@ -81,4 +81,4 @@ if __name__ == '__main__':
     
     # download GloVe word embeddings
     download_wordvecs(wordvec_dir)
-    print("---DONE---")
+    print("Finished downloading word embeddings!")
