@@ -34,7 +34,7 @@ class RelationPredictor(nn.Module):
         self.embed = nn.Embedding(config.vocab_size, config.d_embedding)
         self.encoder = Encoder(config)
 
-        self.dropout = nn.Dropout(p=config.dp_ratio)
+        self.dropout = nn.Dropout(p=config.dropout_prob)
         self.relu = nn.ReLU()
 
         # linear layers map from hidden state space to label space
