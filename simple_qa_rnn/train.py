@@ -178,7 +178,7 @@ for epoch in range(args.epochs):
                     if f != snapshot_path:
                         os.remove(f)
 
-        if iter == 1 or iter % args.log_every == 0:
+        elif iter == 1 or iter % args.log_every == 0:
             print(log_template.format(time.time() - start, epoch, iter, loss.cpu().data[0]))
 
 
