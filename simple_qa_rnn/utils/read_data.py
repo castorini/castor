@@ -44,7 +44,8 @@ def read_dataset(datapath, vocab_pt_filepath):
 
     questions = []
     rel_labels = []
-    # read questions and label from the datapath - could be train, dev, test
+    # read questions and label from the datapath - could be train, dev, testls
+
     with open(datapath) as f:
         for line in f:
             line_items = line.split("\t")

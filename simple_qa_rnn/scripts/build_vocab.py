@@ -1,7 +1,15 @@
 import os
 import glob
-from .read_data import process_tokenize_text
 import torch
+import nltk
+import string
+
+# this method was copied from utils/read_data.py
+def process_tokenize_text(text):
+    punc_remover = str.maketrans('', '', string.punctuation)
+    processed_text = text.lower().translate(punc_remover)
+    tokens = nltk.word_tokenize(processed_text)
+    return tokens
 
 def build_vocab_SQ(data_dir):
     filepaths = glob.glob(os.path.join(data_dir, 'annotated*.txt'))
