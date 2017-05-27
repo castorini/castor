@@ -48,7 +48,7 @@ def read_labels_var(rel_labels, rel_vocab):
     for i in range(N):
         token = rel_labels[i]
         labels_list.append( rel_vocab.get_index(token) )
-    return Variable(torch.LongTensor([labels_list]))
+    return Variable(torch.LongTensor(labels_list))
 
 def read_dataset(datapath, word_vocab, rel_vocab):
     questions = []
