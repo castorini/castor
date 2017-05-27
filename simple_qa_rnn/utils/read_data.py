@@ -1,7 +1,15 @@
 from .vocab import Vocab
 import torch
+import nltk
+import string
 
 ## functions for loading data from disk
+
+def process_tokenize_text(text):
+    punc_remover = str.maketrans('', '', string.punctuation)
+    processed_text = text.lower().translate(punc_remover)
+    tokens = nltk.word_tokenize(processed_text)
+    return tokens
 
 def read_embedding(embed_pt_filepath):
     embed_tuple = torch.load(embed_pt_filepath)
@@ -30,9 +38,23 @@ def read_labels(rel_labels, rel_vocab):
         label_tensor[i] = rel_vocab.index(token)
     return label_tensor
 
-def read_dataset(dataset_pt_filepath):
-    dataset_tuple = torch.load(dataset_pt_filepath)
-    w2i_dict, rel2i_dict, questions, rel_labels = dataset_tuple
+def read_dataset(datapath, vocab_pt_filepath):
+    vocab_tuple = torch.load(vocab_pt_filepath)
+    w2i_dict, rel2i_dict = vocab_tuple
+
+    questions = []
+    rel_labels = []
+    # read questions and label from the datapath - could be train, dev, test
+    with open(datapath) as f:
+        for line in f:
+            line_items = line.split("\t")
+            # add relation
+            relation = line_items[1]
+            rel_labels.append(relation)
+            # add text
+            qText = line_items[3]
+            tokens = process_tokenize_text(qText)
+            questions.append(tokens)
 
     word_vocab = Vocab(w2i_dict)
     word_vocab.add_unk_token("<UNK>")
@@ -43,3 +65,4 @@ def read_dataset(dataset_pt_filepath):
     dataset = {"word_vocab": word_vocab, "rel_vocab": rel_vocab,
                     "questions": questions_tensor, "rel_labels": rel_labels_tensor}
     return dataset
+
