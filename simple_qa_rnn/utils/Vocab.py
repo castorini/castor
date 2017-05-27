@@ -8,20 +8,25 @@ class Vocab(object):
     token.
     """
 
-    def __init__(self, vocabpath):
-        self.size = 0
-        self.index = {}
-        self.tokens = {}
+    # def __init__(self, vocabpath):
+    #     self.size = 0
+    #     self.index = {}
+    #     self.tokens = {}
+    #
+    #     with open(vocabpath, 'r') as f:
+    #         for line in f:
+    #             word = line.rstrip()
+    #             self.tokens[self.size] = word
+    #             self.index[word] = self.size
+    #             self.size += 1
+    #     # automatically add unknown token
+    #     # self.add_unk_token("<UNK>")
 
-        with open(vocabpath, 'r') as f:
-            for line in f:
-                word = line.rstrip()
-                self.tokens[self.size] = word
-                self.index[word] = self.size
-                self.size += 1
-
-        # automatically add unknown token
-        self.add_unk_token("<UNK>")
+    def __init__(self, word2index):
+        self.index = word2index
+        self.size = len(word2index)
+        self.tokens = {index: word for word, index in enumerate(word2index)}
+        # self.add_unk_token("<UNK>")
 
     def contains(self, word):
         return word in self.index.keys()
