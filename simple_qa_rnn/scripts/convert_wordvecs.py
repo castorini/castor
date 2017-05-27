@@ -1,5 +1,4 @@
 import sys
-import os
 from tqdm import tqdm
 import torch
 import array
@@ -35,6 +34,8 @@ if lines is not None:
         else:
             # safety check that the dimension is the same
             if len(entries) != wv_size:
+                print(len(entries))
+                print(lines[i])
                 continue
         try:
             if isinstance(word, six.binary_type):
