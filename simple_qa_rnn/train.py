@@ -56,6 +56,7 @@ emb_vocab = None
 emb_vecs = None
 
 # ---- load datasets ------
+print("loading train/val/test datasets...")
 train_dataset = read_dataset(train_file, word_vocab, rel_vocab)
 val_dataset = read_dataset(val_file, word_vocab, rel_vocab)
 test_dataset = read_dataset(test_file, word_vocab, rel_vocab)
@@ -66,6 +67,7 @@ print('test_file: {}, num test  = {}'.format(test_file, test_dataset["size"]))
 
 # ---- Define Model, Loss, Optim ------
 config = args
+config.vocab_size = vocab_size
 config.d_out = num_classes
 config.n_directions = 2 if config.birnn else 1
 print(config)

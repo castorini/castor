@@ -8,7 +8,7 @@ class BiLSTM(nn.Module):
     def __init__(self, config):
         super(BiLSTM, self).__init__()
         self.config = config
-
+        self.embeddings = nn.Embedding(config.vocab_size, config.d_embedding)
         self.lstm = nn.LSTM(input_size=config.d_embedding, hidden_size=config.d_hidden,
                         num_layers=config.n_layers, dropout=config.dropout_prob,
                         bidirectional=config.birnn, batch_first=True)

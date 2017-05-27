@@ -20,15 +20,15 @@ def read_text(text, word_vocab):
     out_text = []
     for tokens in text:
         S = len(tokens)
-        sent = torch.IntTensor(max(S, 3))
+        sent = []
         for i in range(S):
             token = tokens[i]
-            sent[i] = word_vocab.get_index(token)
+            sent.append( word_vocab.get_index(token) )
         if S < 3:
             for i in range(S, 3):
-                sent[i] = word_vocab.unk_index
+                sent.append( word_vocab.unk_index )
         out_text.append(sent)
-    return out_text
+    return torch.LongTensor(out_text)
 
 def read_labels(rel_labels, rel_vocab):
     N = len(rel_labels)
