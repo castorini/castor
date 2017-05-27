@@ -2,6 +2,7 @@ import torch
 import nltk
 import string
 from torch.autograd import Variable
+import numpy as np
 
 ## functions for loading data from disk
 
@@ -65,6 +66,6 @@ def read_dataset(datapath, word_vocab, rel_vocab):
             questions.append(tokens)
 
     dataset = {"word_vocab": word_vocab, "rel_vocab": rel_vocab, "size": len(rel_labels),
-                                "questions": questions, "rel_labels": rel_labels}
+                            "questions": np.array(questions), "rel_labels": np.array(rel_labels)}
     return dataset
 
