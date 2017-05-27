@@ -23,7 +23,7 @@ def read_text(text, word_vocab):
         sent = torch.IntTensor(max(S, 3))
         for i in range(S):
             token = tokens[i]
-            sent[i] = word_vocab.index(token)
+            sent[i] = word_vocab.get_index(token)
         if S < 3:
             for i in range(S, 3):
                 sent[i] = word_vocab.unk_index
@@ -35,7 +35,7 @@ def read_labels(rel_labels, rel_vocab):
     label_tensor = torch.IntTensor(N)
     for i in range(N):
         token = rel_labels[i]
-        label_tensor[i] = rel_vocab.index(token)
+        label_tensor[i] = rel_vocab.get_index(token)
     return label_tensor
 
 def read_dataset(datapath, word_vocab, rel_vocab):
@@ -56,7 +56,7 @@ def read_dataset(datapath, word_vocab, rel_vocab):
     questions_tensor = read_text(questions, word_vocab)
     rel_labels_tensor = read_labels(rel_labels, rel_vocab)
 
-    dataset = {"word_vocab": word_vocab, "rel_vocab": rel_vocab,
-                    "questions": questions_tensor, "rel_labels": rel_labels_tensor}
+    dataset = {"word_vocab": word_vocab, "rel_vocab": rel_vocab, "size": len(rel_labels),
+                                "questions": questions_tensor, "rel_labels": rel_labels_tensor}
     return dataset
 

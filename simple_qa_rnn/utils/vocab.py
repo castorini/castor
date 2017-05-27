@@ -25,7 +25,7 @@ class Vocab(object):
     def __init__(self, word2index):
         self.index = word2index
         self.size = len(word2index)
-        self.tokens = {index: word for word, index in enumerate(word2index)}
+        self.tokens = {index: word for word, index in word2index.items()}
         # self.add_unk_token("<UNK>")
 
     def contains(self, word):
@@ -40,16 +40,16 @@ class Vocab(object):
     def add_unk_token(self, token):
         self.unk_token = token
         self.add(token)
-        self.unk_index = self.index(token)
+        self.unk_index = self.index[token]
 
-    def index(self, word):
+    def get_index(self, word):
         if self.contains(word):
             return self.index[word]
         else:
             print("{} - word not found in vocab. returning unk_index".format(word))
             return self.unk_index
 
-    def token(self, index):
+    def get_token(self, index):
         if index < 0 or index >= self.size:
             raise IndexError('index {} out of bounds'.format(index))
         return self.tokens[index]
