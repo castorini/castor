@@ -140,8 +140,8 @@ for epoch in range(args.epochs):
         inputs = read_text_var(batch_questions, word_vocab, cuda=args.cuda)
         targets = read_labels_var(batch_relations, rel_vocab, cuda=args.cuda)
         if args.cuda:
-            inputs.cuda()
-            targets.cuda()
+            inputs.data = inputs.data.cuda()
+            targets.data = targets.data.cuda()
 
         # clear out gradients and hidden states of the model
         model.zero_grad()
