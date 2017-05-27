@@ -65,16 +65,16 @@ emb_dim = emb_vecs.size()[1]
 vocab_pt_filepath = os.path.join(data_dir, "vocab.pt")
 word2index_dict, rel2index_dict = torch.load(vocab_pt_filepath)
 
-vocab_size = len(word2index_dict)
-num_classes = len(rel2index_dict)
-print('vocab size = {}'.format(vocab_size))
-print('num classes = {}'.format(num_classes))
-
 word_vocab = Vocab(word2index_dict)
 word_vocab.add_pad_token("<PAD>")
 word_vocab.add_unk_token("<UNK>")
 
 rel_vocab = Vocab(rel2index_dict)
+
+vocab_size = word_vocab.size
+num_classes = len(rel2index_dict)
+print('vocab size = {}'.format(vocab_size))
+print('num classes = {}'.format(num_classes))
 
 num_unk = 0
 vecs = torch.FloatTensor(vocab_size, emb_dim)
