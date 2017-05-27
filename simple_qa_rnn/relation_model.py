@@ -16,14 +16,16 @@ class Encoder(nn.Module):
     def init_hidden(self):
         # axes semantics are (num_layers, batch_size, hidden_dim)
         n_layers = self.config.n_layers * self.config.n_directions
-        return (Variable(torch.zeros(n_layers, self.config.batch_size, self.config.d_hidden)),
-                Variable(torch.zeros(n_layers, self.config.batch_size, self.config.d_hidden)))
+        out = (Variable(torch.zeros(n_layers, self.config.batch_size, self.config.d_hidden)),
+                    Variable(torch.zeros(n_layers, self.config.batch_size, self.config.d_hidden)))
+        if self.config.cuda:
+            out = ( Variable(torch.zeros(n_layers, self.config.batch_size, self.config.d_hidden).cuda()),
+                        Variable(torch.zeros(n_layers, self.config.batch_size, self.config.d_hidden).cuda() ))
+        return out
 
     def forward(self, embeds):
         batch_size = embeds.data.size()[0]
         # sequence_length = embeds.data.size()[1]
-        print("embeds---")
-        print(type(embeds))
         lstm_out, self.hidden = self.lstm(embeds, self.hidden)
         # print("ht size: {}".format(ht.size()))
         return self.hidden[0].transpose(0, 1).contiguous().view(batch_size, -1)  # size - (|B|, |K|)
@@ -54,7 +56,6 @@ class RelationPredictor(nn.Module):
     # batch_input is Variable of size - (|B|, |S|)
     def forward(self, batch_input):
         batch_input_embed = self.embed(batch_input) # size - (|B|, |S|, |D|)
-        print(type(batch_input_embed))
         encode = self.encoder(batch_input_embed)
         rel_space = self.hidden2label(encode) # size - (|B|, |K|)
         scores = F.log_softmax(rel_space)
