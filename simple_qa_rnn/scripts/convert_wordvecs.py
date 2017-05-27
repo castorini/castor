@@ -18,12 +18,14 @@ prefix_toks = path.split(".")
 print('Converting ' + path + ' to PyTorch serialized format...')
 
 lines = [line.rstrip('\n') for line in open(path)]
-vocab_size = len(lines)
+print("number of lines: {}".format(len(lines)))
+
 wv_tokens = []
 wv_arr = array.array('d')
 wv_size = None # dimension of the word vectors
+vocab_size = 0 # counts the number of words saved
 if lines is not None:
-    for i in tqdm(range(vocab_size), desc="loading word vectors from {}".format(path)):
+    for i in tqdm(range(len(lines)), desc="loading word vectors from {}".format(path)):
         entries = lines[i].strip().split(" ")
         word, entries = entries[0], entries[1:]
         if wv_size is None:
@@ -36,11 +38,15 @@ if lines is not None:
             continue
         wv_arr.extend(float(x) for x in entries)
         wv_tokens.append(word)
+        vocab_size += 1
+
+print("vocab size: {}".format(vocab_size))
+print("dim: {}".format(wv_size))
 
 wv_dict = {word: i for i, word in enumerate(wv_tokens)} # word to index dictionary
 wv_arr = torch.Tensor(wv_arr).view(vocab_size, wv_size) # word embeddings in Tensor of shape (|V|, |D|)
 ret = (wv_dict, wv_arr, wv_size) # save all three info in a tuple
-print(ret)
+
 print("saving word vectors to {}".format(outpath))
 torch.save(ret, outpath + '.pt')
 
