@@ -24,9 +24,9 @@ if torch.cuda.is_available():
 
 # ---- helper methods ------
 def evaluate_dataset_batch(data_set, model):
-    n_total = len(data_set)
+    n_total = data_set["size"]
     n_correct = 0
-    num_batches = len(data_set) // args.batch_size
+    num_batches = n_total // args.batch_size
     batch_indices = np.split(range(n_total),
                                 range(args.batch_size, n_total, args.batch_size))
     model.eval()
@@ -166,6 +166,7 @@ for epoch in range(args.epochs):
         if iter % args.dev_every == 0:
             train_acc = evaluate_dataset_batch(train_dataset, model)
             val_acc = evaluate_dataset_batch(val_dataset, model)
+            model.train()
             print(dev_log_template.format(time.time()-start, epoch, iter, loss.data[0], train_acc, val_acc))
             if val_acc > best_val_acc:
                 best_val_acc = val_acc
