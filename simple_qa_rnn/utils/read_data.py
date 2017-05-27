@@ -27,7 +27,7 @@ def find_max_seq_length(text):
     return max_len
 
 
-def read_text_var(batch_text, word_vocab):
+def read_text_tensor(batch_text, word_vocab):
     out_text = []
     max_len = find_max_seq_length(batch_text)
     for sent_tokens in batch_text:
@@ -40,15 +40,15 @@ def read_text_var(batch_text, word_vocab):
         for i in range(S, max_len):
             sent.append( word_vocab.pad_index )
         out_text.append(sent)
-    return Variable(torch.LongTensor(out_text))
+    return torch.LongTensor(out_text)
 
-def read_labels_var(rel_labels, rel_vocab, cuda=False):
+def read_labels_tensor(rel_labels, rel_vocab, cuda=False):
     N = len(rel_labels)
     labels_list = []
     for i in range(N):
         token = rel_labels[i]
         labels_list.append( rel_vocab.get_index(token) )
-    return Variable(torch.LongTensor(labels_list))
+    return torch.LongTensor(labels_list)
 
 def read_dataset(datapath, word_vocab, rel_vocab):
     questions = []

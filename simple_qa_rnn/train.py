@@ -33,15 +33,17 @@ def evaluate_dataset_batch(data_set, model):
     for batch_ix in range(num_batches):
         batch_questions = data_set["questions"][batch_indices[batch_ix]]
         batch_relations = data_set["rel_labels"][batch_indices[batch_ix]]
-        inputs = read_text_var(batch_questions, word_vocab)
-        targets = read_labels_var(batch_relations, rel_vocab)
+        inputs = Variable(read_text_tensor(batch_questions, word_vocab), volatile=True)
+        targets = Variable(read_labels_tensor(batch_relations, rel_vocab), volatile=True)
         if args.cuda:
             inputs.data = inputs.data.cuda()
             targets.data = targets.data.cuda()
         scores = model(inputs)
         pred_score, pred_label_ix = torch.max(scores, dim=1) # check this properly
-        n_correct += torch.sum(torch.eq(pred_label_ix, targets))
-    acc = n_correct / n_total
+        pred_label_ix = pred_label_ix.view(args.batch_size)
+        sum_correct = torch.sum(torch.eq(pred_label_ix, targets))
+        n_correct += sum_correct.data[0]
+    acc = n_correct / (num_batches * args.batch_size)
     return acc
 
 def repackage_hidden(h):
@@ -140,8 +142,8 @@ for epoch in range(args.epochs):
         iter += 1
         batch_questions = train_dataset["questions"][batch_indices[batch_ix]]
         batch_relations = train_dataset["rel_labels"][batch_indices[batch_ix]]
-        inputs = read_text_var(batch_questions, word_vocab)
-        targets = read_labels_var(batch_relations, rel_vocab)
+        inputs = Variable( read_text_tensor(batch_questions, word_vocab) )
+        targets = Variable( read_labels_tensor(batch_relations, rel_vocab) )
         if args.cuda:
             inputs.data = inputs.data.cuda()
             targets.data = targets.data.cuda()
@@ -177,6 +179,6 @@ for epoch in range(args.epochs):
                         os.remove(f)
 
         if iter == 1 or iter % args.log_every == 0:
-            print(log_template.format(time.time() - start, epoch, iter, loss.data[0]))
+            print(log_template.format(time.time() - start, epoch, iter, loss.cpu().data[0]))
 
 

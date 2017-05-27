@@ -14,7 +14,7 @@ def get_args():
     parser.add_argument('--log_every', type=int, default=100)
     parser.add_argument('--dev_every', type=int, default=500)
     parser.add_argument('--save_every', type=int, default=1000)
-    parser.add_argument('--dropout_prob', type=int, default=0.2)
+    parser.add_argument('--dropout_prob', type=float, default=0.2)
     parser.add_argument('--gpu', type=int, default=0)
     parser.add_argument('--seed', type=int, default=1111, help='random seed for reproducing results')
     parser.add_argument('--cuda', action='store_true', help='use CUDA')
