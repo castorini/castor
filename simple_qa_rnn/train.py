@@ -14,7 +14,15 @@ from utils.vocab import Vocab
 from utils.read_data import *
 
 args = get_args()
-# torch.cuda.set_device(args.gpu)
+
+# Set the random seed manually for reproducibility.
+torch.manual_seed(args.seed)
+args.cuda = True
+if torch.cuda.is_available():
+    if not args.cuda:
+        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+    else:
+        torch.cuda.manual_seed(args.seed)
 
 # ---- helper methods ------
 def evaluate_dataset_batch(data_set, max_sent_length, model, w2v_map, label_to_ix):
@@ -102,6 +110,8 @@ config.d_out = num_classes
 config.n_directions = 2 if config.birnn else 1
 print(config)
 model = RelationPredictor(config)
+if args.cuda:
+    model.cuda()
 loss_function = nn.NLLLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
@@ -128,10 +138,13 @@ for epoch in range(args.epochs):
         batch_relations = train_dataset["rel_labels"][batch_indices[batch_ix]]
         inputs = read_text_var(batch_questions, word_vocab)
         targets = read_labels_var(batch_relations, rel_vocab)
+        if args.cuda:
+            inputs.cuda()
+            targets.cuda()
 
         # clear out gradients and hidden states of the model
         model.zero_grad()
-        model.hidden = repackage_hidden(model.hidden)
+        model.encoder.hidden = repackage_hidden(model.encoder.hidden)
 
         # prepare inputs for LSTM model and run forward pass
         scores = model(inputs)
