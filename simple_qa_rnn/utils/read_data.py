@@ -16,21 +16,32 @@ def read_embedding(embed_pt_filepath):
     word2index, w2v_tensor, dim = embed_tuple
     return word2index, w2v_tensor
 
-def read_text(text, word_vocab):
+
+def find_max_seq_length(text):
+    max_len = -1
+    for tokens in text:
+        curr_len = len(tokens)
+        if curr_len > max_len:
+            max_len = curr_len
+    return max_len
+
+
+def read_text_tensor(text, word_vocab):
     out_text = []
+    max_len = find_max_seq_length(text)
     for tokens in text:
         S = len(tokens)
         sent = []
         for i in range(S):
             token = tokens[i]
             sent.append( word_vocab.get_index(token) )
-        if S < 3:
-            for i in range(S, 3):
-                sent.append( word_vocab.unk_index )
+        # pad the right end till the max length of the mini batch
+        for i in range(S, max_len):
+            sent.append( word_vocab.pad_index )
         out_text.append(sent)
     return torch.LongTensor(out_text)
 
-def read_labels(rel_labels, rel_vocab):
+def read_labels_tensor(rel_labels, rel_vocab):
     N = len(rel_labels)
     label_tensor = torch.IntTensor(N)
     for i in range(N):
@@ -53,10 +64,7 @@ def read_dataset(datapath, word_vocab, rel_vocab):
             tokens = process_tokenize_text(qText)
             questions.append(tokens)
 
-    questions_tensor = read_text(questions, word_vocab)
-    rel_labels_tensor = read_labels(rel_labels, rel_vocab)
-
     dataset = {"word_vocab": word_vocab, "rel_vocab": rel_vocab, "size": len(rel_labels),
-                                "questions": questions_tensor, "rel_labels": rel_labels_tensor}
+                                "questions": questions, "rel_labels": rel_labels}
     return dataset
 

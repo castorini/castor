@@ -38,7 +38,9 @@ print('vocab size = {}'.format(vocab_size))
 print('num classes = {}'.format(num_classes))
 
 word_vocab = Vocab(word2index_dict)
+word_vocab.add_pad_token("<PAD>")
 word_vocab.add_unk_token("<UNK>")
+
 rel_vocab = Vocab(rel2index_dict)
 
 num_unk = 0
@@ -47,6 +49,8 @@ for i in range(vocab_size):
     word = word_vocab.get_token(i)
     if emb_vocab.contains(word):
         vecs[i] = emb_vecs[emb_vocab.get_index(word)]
+    elif word == word_vocab.pad_token:
+        vecs[i].zero_()
     else:
         num_unk += 1
         vecs[i].uniform_(-0.05, 0.05)

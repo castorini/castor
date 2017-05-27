@@ -42,6 +42,11 @@ class Vocab(object):
         self.add(token)
         self.unk_index = self.index[token]
 
+    def add_pad_token(self, token):
+        self.pad_token = token
+        self.add(token)
+        self.pad_index = self.index[token]
+
     def get_index(self, word):
         if self.contains(word):
             return self.index[word]
