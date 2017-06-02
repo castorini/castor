@@ -1,14 +1,14 @@
 from random import randint, uniform
 from subprocess import call
 
-epochs = 20
-count = 500
+epochs = 50
+count = 20
 for id in range(count):
-    learning_rate = 10 ** uniform(-7, -3)
-    d_hidden = randint(300, 800)
-    n_layers = randint(1, 4)
-    dropout = uniform(0.15, 0.65)
-    clip = uniform(0.4, 1)
+    learning_rate = 10 ** uniform(-5, -4)
+    d_hidden = randint(550, 600)
+    n_layers = randint(4, 5)
+    dropout = uniform(0.5, 0.6)
+    clip = uniform(0.6, 0.7)
 
     command = "python train.py --cuda --dev_every 500 --log_every 250 --batch_size 128 " \
                 "--epochs {} --lr {} --d_hidden {} --n_layers {} --dropout_prob {} --clip {} >> " \
