@@ -21,6 +21,7 @@ if torch.cuda.is_available():
         print("WARNING: You have a CUDA device, so you should probably run with --cuda")
     else:
         torch.cuda.manual_seed(args.seed)
+        torch.cuda.set_device(args.device)
 
 # ---- helper methods ------
 def evaluate_dataset_batch(data_set, model):
