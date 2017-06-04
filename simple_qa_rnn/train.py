@@ -172,7 +172,7 @@ for epoch in range(args.epochs):
             if val_acc > best_val_acc:
                 best_val_acc = val_acc
                 snapshot_prefix = os.path.join(args.save_path, 'best_snapshot')
-                snapshot_path = snapshot_prefix + '_valacc_{:6.4f}__iter_{}_model.pt'.format(val_acc, iter)
+                snapshot_path = snapshot_prefix + '_valacc_{:6.4f}_trainacc{:6.4f}_iter_{}_model.pt'.format(val_acc, train_acc, iter)
                 torch.save(model.state_dict(), snapshot_path)
                 for f in glob.glob(snapshot_prefix + '*'):
                     if f != snapshot_path:
