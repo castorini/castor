@@ -1,0 +1,1732 @@
+wqr000004	/location/country/currency_used	what kind of money to take to bahamas?
+wqr000014	/common/topic/image	where is rome italy located on a map?
+wqr000014	/type/object/name	where is rome italy located on a map?
+wqr000019	/military/military_combatant/military_conflicts	who did the philippines gain independence from?
+wqr000019	/military/military_combatant_group/combatants	who did the philippines gain independence from?
+wqr000024	/location/country/form_of_government	what form of government does russia have today?
+wqr000034	/government/government_office_or_title/office_holders	what is the president of brazil?
+wqr000034	/government/government_position_held/office_holder	what is the president of brazil?
+wqr000034	/government/governmental_jurisdiction/governing_officials	what is the president of brazil?
+wqr000034	/government/government_position_held/office_holder	what is the president of brazil?
+wqr000039	/location/location/contains	when is the new series of the only way is essex starting?
+wqr000044	/common/topic/image	what county is the city of hampton va in?
+wqr000044	/location/hud_county_place/place	what county is the city of hampton va in?
+wqr000044	/type/object/name	what county is the city of hampton va in?
+wqr000049	/film/actor/film	what movie is josh hutcherson in?
+wqr000049	/film/performance/film	what movie is josh hutcherson in?
+wqr000049	/award/award_nominee/award_nominations	what movie is josh hutcherson in?
+wqr000049	/award/award_nomination/nominated_for	what movie is josh hutcherson in?
+wqr000049	/award/award_winner/awards_won	what movie is josh hutcherson in?
+wqr000049	/award/award_honor/honored_for	what movie is josh hutcherson in?
+wqr000049	/film/producer/films_executive_produced	what movie is josh hutcherson in?
+wqr000054	/book/book_subject/works	what was the name of frederick douglass book?
+wqr000059	/geography/river/origin	where does lena river begin and end?
+wqr000064	/film/actor/film	what was tupac name in juice?
+wqr000064	/film/performance/character	what was tupac name in juice?
+wqr000069	/tv/tv_actor/starring_roles	what tv show did joey lawrence play on?
+wqr000069	/tv/regular_tv_appearance/series	what tv show did joey lawrence play on?
+wqr000069	/tv/tv_producer/programs_produced	what tv show did joey lawrence play on?
+wqr000069	/tv/tv_producer_term/program	what tv show did joey lawrence play on?
+wqr000074	/sports/sports_team/championships	when did the colorado rockies go to the world series?
+wqr000079	/location/country/first_level_divisions	where did france colonise?
+wqr000079	/location/country/second_level_divisions	where did france colonise?
+wqr000079	/location/country/administrative_divisions	where did france colonise?
+wqr000084	/location/country/languages_spoken	what is the official language of china 2010?
+wqr000089	/book/book_subject/works	which part of korea is communist?
+wqr000094	/location/location/events	who founded the roanoke settlement?
+wqr000099	/film/actor/film	who does the author stephenie meyer play in the movie twilight?
+wqr000099	/film/performance/character	who does the author stephenie meyer play in the movie twilight?
+wqr000104	/government/government_office_category/officeholders	who was the president after jfk died?
+wqr000104	/government/government_position_held/office_holder	who was the president after jfk died?
+wqr000104	/government/government_office_or_title/office_holders	who was the president after jfk died?
+wqr000104	/government/government_position_held/office_holder	who was the president after jfk died?
+wqr000104	/government/us_president/vice_president	who was the president after jfk died?
+wqr000109	/location/location/contains	where to visit in n. ireland?
+wqr000114	/location/statistical_region/religions	what religion are people in russia?
+wqr000114	/location/religion_percentage/religion	what religion are people in russia?
+wqr000119	/location/country/currency_formerly_used	what are dollars called in spain?
+wqr000124	/film/director/film	what movie did angelina jolie direct?
+wqr000124	/film/producer/film	what movie did angelina jolie direct?
+wqr000124	/film/writer/film	what movie did angelina jolie direct?
+wqr000129	/government/governmental_jurisdiction/governing_officials	who is the current president of the dominican republic in 2010?
+wqr000129	/government/government_position_held/office_holder	who is the current president of the dominican republic in 2010?
+wqr000134	/celebrities/celebrity/sexual_relationships	who all has dated taylor swift?
+wqr000134	/celebrities/romantic_relationship/celebrity	who all has dated taylor swift?
+wqr000139	/film/film_character/portrayed_in_films	who plays lola bunny in the looney tunes show?
+wqr000139	/film/performance/actor	who plays lola bunny in the looney tunes show?
+wqr000139	/tv/tv_program/regular_cast	who plays lola bunny in the looney tunes show?
+wqr000139	/tv/regular_tv_appearance/actor	who plays lola bunny in the looney tunes show?
+wqr000139	/tv/tv_character/appeared_in_tv_program	who plays lola bunny in the looney tunes show?
+wqr000139	/tv/regular_tv_appearance/actor	who plays lola bunny in the looney tunes show?
+wqr000149	/book/book_subject/works	when does harry potter come out on dvd deathly hallows 2?
+wqr000154	/sports/sports_award_winner/awards	what years did brett favre go to the super bowl?
+wqr000154	/sports/sports_award/season	what years did brett favre go to the super bowl?
+wqr000159	/location/location/time_zones	what time zone is oklahoma state?
+wqr000164	/people/deceased_person/place_of_death	where was kennedy when he got shot?
+wqr000169	/military/military_person/service	who was general cornwallis american revolution?
+wqr000169	/military/military_service/military_force	who was general cornwallis american revolution?
+wqr000174	/people/person/education	where did pauley perrette go to college?
+wqr000174	/education/education/institution	where did pauley perrette go to college?
+wqr000179	/location/location/partially_contains	where did the massive allied invasion of northern france take place in june 1944?
+wqr000179	/location/location/partiallycontains	where did the massive allied invasion of northern france take place in june 1944?
+wqr000179	/location/partial_containment_relationship/partially_contains	where did the massive allied invasion of northern france take place in june 1944?
+wqr000184	/location/country/currency_used	what is the currency name of brazil?
+wqr000189	/organization/organization/headquarters	where is mitsubishi headquarters?
+wqr000189	/location/mailing_address/citytown	where is mitsubishi headquarters?
+wqr000194	/government/governmental_jurisdiction/governing_officials	what are the 5 biggest cities in the usa?
+wqr000194	/government/government_position_held/district_represented	what are the 5 biggest cities in the usa?
+wqr000194	/location/country/first_level_divisions	what are the 5 biggest cities in the usa?
+wqr000194	/organization/organization/headquarters	what are the 5 biggest cities in the usa?
+wqr000194	/location/mailing_address/state_province_region	what are the 5 biggest cities in the usa?
+wqr000199	/people/person/education	where did jeff dunham go to school?
+wqr000199	/education/education/institution	where did jeff dunham go to school?
+wqr000204	/location/citytown/postal_codes	what is the zip code for minneapolis?
+wqr000209	/sports/sports_championship/events	when did kings last win stanley cup?
+wqr000209	/sports/sports_team/championships	when did kings last win stanley cup?
+wqr000214	/tv/tv_actor/starring_roles	when did jennifer lopez start on in living color?
+wqr000214	/tv/regular_tv_appearance/seasons	when did jennifer lopez start on in living color?
+wqr000214	/tv/tv_program/regular_cast	when did jennifer lopez start on in living color?
+wqr000214	/tv/regular_tv_appearance/seasons	when did jennifer lopez start on in living color?
+wqr000214	/tv/tv_program/seasons	when did jennifer lopez start on in living color?
+wqr000219	/tv/tv_actor/starring_roles	what does nick cannon play in?
+wqr000219	/tv/regular_tv_appearance/series	what does nick cannon play in?
+wqr000219	/award/award_nominee/award_nominations	what does nick cannon play in?
+wqr000219	/award/award_nomination/nominated_for	what does nick cannon play in?
+wqr000219	/tv/tv_producer/programs_produced	what does nick cannon play in?
+wqr000219	/tv/tv_producer_term/program	what does nick cannon play in?
+wqr000219	/tv/tv_program_creator/programs_created	what does nick cannon play in?
+wqr000219	/award/award_winner/awards_won	what does nick cannon play in?
+wqr000219	/award/award_honor/honored_for	what does nick cannon play in?
+wqr000219	/tv/tv_personality/tv_regular_appearances	what does nick cannon play in?
+wqr000219	/tv/tv_regular_personal_appearance/program	what does nick cannon play in?
+wqr000229	/language/human_language/language_family	what language do they speak in thai?
+wqr000234	/location/country/languages_spoken	what language do people speak in brazil wikipedia?
+wqr000234	/location/country/official_language	what language do people speak in brazil wikipedia?
+wqr000239	/sports/sports_team/championships	when did the lakers win the championship?
+wqr000244	/people/person/place_of_birth	what city was leonardo da vinci from?
+wqr000244	/people/person/places_lived	what city was leonardo da vinci from?
+wqr000244	/people/place_lived/location	what city was leonardo da vinci from?
+wqr000249	/people/person/parents	who is tia and tamera mowry parents?
+wqr000254	/location/location/adjoin_s	what three countries does mexico border?
+wqr000254	/location/adjoining_relationship/adjoins	what three countries does mexico border?
+wqr000254	/military/military_combatant/military_conflicts	what three countries does mexico border?
+wqr000254	/military/military_combatant_group/combatants	what three countries does mexico border?
+wqr000254	/location/statistical_region/places_exported_to	what three countries does mexico border?
+wqr000254	/location/imports_and_exports/exported_to	what three countries does mexico border?
+wqr000254	/location/statistical_region/places_imported_from	what three countries does mexico border?
+wqr000254	/location/imports_and_exports/imported_from	what three countries does mexico border?
+wqr000259	/tv/tv_actor/starring_roles	what shows did kellie martin star in?
+wqr000259	/tv/regular_tv_appearance/series	what shows did kellie martin star in?
+wqr000259	/award/award_nominee/award_nominations	what shows did kellie martin star in?
+wqr000259	/award/award_nomination/nominated_for	what shows did kellie martin star in?
+wqr000264	/people/person/spouse_s	who is julia roberts married to 2012?
+wqr000264	/people/marriage/spouse	who is julia roberts married to 2012?
+wqr000269	/tv/tv_character/appeared_in_tv_program	who played mason capwell?
+wqr000269	/tv/regular_tv_appearance/actor	who played mason capwell?
+wqr000274	/people/person/parents	who are shakespeare's parents names?
+wqr000279	/location/country/languages_spoken	what language they speak in the philippines?
+wqr000279	/location/country/official_language	what language they speak in the philippines?
+wqr000289	/soccer/football_player/statistics	who will david beckham play for in 2013?
+wqr000289	/soccer/football_player_stats/team	who will david beckham play for in 2013?
+wqr000289	/sports/pro_athlete/teams	who will david beckham play for in 2013?
+wqr000289	/sports/sports_team_roster/team	who will david beckham play for in 2013?
+wqr000294	/people/deceased_person/place_of_death	where did hernando cortez die?
+wqr000299	/film/person_or_entity_appearing_in_film/films	what's the book hitler wrote in prison?
+wqr000299	/film/personal_film_appearance/film	what's the book hitler wrote in prison?
+wqr000304	/location/country/languages_spoken	what languages are there in switzerland?
+wqr000304	/location/country/official_language	what languages are there in switzerland?
+wqr000309	/common/topic/alias	what is the name of the first prophet of islam?
+wqr000309	/religion/religion/founding_figures	what is the name of the first prophet of islam?
+wqr000309	/religion/religion/notable_figures	what is the name of the first prophet of islam?
+wqr000314	/religion/religion/practices	what do abrahamic religions have in common?
+wqr000319	/people/person/spouse_s	who did elton john marry first?
+wqr000319	/people/marriage/spouse	who did elton john marry first?
+wqr000329	/film/film_character/portrayed_in_films	who voiced meg in the pilot?
+wqr000329	/film/performance/actor	who voiced meg in the pilot?
+wqr000329	/cvg/game_character/games	who voiced meg in the pilot?
+wqr000329	/cvg/game_performance/voice_actor	who voiced meg in the pilot?
+wqr000329	/tv/tv_character/appeared_in_tv_episodes	who voiced meg in the pilot?
+wqr000329	/tv/tv_guest_role/actor	who voiced meg in the pilot?
+wqr000329	/tv/tv_character/appeared_in_tv_program	who voiced meg in the pilot?
+wqr000329	/tv/regular_tv_appearance/actor	who voiced meg in the pilot?
+wqr000334	/tv/tv_program/regular_cast	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/regular_tv_appearance/actor	who is the voice of stewie griffin from family guy?
+wqr000334	/award/award_nominated_work/award_nominations	who is the voice of stewie griffin from family guy?
+wqr000334	/award/award_nomination/award_nominee	who is the voice of stewie griffin from family guy?
+wqr000334	/award/award_winning_work/awards_won	who is the voice of stewie griffin from family guy?
+wqr000334	/award/award_honor/award_winner	who is the voice of stewie griffin from family guy?
+wqr000334	/cvg/game_character/games	who is the voice of stewie griffin from family guy?
+wqr000334	/cvg/game_performance/voice_actor	who is the voice of stewie griffin from family guy?
+wqr000334	/fictional_universe/fictional_character/character_created_by	who is the voice of stewie griffin from family guy?
+wqr000334	/film/film_character/portrayed_in_films	who is the voice of stewie griffin from family guy?
+wqr000334	/film/performance/actor	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/tv_character/appeared_in_tv_program	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/regular_tv_appearance/actor	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/tv_program/program_creator	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/tv_program/recurring_writers	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/tv_program_writer_relationship/writer	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/tv_program/tv_producer	who is the voice of stewie griffin from family guy?
+wqr000334	/tv/tv_producer_term/producer	who is the voice of stewie griffin from family guy?
+wqr000344	/fictional_universe/fictional_character/parents	who were anakin skywalker's parents?
+wqr000349	/government/politician/government_positions_held	what kind of government did benito mussolini have?
+wqr000349	/government/government_position_held/basic_title	what kind of government did benito mussolini have?
+wqr000354	/baseball/baseball_player/batting_stats	where did deion sanders play baseball?
+wqr000354	/baseball/batting_statistics/team	where did deion sanders play baseball?
+wqr000354	/sports/pro_athlete/teams	where did deion sanders play baseball?
+wqr000354	/sports/sports_team_roster/team	where did deion sanders play baseball?
+wqr000354	/sports/sport/teams	where did deion sanders play baseball?
+wqr000359	/location/country/capital	where does the australian prime minister reside?
+wqr000364	/military/armed_force/personnel	what year was the navy chief established?
+wqr000364	/military/military_service/military_person	what year was the navy chief established?
+wqr000369	/location/country/form_of_government	what is the government of spain today?
+wqr000374	/location/country/form_of_government	what was the soviet union?
+wqr000379	/people/deceased_person/cause_of_death	what did corey haim really die of?
+wqr000384	/people/person/education	what military school did poe attend?
+wqr000384	/education/education/institution	what military school did poe attend?
+wqr000389	/people/person/date_of_birth	when was blessed kateri born?
+wqr000394	/book/book_subject/works	what cases does the supreme court have original jurisdiction over?
+wqr000399	/travel/travel_destination/tourist_attractions	what is in liverpool england?
+wqr000404	/people/deceased_person/cause_of_death	what killed whitney houston?
+wqr000409	/location/location/adjoin_s	which country is north of the usa?
+wqr000409	/location/adjoining_relationship/adjoins	which country is north of the usa?
+wqr000414	/language/human_language/main_country	what countries around the world speak french?
+wqr000419	/location/location/contains	what time do atlantic city bars close?
+wqr000424	/film/film_character/portrayed_in_films	who plays princess padme in star wars?
+wqr000424	/film/performance/actor	who plays princess padme in star wars?
+wqr000424	/tv/tv_character/appeared_in_tv_program	who plays princess padme in star wars?
+wqr000424	/tv/regular_tv_appearance/actor	who plays princess padme in star wars?
+wqr000429	/people/person/place_of_birth	where is abraham lincoln hometown?
+wqr000434	/sports/sports_team/team_mascot	what is the atlanta braves mascot?
+wqr000439	/travel/travel_destination/tourist_attractions	what is the center of london called?
+wqr000444	/location/location/containedby	when did tamu admit women?
+wqr000449	/people/person/education	where did lee corso go to college?
+wqr000449	/education/education/institution	where did lee corso go to college?
+wqr000454	/symbols/name_source/namesakes	what river did henry hudson sail up?
+wqr000459	/location/country/capital	where is the best place to vacation in the dominican republic?
+wqr000464	/location/location/events	what time is right now in texas?
+wqr000469	/location/location/events	when did the aurora colorado shooting take place?
+wqr000474	/location/country/form_of_government	what type of government system does saudi arabia have?
+wqr000479	/people/person/places_lived	where was zachary taylor elected from?
+wqr000479	/people/place_lived/location	where was zachary taylor elected from?
+wqr000484	/location/country/currency_used	what do you call money in brazil?
+wqr000489	/sports/pro_athlete/sports_played_professionally	what ball does rickie fowler play?
+wqr000489	/sports/pro_sports_played/sport	what ball does rickie fowler play?
+wqr000494	/location/statistical_region/religions	what religions are in russia?
+wqr000494	/location/religion_percentage/religion	what religions are in russia?
+wqr000499	/people/person/education	what did martin luther king jr go to college for?
+wqr000499	/education/education/major_field_of_study	what did martin luther king jr go to college for?
+wqr000504	/sports/sports_team/championships	when did the houston rockets win the championship?
+wqr000509	/location/location/contains	where is puntland somalia?
+wqr000509	/location/country/capital	where is puntland somalia?
+wqr000514	/music/artist/album	what are taylor swift's albums?
+wqr000514	/award/award_nominee/award_nominations	what are taylor swift's albums?
+wqr000514	/award/award_nomination/nominated_for	what are taylor swift's albums?
+wqr000514	/music/composer/compositions	what are taylor swift's albums?
+wqr000514	/award/award_winner/awards_won	what are taylor swift's albums?
+wqr000514	/award/award_honor/honored_for	what are taylor swift's albums?
+wqr000514	/music/artist/track	what are taylor swift's albums?
+wqr000514	/music/producer/tracks_produced	what are taylor swift's albums?
+wqr000519	/baseball/baseball_player/batting_stats	who did johnny bench play for?
+wqr000519	/baseball/batting_statistics/team	who did johnny bench play for?
+wqr000519	/sports/pro_athlete/teams	who did johnny bench play for?
+wqr000519	/sports/sports_team_roster/team	who did johnny bench play for?
+wqr000524	/sports/sports_team/arena_stadium	where do houston aeros play?
+wqr000524	/sports/sports_team/venue	where do houston aeros play?
+wqr000524	/sports/team_venue_relationship/venue	where do houston aeros play?
+wqr000529	/government/governmental_jurisdiction/official_symbols	what is pennsylvania's state flower called?
+wqr000529	/location/location_symbol_relationship/symbol	what is pennsylvania's state flower called?
+wqr000534	/american_football/football_player/games	who does michael vick play for?
+wqr000534	/american_football/player_game_statistics/team	who does michael vick play for?
+wqr000534	/american_football/football_player/passing	who does michael vick play for?
+wqr000534	/american_football/player_passing_statistics/team	who does michael vick play for?
+wqr000534	/american_football/football_player/rushing	who does michael vick play for?
+wqr000534	/american_football/player_rushing_statistics/team	who does michael vick play for?
+wqr000534	/sports/pro_athlete/teams	who does michael vick play for?
+wqr000534	/sports/sports_team_roster/team	who does michael vick play for?
+wqr000539	/award/competitor/competitions_won	what season did brooke burke won?
+wqr000539	/tv/tv_personality/tv_regular_appearances	what season did brooke burke won?
+wqr000539	/tv/tv_regular_personal_appearance/seasons	what season did brooke burke won?
+wqr000549	/location/location/partially_contained_by	where did france surrender ww2?
+wqr000549	/location/partial_containment_relationship/partially_contained_by	where did france surrender ww2?
+wqr000549	/location/location/partially_containedby	where did france surrender ww2?
+wqr000549	/military/military_conflict/locations	where did france surrender ww2?
+wqr000549	/time/event/locations	where did france surrender ww2?
+wqr000554	/olympics/olympic_host_city/olympics_hosted	when was the 2012 calgary stampede?
+wqr000559	/people/person/education	what college did james franco go to?
+wqr000559	/education/education/institution	what college did james franco go to?
+wqr000564	/people/person/religion	what religion was john f kennedy?
+wqr000569	/location/country/form_of_government	what type of government and economic system does the united states have?
+wqr000574	/book/book/editions	what is the very first harry potter book?
+wqr000574	/book/literary_series/works_in_this_series	what is the very first harry potter book?
+wqr000574	/media_common/adapted_work/adaptations	what is the very first harry potter book?
+wqr000574	/type/object/name	what is the very first harry potter book?
+wqr000579	/film/film_character/portrayed_in_films	who played luke skywalker in star wars episode 4?
+wqr000579	/film/performance/actor	who played luke skywalker in star wars episode 4?
+wqr000579	/film/film/starring	who played luke skywalker in star wars episode 4?
+wqr000579	/film/performance/actor	who played luke skywalker in star wars episode 4?
+wqr000579	/tv/tv_character/appeared_in_tv_program	who played luke skywalker in star wars episode 4?
+wqr000579	/tv/regular_tv_appearance/actor	who played luke skywalker in star wars episode 4?
+wqr000584	/location/location/containedby	where was hackney 2012 held?
+wqr000589	/music/artist/origin	what city was selena gomez born in?
+wqr000589	/people/person/place_of_birth	what city was selena gomez born in?
+wqr000599	/sports/sports_team/championships	when was the last time the dallas cowboys went to the super bowl?
+wqr000604	/people/person/place_of_birth	where did bruno mars get his start?
+wqr000609	/location/country/capital	where did the sultan of the ottoman empire live?
+wqr000614	/people/ethnicity/geographic_distribution	where are the seneca indians now?
+wqr000619	/music/artist/origin	where did rihanna come from?
+wqr000619	/people/person/nationality	where did rihanna come from?
+wqr000619	/people/person/place_of_birth	where did rihanna come from?
+wqr000619	/people/person/places_lived	where did rihanna come from?
+wqr000619	/people/place_lived/location	where did rihanna come from?
+wqr000624	/government/politician/government_positions_held	what state did thomas jefferson live in?
+wqr000624	/government/government_position_held/jurisdiction_of_office	what state did thomas jefferson live in?
+wqr000624	/people/person/places_lived	what state did thomas jefferson live in?
+wqr000624	/people/place_lived/location	what state did thomas jefferson live in?
+wqr000629	/location/country/currency_used	what do australia call their money?
+wqr000629	/location/statistical_region/gdp_nominal_per_capita	what do australia call their money?
+wqr000629	/measurement_unit/dated_money_value/currency	what do australia call their money?
+wqr000634	/people/person/profession	what did martin luther do?
+wqr000634	/common/topic/notable_for	what did martin luther do?
+wqr000639	/organization/organization/headquarters	where do audi come from?
+wqr000639	/location/mailing_address/citytown	where do audi come from?
+wqr000644	/location/country/official_language	what do singapore speak?
+wqr000644	/location/country/languages_spoken	what do singapore speak?
+wqr000649	/location/country/capital	what is the capital city of albania?
+wqr000649	/type/object/name	what is the capital city of albania?
+wqr000654	/book/author/book_editions_published	what was the title of the first book dr. seuss wrote?
+wqr000654	/book/author/works_written	what was the title of the first book dr. seuss wrote?
+wqr000659	/people/person/places_lived	where does joey king live?
+wqr000659	/people/place_lived/location	where does joey king live?
+wqr000659	/people/person/place_of_birth	where does joey king live?
+wqr000669	/food/beer_country_region/beers_from_here	what does canada grow for food?
+wqr000674	/tv/tv_actor/starring_roles	what voice does hank azaria do on the simpsons?
+wqr000674	/tv/regular_tv_appearance/character	what voice does hank azaria do on the simpsons?
+wqr000674	/tv/tv_program/regular_cast	what voice does hank azaria do on the simpsons?
+wqr000674	/tv/regular_tv_appearance/character	what voice does hank azaria do on the simpsons?
+wqr000684	/language/human_language/main_country	what country speak english as native language?
+wqr000684	/language/human_language/countries_spoken_in	what country speak english as native language?
+wqr000689	/government/governmental_body/members	who is the house of representatives made up of?
+wqr000689	/government/government_position_held/office_holder	who is the house of representatives made up of?
+wqr000694	/people/person/place_of_birth	where did morgan freeman come from?
+wqr000694	/people/person/places_lived	where did morgan freeman come from?
+wqr000694	/people/place_lived/location	where did morgan freeman come from?
+wqr000699	/people/person/education	what makes einstein smart?
+wqr000699	/education/education/major_field_of_study	what makes einstein smart?
+wqr000704	/organization/organization/headquarters	where is eu headquarters located?
+wqr000704	/location/mailing_address/state_province_region	where is eu headquarters located?
+wqr000709	/fictional_universe/fictional_language/where_spoken	who created english alphabet?
+wqr000714	/baseball/baseball_player/batting_stats	what year did pete rose play?
+wqr000714	/baseball/batting_statistics/season	what year did pete rose play?
+wqr000714	/sports/sports_award_winner/awards	what year did pete rose play?
+wqr000714	/sports/sports_award/season	what year did pete rose play?
+wqr000714	/baseball/baseball_player/lifetime_batting_statistics	what year did pete rose play?
+wqr000714	/baseball/lifetime_batting_statistics/starting_season	what year did pete rose play?
+wqr000719	/film/actor/film	what has anna kendrick been in?
+wqr000719	/film/performance/film	what has anna kendrick been in?
+wqr000724	/type/object/type	what is calabria italy?
+wqr000724	/common/topic/notable_for	what is calabria italy?
+wqr000724	/common/topic/notable_types	what is calabria italy?
+wqr000729	/location/location/contains	what 4 countries make up great britain?
+wqr000734	/business/business_operation/industry	who carries sherwin williams paint?
+wqr000744	/people/person/places_lived	where does selena gomez live map?
+wqr000744	/people/place_lived/location	where does selena gomez live map?
+wqr000754	/religion/religion/deities	what god do catholics believe in?
+wqr000759	/people/ethnicity/languages_spoken	what language do jewish speak?
+wqr000764	/american_football/football_team/historical_coaching_staff	who was the colts coach in 2011?
+wqr000764	/american_football/football_historical_coach_position/coach	who was the colts coach in 2011?
+wqr000764	/sports/sports_team/coaches	who was the colts coach in 2011?
+wqr000764	/sports/sports_team_coach_tenure/coach	who was the colts coach in 2011?
+wqr000769	/people/person/nationality	where did giovanni da verrazano come from?
+wqr000779	/location/location/contains	when does summer start in new england?
+wqr000784	/american_football/football_player/games	who does michael oher play for in 2009?
+wqr000784	/american_football/player_game_statistics/team	who does michael oher play for in 2009?
+wqr000784	/american_football/football_player/receiving	who does michael oher play for in 2009?
+wqr000784	/american_football/player_receiving_statistics/team	who does michael oher play for in 2009?
+wqr000784	/sports/drafted_athlete/drafted	who does michael oher play for in 2009?
+wqr000784	/sports/sports_league_draft_pick/team	who does michael oher play for in 2009?
+wqr000784	/sports/pro_athlete/teams	who does michael oher play for in 2009?
+wqr000784	/sports/sports_team_roster/team	who does michael oher play for in 2009?
+wqr000789	/tv/tv_program/regular_cast	who plays the brother in hannah montana?
+wqr000789	/tv/regular_tv_appearance/actor	who plays the brother in hannah montana?
+wqr000794	/location/location/containedby	where is the syracuse university?
+wqr000794	/education/educational_institution/nickname	where is the syracuse university?
+wqr000794	/organization/organization/headquarters	where is the syracuse university?
+wqr000794	/location/mailing_address/citytown	where is the syracuse university?
+wqr000794	/organization/organization/headquarters	where is the syracuse university?
+wqr000794	/location/mailing_address/country	where is the syracuse university?
+wqr000794	/organization/organization/headquarters	where is the syracuse university?
+wqr000794	/location/mailing_address/state_province_region	where is the syracuse university?
+wqr000799	/travel/travel_destination/tourist_attractions	what to do with kids in halifax?
+wqr000804	/film/film_character/portrayed_in_films	who played emperor palpatine?
+wqr000804	/film/performance/actor	who played emperor palpatine?
+wqr000804	/tv/tv_character/appeared_in_tv_program	who played emperor palpatine?
+wqr000804	/tv/regular_tv_appearance/actor	who played emperor palpatine?
+wqr000814	/travel/travel_destination/tourist_attractions	what to see in london in june 2012?
+wqr000814	/location/location/contains	what to see in london in june 2012?
+wqr000824	/location/country/languages_spoken	what kind of language do they speak in greece?
+wqr000824	/location/country/official_language	what kind of language do they speak in greece?
+wqr000829	/people/person/profession	who was rudolf virchow?
+wqr000829	/type/object/type	who was rudolf virchow?
+wqr000834	/government/politician/government_positions_held	what office does hillary clinton hold?
+wqr000834	/government/government_position_held/governmental_body	what office does hillary clinton hold?
+wqr000834	/government/politician/government_positions_held	what office does hillary clinton hold?
+wqr000834	/government/government_position_held/office_position_or_title	what office does hillary clinton hold?
+wqr000834	/people/appointee/position	what office does hillary clinton hold?
+wqr000834	/people/appointment/appointed_role	what office does hillary clinton hold?
+wqr000839	/baseball/baseball_team/team_stats	when did toronto blue jays become a team?
+wqr000839	/baseball/baseball_team_stats/season	when did toronto blue jays become a team?
+wqr000844	/location/location/adjoin_s	what 3 states border the pacific ocean?
+wqr000844	/location/adjoining_relationship/adjoins	what 3 states border the pacific ocean?
+wqr000849	/location/location/adjoin_s	which countries do germany border?
+wqr000849	/location/adjoining_relationship/adjoins	which countries do germany border?
+wqr000849	/military/military_combatant/military_conflicts	which countries do germany border?
+wqr000849	/military/military_combatant_group/combatants	which countries do germany border?
+wqr000854	/people/person/place_of_birth	where are they now jessica mcclure?
+wqr000854	/people/person/places_lived	where are they now jessica mcclure?
+wqr000854	/people/place_lived/location	where are they now jessica mcclure?
+wqr000859	/location/location/contains	what to do in downtown waukesha?
+wqr000864	/soccer/football_player/goals_scored	who does messi play with?
+wqr000864	/soccer/football_goal/point_awarded_to	who does messi play with?
+wqr000864	/sports/pro_athlete/teams	who does messi play with?
+wqr000864	/sports/sports_team_roster/team	who does messi play with?
+wqr000864	/sports/sports_award_winner/awards	who does messi play with?
+wqr000864	/sports/sports_award/team	who does messi play with?
+wqr000874	/sports/pro_athlete/teams	what is kevin durant play style?
+wqr000874	/sports/sports_team_roster/position	what is kevin durant play style?
+wqr000874	/basketball/basketball_player/position_s	what is kevin durant play style?
+wqr000879	/location/location/contains	what places can you visit in france?
+wqr000884	/location/location/contains	what countries in north america continent?
+wqr000889	/film/film_character/portrayed_in_films	who play luke skywalker?
+wqr000889	/film/performance/actor	who play luke skywalker?
+wqr000889	/tv/tv_character/appeared_in_tv_program	who play luke skywalker?
+wqr000889	/tv/regular_tv_appearance/actor	who play luke skywalker?
+wqr000894	/influence/influence_node/influenced_by	what inspired scott fitzgerald?
+wqr000899	/travel/travel_destination/tourist_attractions	what to do in seattle during the summer?
+wqr000899	/location/location/contains	what to do in seattle during the summer?
+wqr000904	/business/business_operation/industry	what kind of insurance does geico offer?
+wqr000904	/common/topic/notable_for	what kind of insurance does geico offer?
+wqr000909	/music/artist/origin	where did bob dylan live?
+wqr000914	/travel/travel_destination/tourist_attractions	what is there to see in barcelona?
+wqr000914	/location/location/contains	what is there to see in barcelona?
+wqr000919	/sports/pro_athlete/teams	who does tim howard play for club?
+wqr000919	/sports/sports_team_roster/team	who does tim howard play for club?
+wqr000924	/people/person/education	what middle school did barack obama attend?
+wqr000924	/education/education/institution	what middle school did barack obama attend?
+wqr000929	/symbols/name_source/namesakes	what does donald trump own?
+wqr000929	/organization/organization_founder/organizations_founded	what does donald trump own?
+wqr000929	/architecture/architectural_structure_owner/structures_owned	what does donald trump own?
+wqr000929	/architecture/ownership/structure	what does donald trump own?
+wqr000929	/business/board_member/leader_of	what does donald trump own?
+wqr000929	/organization/leadership/organization	what does donald trump own?
+wqr000929	/people/person/employment_history	what does donald trump own?
+wqr000929	/business/employment_tenure/company	what does donald trump own?
+wqr000934	/people/ethnicity/includes_groups	who was the general for the british in the revolutionary war?
+wqr000939	/organization/organization/founders	who founded collegehumor?
+wqr000944	/location/location/contains	what are the islands of oceania?
+wqr000949	/people/person/place_of_birth	where was martin cooper from?
+wqr000954	/symbols/name_source/namesakes	what medium is the school of athens?
+wqr000954	/common/topic/image	what medium is the school of athens?
+wqr000954	/type/object/name	what medium is the school of athens?
+wqr000959	/government/governmental_jurisdiction/governing_officials	who is the current leader of china today?
+wqr000959	/government/government_position_held/office_holder	who is the current leader of china today?
+wqr000964	/visual_art/visual_artist/art_forms	what kind of artist is henri matisse?
+wqr000964	/common/topic/notable_for	what kind of artist is henri matisse?
+wqr000969	/american_football/football_team/historical_coaching_staff	who is the head coach of the tennessee titans?
+wqr000969	/american_football/football_historical_coach_position/coach	who is the head coach of the tennessee titans?
+wqr000974	/location/country/languages_spoken	what language do people speak in turkey?
+wqr000974	/location/country/official_language	what language do people speak in turkey?
+wqr000989	/people/deceased_person/place_of_death	where did prophet daniel died?
+wqr000999	/influence/influence_node/influenced_by	what influenced william morris to be an artist?
+wqr001014	/people/person/profession	who is samantha gibb?
+wqr001019	/location/location/containedby	where is the mozambique located?
+wqr001024	/sports/pro_athlete/teams	what college did matt schaub play for?
+wqr001024	/sports/sports_team_roster/team	what college did matt schaub play for?
+wqr001029	/film/music_contributor/film	what films did hans zimmer wrote music for?
+wqr001029	/music/artist/album	what films did hans zimmer wrote music for?
+wqr001029	/music/producer/releases_produced	what films did hans zimmer wrote music for?
+wqr001029	/music/artist/contribution	what films did hans zimmer wrote music for?
+wqr001029	/music/recording_contribution/album	what films did hans zimmer wrote music for?
+wqr001039	/geography/river/basin_countries	what does the zambezi river flow into?
+wqr001039	/location/location/partially_contained_by	what does the zambezi river flow into?
+wqr001039	/location/partial_containment_relationship/partially_contained_by	what does the zambezi river flow into?
+wqr001039	/location/location/partially_containedby	what does the zambezi river flow into?
+wqr001044	/location/citytown/postal_codes	what is the zip code of new york city?
+wqr001049	/location/country/currency_used	what is currency in dominican republic?
+wqr001054	/film/film_character/portrayed_in_films	who plays the voice of lois griffin?
+wqr001054	/film/performance/actor	who plays the voice of lois griffin?
+wqr001054	/tv/tv_character/appeared_in_tv_program	who plays the voice of lois griffin?
+wqr001054	/tv/regular_tv_appearance/actor	who plays the voice of lois griffin?
+wqr001059	/law/court/judges	who is the present chief justice of the u.s. supreme court?
+wqr001059	/law/judicial_tenure/judge	who is the present chief justice of the u.s. supreme court?
+wqr001069	/location/country/languages_spoken	what language do denmark?
+wqr001069	/location/country/official_language	what language do denmark?
+wqr001074	/music/artist/genre	what kind of music does john mayer play?
+wqr001079	/people/ethnicity/languages_spoken	what kind of language do irish speak?
+wqr001079	/type/object/name	what kind of language do irish speak?
+wqr001079	/common/topic/alias	what kind of language do irish speak?
+wqr001079	/education/field_of_study/students_majoring	what kind of language do irish speak?
+wqr001079	/education/education/major_field_of_study	what kind of language do irish speak?
+wqr001084	/location/location/time_zones	what timezone is texas san antonio in?
+wqr001089	/sports/pro_athlete/teams	what team does chris humphrey play for?
+wqr001089	/sports/sports_team_roster/team	what team does chris humphrey play for?
+wqr001094	/people/ethnicity/languages_spoken	what year is it going to be on the jewish calendar?
+wqr001099	/celebrities/celebrity/sexual_relationships	who is hugh hefner dating now in 2012?
+wqr001099	/celebrities/romantic_relationship/celebrity	who is hugh hefner dating now in 2012?
+wqr001099	/people/person/spouse_s	who is hugh hefner dating now in 2012?
+wqr001099	/people/marriage/spouse	who is hugh hefner dating now in 2012?
+wqr001109	/location/country/currency_used	what is the currency used in tunisia?
+wqr001114	/people/deceased_person/place_of_death	where did kaiser wilhelm fled to?
+wqr001119	/people/person/place_of_birth	where is adam smith from?
+wqr001124	/celebrities/celebrity/sexual_relationships	who is jennifer lawrence boyfriend 2012?
+wqr001124	/celebrities/romantic_relationship/celebrity	who is jennifer lawrence boyfriend 2012?
+wqr001129	/location/location/contains	where did the cuban missile crisis happen?
+wqr001134	/location/location/containedby	where is port lavaca tx?
+wqr001134	/location/capital_of_administrative_division/capital_of	where is port lavaca tx?
+wqr001134	/location/administrative_division_capital_relationship/administrative_division	where is port lavaca tx?
+wqr001134	/location/hud_county_place/county	where is port lavaca tx?
+wqr001139	/government/governmental_jurisdiction/governing_officials	who was the communist dictator of north korea?
+wqr001139	/government/government_position_held/office_holder	who was the communist dictator of north korea?
+wqr001144	/sports/pro_athlete/teams	what team does drogba play for 2013?
+wqr001144	/sports/sports_team_roster/team	what team does drogba play for 2013?
+wqr001149	/people/ethnicity/people	what does the dutch word boer mean?
+wqr001159	/people/person/place_of_birth	where did noah live before the flood?
+wqr001164	/common/topic/notable_for	what does starbucks sell?
+wqr001169	/location/location/containedby	where is the country of panama located?
+wqr001179	/people/deceased_person/cause_of_death	what happened to nina simone?
+wqr001184	/people/person/spouse_s	who all was richard burton married to?
+wqr001184	/people/marriage/spouse	who all was richard burton married to?
+wqr001189	/tv/tv_character/appeared_in_tv_program	who should play harley quinn?
+wqr001189	/tv/regular_tv_appearance/actor	who should play harley quinn?
+wqr001189	/cvg/game_character/games	who should play harley quinn?
+wqr001189	/cvg/game_performance/voice_actor	who should play harley quinn?
+wqr001199	/location/country/official_language	what do people in south africa speak?
+wqr001199	/location/country/languages_spoken	what do people in south africa speak?
+wqr001199	/book/periodical/language	what do people in south africa speak?
+wqr001204	/location/location/containedby	what cities are in oakland county michigan?
+wqr001209	/government/governmental_jurisdiction/governing_officials	what is the parliament of canada called?
+wqr001209	/government/government_position_held/governmental_body	what is the parliament of canada called?
+wqr001209	/government/governmental_jurisdiction/government_bodies	what is the parliament of canada called?
+wqr001209	/type/object/name	what is the parliament of canada called?
+wqr001214	/basketball/basketball_team/head_coach	who is the current coach of the chicago bulls?
+wqr001219	/people/person/sibling_s	who were michael jackson's brothers and sisters?
+wqr001219	/people/sibling_relationship/sibling	who were michael jackson's brothers and sisters?
+wqr001219	/award/award_winner/awards_won	who were michael jackson's brothers and sisters?
+wqr001219	/award/award_honor/award_winner	who were michael jackson's brothers and sisters?
+wqr001224	/film/actor/film	who does christopher walken play in batman returns?
+wqr001224	/film/performance/character	who does christopher walken play in batman returns?
+wqr001224	/film/film/starring	who does christopher walken play in batman returns?
+wqr001224	/film/performance/character	who does christopher walken play in batman returns?
+wqr001229	/symbols/name_source/namesakes	what was nicolaus copernicus discovery?
+wqr001234	/geography/river/mouth	which ocean does the murray river flow into?
+wqr001239	/government/government_office_category/officeholders	who became president when jfk was killed?
+wqr001239	/government/government_position_held/office_holder	who became president when jfk was killed?
+wqr001239	/government/government_office_or_title/office_holders	who became president when jfk was killed?
+wqr001239	/government/government_position_held/office_holder	who became president when jfk was killed?
+wqr001239	/government/us_president/vice_president	who became president when jfk was killed?
+wqr001244	/people/deceased_person/place_of_burial	what did god say to abraham about circumcision?
+wqr001249	/book/periodical/language	what language do the people in ghana speak?
+wqr001249	/location/country/languages_spoken	what language do the people in ghana speak?
+wqr001249	/location/country/official_language	what language do the people in ghana speak?
+wqr001254	/film/film_subject/films	where was the gallipoli campaign waged?
+wqr001254	/military/military_conflict/locations	where was the gallipoli campaign waged?
+wqr001254	/time/event/locations	where was the gallipoli campaign waged?
+wqr001259	/people/person/education	where did brad paisley graduate from college?
+wqr001259	/education/education/institution	where did brad paisley graduate from college?
+wqr001264	/location/country/currency_used	what kind of currency to bring to mexico?
+wqr001269	/fictional_universe/fictional_character/married_to	who is liz lemon getting married to?
+wqr001269	/fictional_universe/marriage_of_fictional_characters/spouses	who is liz lemon getting married to?
+wqr001274	/people/person/education	where did helen keller go to school?
+wqr001274	/education/education/institution	where did helen keller go to school?
+wqr001279	/film/actor/film	who does paul bettany play in the avengers?
+wqr001279	/film/performance/character	who does paul bettany play in the avengers?
+wqr001279	/tv/tv_program/regular_cast	who does paul bettany play in the avengers?
+wqr001279	/tv/regular_tv_appearance/character	who does paul bettany play in the avengers?
+wqr001284	/medicine/notable_person_with_medical_condition/condition	what blood disease does robin roberts have?
+wqr001289	/location/statistical_region/religions	where to get married in north alabama?
+wqr001289	/location/religion_percentage/religion	where to get married in north alabama?
+wqr001294	/film/film_character/portrayed_in_films	what is vito corleone real name?
+wqr001294	/film/performance/actor	what is vito corleone real name?
+wqr001294	/tv/tv_character/appeared_in_tv_program	what is vito corleone real name?
+wqr001294	/tv/regular_tv_appearance/actor	what is vito corleone real name?
+wqr001299	/sports/sports_team/season_record	when was the last superbowl win for the steelers?
+wqr001299	/sports/sports_team_season_record/season	when was the last superbowl win for the steelers?
+wqr001304	/olympics/olympic_athlete/medals_won	what did bruce jenner win gold for?
+wqr001304	/olympics/olympic_medal_honor/event	what did bruce jenner win gold for?
+wqr001314	/book/author/works_written	what books did jules verne wright?
+wqr001314	/book/author/book_editions_published	what books did jules verne wright?
+wqr001319	/organization/organization_member/member_of	what does qatar export?
+wqr001319	/organization/organization_membership/organization	what does qatar export?
+wqr001324	/location/location/containedby	which country is located directly east of belgium?
+wqr001329	/soccer/football_player/matches_played	what club team is diego forlan on?
+wqr001329	/soccer/football_player_match_participation/team	what club team is diego forlan on?
+wqr001329	/soccer/football_player/goals_scored	what club team is diego forlan on?
+wqr001329	/soccer/football_goal/point_awarded_to	what club team is diego forlan on?
+wqr001329	/sports/pro_athlete/teams	what club team is diego forlan on?
+wqr001329	/sports/sports_team_roster/team	what club team is diego forlan on?
+wqr001334	/visual_art/art_subject/artwork_on_the_subject	what is the episode of family guy when peter makes his own country?
+wqr001339	/location/location/containedby	where is the bank of america pavilion?
+wqr001344	/tv/tv_actor/guest_roles	who plays ray barone?
+wqr001344	/tv/tv_guest_role/episodes_appeared_in	who plays ray barone?
+wqr001349	/medicine/notable_person_with_medical_condition/condition	what kind of mental illness did howard hughes have?
+wqr001354	/award/award_winner/awards_won	what films have johnny depp been in?
+wqr001354	/award/award_honor/honored_for	what films have johnny depp been in?
+wqr001354	/award/award_nominee/award_nominations	what films have johnny depp been in?
+wqr001354	/award/award_nomination/nominated_for	what films have johnny depp been in?
+wqr001354	/film/producer/film	what films have johnny depp been in?
+wqr001359	/military/military_conflict/combatants	what countries was the vietnam war between?
+wqr001359	/military/military_combatant_group/combatants	what countries was the vietnam war between?
+wqr001359	/military/military_conflict/casualties	what countries was the vietnam war between?
+wqr001359	/military/casualties/combatant	what countries was the vietnam war between?
+wqr001359	/military/military_conflict/force_strengths	what countries was the vietnam war between?
+wqr001359	/military/force_strength/combatant	what countries was the vietnam war between?
+wqr001359	/military/military_conflict/commanders	what countries was the vietnam war between?
+wqr001359	/military/military_command/military_combatant	what countries was the vietnam war between?
+wqr001359	/military/military_conflict/locations	what countries was the vietnam war between?
+wqr001359	/time/event/locations	what countries was the vietnam war between?
+wqr001364	/celebrities/celebrity/sexual_relationships	who did jason segel date?
+wqr001364	/celebrities/romantic_relationship/celebrity	who did jason segel date?
+wqr001369	/basketball/basketball_player/player_statistics	who is lamar odom playing for in 2012?
+wqr001369	/basketball/basketball_player_stats/team	who is lamar odom playing for in 2012?
+wqr001369	/sports/pro_athlete/teams	who is lamar odom playing for in 2012?
+wqr001369	/sports/sports_team_roster/team	who is lamar odom playing for in 2012?
+wqr001374	/location/country/form_of_government	what kind of system of government does the united states have?
+wqr001384	/royalty/noble_person/titles	who was louis xvi?
+wqr001384	/royalty/noble_title_tenure/noble_title	who was louis xvi?
+wqr001389	/basketball/basketball_player/player_statistics	who did lamar odom sign with?
+wqr001389	/basketball/basketball_player_stats/team	who did lamar odom sign with?
+wqr001389	/sports/pro_athlete/teams	who did lamar odom sign with?
+wqr001389	/sports/sports_team_roster/team	who did lamar odom sign with?
+wqr001394	/location/statistical_region/places_exported_to	what country does turkey trade with?
+wqr001394	/location/imports_and_exports/exported_to	what country does turkey trade with?
+wqr001399	/location/location/adjoin_s	what country is next to russia?
+wqr001399	/location/adjoining_relationship/adjoins	what country is next to russia?
+wqr001404	/people/person/parents	who plays jackson gibbs on ncis?
+wqr001409	/language/human_language/main_country	what country do arabic people come from?
+wqr001409	/language/human_language/countries_spoken_in	what country do arabic people come from?
+wqr001414	/location/country/form_of_government	what type of legal system does italy have?
+wqr001424	/location/location/containedby	where is oceania on a map?
+wqr001429	/common/topic/notable_for	who is adam sandler?
+wqr001429	/people/person/profession	who is adam sandler?
+wqr001439	/location/country/languages_spoken	what language do the assyrians speak?
+wqr001444	/sports/sports_team/championships	when was the last time the oakland raiders won the super bowl?
+wqr001449	/travel/travel_destination/tourist_attractions	what to do when traveling to london?
+wqr001449	/location/location/contains	what to do when traveling to london?
+wqr001454	/people/person/places_lived	where does ryan lochte live now?
+wqr001454	/people/place_lived/location	where does ryan lochte live now?
+wqr001459	/people/person/spouse_s	who did corey feldman married?
+wqr001459	/people/marriage/spouse	who did corey feldman married?
+wqr001464	/book/book_subject/works	who was the founder of the colony of virginia?
+wqr001469	/government/political_district/representatives	who is the state senator of kentucky?
+wqr001469	/government/government_position_held/office_holder	who is the state senator of kentucky?
+wqr001474	/common/topic/image	what countries do they speak italian?
+wqr001474	/language/human_language/countries_spoken_in	what countries do they speak italian?
+wqr001474	/language/human_language/main_country	what countries do they speak italian?
+wqr001474	/type/object/name	what countries do they speak italian?
+wqr001479	/people/person/parents	what are bridgit mendler's parents names?
+wqr001484	/visual_art/visual_artist/associated_periods_or_movements	what kind of paintings did frida kahlo do?
+wqr001489	/film/actor/film	what movies has michael clarke duncan been in?
+wqr001489	/film/performance/film	what movies has michael clarke duncan been in?
+wqr001494	/music/artist/album	what are all of michael jackson albums?
+wqr001494	/award/award_nominee/award_nominations	what are all of michael jackson albums?
+wqr001494	/award/award_nomination/nominated_for	what are all of michael jackson albums?
+wqr001494	/music/artist/track	what are all of michael jackson albums?
+wqr001494	/music/producer/tracks_produced	what are all of michael jackson albums?
+wqr001494	/music/artist/concert_tours	what are all of michael jackson albums?
+wqr001494	/music/artist/track_contributions	what are all of michael jackson albums?
+wqr001494	/music/track_contribution/track	what are all of michael jackson albums?
+wqr001494	/music/composer/compositions	what are all of michael jackson albums?
+wqr001494	/music/lyricist/lyrics_written	what are all of michael jackson albums?
+wqr001494	/music/music_video_performer/music_video_performances	what are all of michael jackson albums?
+wqr001494	/music/music_video_performance/music_video	what are all of michael jackson albums?
+wqr001499	/military/military_commander/military_commands	where did lee surrender to grant to end the civil war?
+wqr001499	/military/military_command/military_conflict	where did lee surrender to grant to end the civil war?
+wqr001504	/people/person/parents	who is ben roethlisberger parents?
+wqr001514	/travel/transport_operator/travel_destinations_served	where is greyhound station in washington dc?
+wqr001514	/travel/transportation/transport_operator	where is greyhound station in washington dc?
+wqr001514	/travel/travel_destination/how_to_get_here	where is greyhound station in washington dc?
+wqr001514	/travel/transportation/transport_operator	where is greyhound station in washington dc?
+wqr001514	/type/object/name	where is greyhound station in washington dc?
+wqr001519	/sports/professional_sports_team/draft_picks	who is the falcons quarterback 2012?
+wqr001519	/sports/sports_league_draft_pick/player	who is the falcons quarterback 2012?
+wqr001519	/sports/sports_team/roster	who is the falcons quarterback 2012?
+wqr001519	/sports/sports_team_roster/player	who is the falcons quarterback 2012?
+wqr001524	/law/inventor/inventions	what was one of benjamin franklin's inventions?
+wqr001529	/location/country/languages_spoken	what does guyana speak?
+wqr001529	/location/country/official_language	what does guyana speak?
+wqr001534	/location/capital_of_administrative_division/capital_of	what county is minneapolis mn in?
+wqr001534	/location/administrative_division_capital_relationship/administrative_division	what county is minneapolis mn in?
+wqr001534	/location/hud_county_place/county	what county is minneapolis mn in?
+wqr001534	/location/location/containedby	what county is minneapolis mn in?
+wqr001539	/film/film/produced_by	who plays paul blart?
+wqr001539	/film/film/starring	who plays paul blart?
+wqr001539	/film/performance/actor	who plays paul blart?
+wqr001539	/film/film/written_by	who plays paul blart?
+wqr001544	/location/location/containedby	what culture lived in teotihuacan?
+wqr001549	/film/film/starring	who was cleopatra married too?
+wqr001549	/film/performance/character	who was cleopatra married too?
+wqr001549	/people/person/spouse_s	who was cleopatra married too?
+wqr001549	/people/marriage/spouse	who was cleopatra married too?
+wqr001559	/cvg/game_character/games	who voice acts peter griffin?
+wqr001559	/cvg/game_performance/voice_actor	who voice acts peter griffin?
+wqr001559	/fictional_universe/fictional_character/character_created_by	who voice acts peter griffin?
+wqr001559	/film/film_character/portrayed_in_films	who voice acts peter griffin?
+wqr001559	/film/performance/actor	who voice acts peter griffin?
+wqr001559	/tv/tv_character/appeared_in_tv_program	who voice acts peter griffin?
+wqr001559	/tv/regular_tv_appearance/actor	who voice acts peter griffin?
+wqr001569	/location/country/form_of_government	what system of government does nigeria have?
+wqr001579	/location/location/nearby_airports	where do you fly into for destin?
+wqr001579	/travel/travel_destination/how_to_get_here	where do you fly into for destin?
+wqr001579	/travel/transportation/mode_of_transportation	where do you fly into for destin?
+wqr001584	/people/person/employment_history	where does dr. sanjay gupta practice?
+wqr001584	/business/employment_tenure/company	where does dr. sanjay gupta practice?
+wqr001589	/soccer/football_player/loans	who does david beckham play for in 2012?
+wqr001589	/soccer/football_player_loan/lending_team	who does david beckham play for in 2012?
+wqr001589	/sports/pro_athlete/teams	who does david beckham play for in 2012?
+wqr001589	/sports/sports_team_roster/team	who does david beckham play for in 2012?
+wqr001594	/common/topic/image	what two countries speak italian?
+wqr001594	/language/human_language/countries_spoken_in	what two countries speak italian?
+wqr001594	/language/human_language/main_country	what two countries speak italian?
+wqr001594	/type/object/name	what two countries speak italian?
+wqr001599	/film/actor/film	what has ian somerhalder played in?
+wqr001599	/film/performance/film	what has ian somerhalder played in?
+wqr001599	/film/actor/film	what has ian somerhalder played in?
+wqr001599	/film/performance/character	what has ian somerhalder played in?
+wqr001604	/influence/influence_node/influenced_by	what influenced abraham lincoln to become president?
+wqr001609	/religion/religion/beliefs	what bible do rastafarians use?
+wqr001614	/location/location/containedby	where was san gabriel arcangel located?
+wqr001614	/location/hud_county_place/place	where was san gabriel arcangel located?
+wqr001614	/location/location/street_address	where was san gabriel arcangel located?
+wqr001614	/location/mailing_address/citytown	where was san gabriel arcangel located?
+wqr001614	/location/location/street_address	where was san gabriel arcangel located?
+wqr001614	/location/mailing_address/state_province_region	where was san gabriel arcangel located?
+wqr001614	/type/object/name	where was san gabriel arcangel located?
+wqr001619	/sports/sports_team/location	where do the orioles play spring training?
+wqr001624	/language/human_language/countries_spoken_in	where is basque located?
+wqr001624	/language/human_language/main_country	where is basque located?
+wqr001624	/military/military_conflict/locations	where is basque located?
+wqr001624	/time/event/locations	where is basque located?
+wqr001624	/government/political_district/representatives	where is basque located?
+wqr001624	/government/government_position_held/jurisdiction_of_office	where is basque located?
+wqr001624	/location/administrative_division/country	where is basque located?
+wqr001624	/location/administrative_division/first_level_division_of	where is basque located?
+wqr001624	/location/location/containedby	where is basque located?
+wqr001629	/film/film_character/portrayed_in_films	who the voice of jack skellington?
+wqr001629	/film/performance/actor	who the voice of jack skellington?
+wqr001634	/people/ethnicity/languages_spoken	what language do egyptians use?
+wqr001639	/film/person_or_entity_appearing_in_film/films	what was the name of the book hitler wrote while in prison?
+wqr001639	/film/personal_film_appearance/film	what was the name of the book hitler wrote while in prison?
+wqr001644	/location/country/languages_spoken	what are the major languages in italy?
+wqr001644	/location/country/official_language	what are the major languages in italy?
+wqr001649	/travel/travel_destination/local_transportation	where is the thalys train station in brussels?
+wqr001659	/sports/pro_athlete/teams	who do nate robinson play for?
+wqr001659	/sports/sports_team_roster/team	who do nate robinson play for?
+wqr001664	/basketball/basketball_player/player_statistics	who all has steve nash played for?
+wqr001664	/basketball/basketball_player_stats/team	who all has steve nash played for?
+wqr001664	/sports/pro_athlete/teams	who all has steve nash played for?
+wqr001664	/sports/sports_team_roster/team	who all has steve nash played for?
+wqr001664	/sports/sports_award_winner/awards	who all has steve nash played for?
+wqr001664	/sports/sports_award/team	who all has steve nash played for?
+wqr001669	/government/politician/government_positions_held	what did gerald ford do?
+wqr001669	/government/government_position_held/office_position_or_title	what did gerald ford do?
+wqr001674	/olympics/olympic_participating_country/athletes	what battles did canada win in ww2?
+wqr001674	/olympics/olympic_athlete_affiliation/athlete	what battles did canada win in ww2?
+wqr001674	/olympics/olympic_participating_country/medals_won	what battles did canada win in ww2?
+wqr001674	/olympics/olympic_medal_honor/medalist	what battles did canada win in ww2?
+wqr001679	/location/location/adjoin_s	where is washington d.c. at?
+wqr001679	/location/adjoining_relationship/adjoins	where is washington d.c. at?
+wqr001684	/biology/animal_breed/registered_with	what is a king charles cavalier dog?
+wqr001684	/biology/breed_registration/breed_group	what is a king charles cavalier dog?
+wqr001689	/basketball/basketball_player/player_statistics	what year did lamar odom play for the clippers?
+wqr001689	/basketball/basketball_player_stats/season	what year did lamar odom play for the clippers?
+wqr001694	/travel/tourist_attraction/near_travel_destination	where does the shannon river flow?
+wqr001694	/geography/river/cities	where does the shannon river flow?
+wqr001699	/location/country/currency_used	what currency does hungary have?
+wqr001704	/award/award_nominee/award_nominations	who married jessica simpson?
+wqr001704	/award/award_nomination/award_nominee	who married jessica simpson?
+wqr001704	/people/person/spouse_s	who married jessica simpson?
+wqr001704	/people/marriage/spouse	who married jessica simpson?
+wqr001709	/location/country/currency_used	what is the currency in the dominican republic 2010?
+wqr001714	/people/ethnicity/included_in_group	what race are arabs?
+wqr001719	/influence/influence_node/influenced_by	who was niccolo machiavelli influenced by?
+wqr001724	/government/politician/government_positions_held	what state did obama win?
+wqr001724	/government/government_position_held/district_represented	what state did obama win?
+wqr001724	/government/politician/government_positions_held	what state did obama win?
+wqr001724	/government/government_position_held/jurisdiction_of_office	what state did obama win?
+wqr001739	/people/person/places_lived	where did walt disney live before he died?
+wqr001739	/people/place_lived/location	where did walt disney live before he died?
+wqr001739	/people/person/place_of_birth	where did walt disney live before he died?
+wqr001744	/book/author/works_written	what books did emily dickinson wrote?
+wqr001744	/type/object/name	what books did emily dickinson wrote?
+wqr001749	/location/capital_of_administrative_division/capital_of	in which state did the santa fe trail begin?
+wqr001749	/location/administrative_division_capital_relationship/administrative_division	in which state did the santa fe trail begin?
+wqr001749	/location/location/containedby	in which state did the santa fe trail begin?
+wqr001754	/influence/influence_node/influenced_by	what influenced andy warhol's work?
+wqr001764	/law/court/judges	who are the judges on the us supreme court?
+wqr001764	/law/judicial_tenure/judge	who are the judges on the us supreme court?
+wqr001769	/people/family/country	what did the habsburg family control?
+wqr001774	/location/administrative_division/first_level_division_of	what countries are located in the netherlands?
+wqr001774	/location/location/containedby	what countries are located in the netherlands?
+wqr001779	/people/deceased_person/place_of_death	what race did dan wheldon died in?
+wqr001784	/language/human_language/countries_spoken_in	what countries in the world speak german?
+wqr001784	/location/location/adjoin_s	what countries in the world speak german?
+wqr001784	/location/adjoining_relationship/adjoins	what countries in the world speak german?
+wqr001784	/military/military_combatant/military_conflicts	what countries in the world speak german?
+wqr001784	/military/military_combatant_group/combatants	what countries in the world speak german?
+wqr001784	/biology/animal_breed/place_of_origin	what countries in the world speak german?
+wqr001784	/language/human_language/main_country	what countries in the world speak german?
+wqr001784	/people/ethnicity/geographic_distribution	what countries in the world speak german?
+wqr001784	/type/object/name	what countries in the world speak german?
+wqr001789	/people/person/profession	who is henry david thoreau?
+wqr001794	/people/person/education	what highschool did bill gates graduated from?
+wqr001794	/education/education/institution	what highschool did bill gates graduated from?
+wqr001799	/tv/tv_character/appeared_in_tv_episodes	who played danielle rousseau on lost?
+wqr001799	/tv/tv_guest_role/actor	who played danielle rousseau on lost?
+wqr001799	/tv/tv_character/appeared_in_tv_program	who played danielle rousseau on lost?
+wqr001799	/tv/regular_tv_appearance/actor	who played danielle rousseau on lost?
+wqr001804	/organization/membership_organization/members	what countries are part of nato?
+wqr001804	/organization/organization_membership/member	what countries are part of nato?
+wqr001804	/film/film/country	what countries are part of nato?
+wqr001804	/military/military_combatant/includes_allies	what countries are part of nato?
+wqr001804	/organization/organization/founders	what countries are part of nato?
+wqr001809	/military/military_conflict/locations	where was the battle of shiloh?
+wqr001809	/time/event/locations	where was the battle of shiloh?
+wqr001814	/sports/sports_team/founded	when did the new york mets start playing baseball?
+wqr001819	/aviation/aircraft_owner/aircraft_fleet_composition	what type of aircraft does virgin america use?
+wqr001819	/aviation/aircraft_ownership_count/aircraft_model	what type of aircraft does virgin america use?
+wqr001824	/film/film_character/portrayed_in_films	who played cruella deville in 102 dalmatians?
+wqr001824	/film/performance/actor	who played cruella deville in 102 dalmatians?
+wqr001824	/award/award_nominated_work/award_nominations	who played cruella deville in 102 dalmatians?
+wqr001824	/award/award_nomination/award_nominee	who played cruella deville in 102 dalmatians?
+wqr001824	/film/film/starring	who played cruella deville in 102 dalmatians?
+wqr001824	/film/performance/actor	who played cruella deville in 102 dalmatians?
+wqr001824	/tv/tv_character/appeared_in_tv_program	who played cruella deville in 102 dalmatians?
+wqr001824	/tv/regular_tv_appearance/actor	who played cruella deville in 102 dalmatians?
+wqr001829	/location/statistical_region/minimum_wage	what is the name of currency used in spain?
+wqr001829	/measurement_unit/recurring_money_value/currency	what is the name of currency used in spain?
+wqr001829	/location/country/currency_used	what is the name of currency used in spain?
+wqr001834	/film/film_character/portrayed_in_films	who played bilbo baggins?
+wqr001834	/film/performance/actor	who played bilbo baggins?
+wqr001844	/location/statistical_region/major_exports	what products are made in the usa?
+wqr001844	/location/imports_exports_by_industry/industry	what products are made in the usa?
+wqr001849	/common/topic/notable_for	what happened at the virginia tech massacre?
+wqr001849	/event/disaster/type_of_disaster	what happened at the virginia tech massacre?
+wqr001854	/language/human_language/countries_spoken_in	where does turkish language?
+wqr001854	/language/human_language/main_country	where does turkish language?
+wqr001859	/travel/travel_destination/tourist_attractions	what to do with kids in phx az?
+wqr001864	/location/location/adjoin_s	which asian country has the biggest population?
+wqr001864	/location/adjoining_relationship/adjoins	which asian country has the biggest population?
+wqr001864	/location/location/coterminous_with	which asian country has the biggest population?
+wqr001864	/location/cotermination/location	which asian country has the biggest population?
+wqr001869	/sports/sports_league/teams	who won last year's nfl super bowl?
+wqr001869	/sports/sports_league_participation/team	who won last year's nfl super bowl?
+wqr001874	/common/topic/alias	what language is spoken in basque?
+wqr001879	/people/person/nationality	what country did jacques cartier came from?
+wqr001884	/symbols/flag_referent/flag	what represents ghana?
+wqr001884	/symbols/flag_use/flag	what represents ghana?
+wqr001889	/sports/pro_athlete/teams	who does jr smith play for 2012?
+wqr001889	/sports/sports_team_roster/team	who does jr smith play for 2012?
+wqr001889	/sports/sports_award_winner/awards	who does jr smith play for 2012?
+wqr001889	/sports/sports_award/team	who does jr smith play for 2012?
+wqr001894	/location/hud_county_place/county	where is shoreview mn?
+wqr001894	/location/location/containedby	where is shoreview mn?
+wqr001899	/location/statistical_region/minimum_wage	what is the official currency in france?
+wqr001899	/measurement_unit/recurring_money_value/currency	what is the official currency in france?
+wqr001899	/location/country/currency_used	what is the official currency in france?
+wqr001904	/film/actor/film	what is molly ringwald in?
+wqr001904	/film/performance/film	what is molly ringwald in?
+wqr001904	/award/award_nominee/award_nominations	what is molly ringwald in?
+wqr001904	/award/award_nomination/nominated_for	what is molly ringwald in?
+wqr001904	/tv/tv_actor/starring_roles	what is molly ringwald in?
+wqr001904	/tv/regular_tv_appearance/series	what is molly ringwald in?
+wqr001904	/award/award_winner/awards_won	what is molly ringwald in?
+wqr001904	/award/award_honor/honored_for	what is molly ringwald in?
+wqr001909	/business/board_member/leader_of	what mark zuckerberg?
+wqr001909	/organization/leadership/organization	what mark zuckerberg?
+wqr001909	/business/board_member/organization_board_memberships	what mark zuckerberg?
+wqr001909	/organization/organization_board_membership/organization	what mark zuckerberg?
+wqr001909	/people/person/employment_history	what mark zuckerberg?
+wqr001909	/business/employment_tenure/company	what mark zuckerberg?
+wqr001909	/organization/organization_founder/organizations_founded	what mark zuckerberg?
+wqr001914	/sports/pro_athlete/teams	what basketball team does kris humphrey play for?
+wqr001914	/sports/sports_team_roster/team	what basketball team does kris humphrey play for?
+wqr001919	/people/person/profession	what did doctor kevorkian do?
+wqr001919	/common/topic/notable_for	what did doctor kevorkian do?
+wqr001919	/common/topic/notable_types	what did doctor kevorkian do?
+wqr001919	/type/object/type	what did doctor kevorkian do?
+wqr001924	/location/country/administrative_divisions	where is the warmest weather in the united states in december?
+wqr001924	/location/country/first_level_divisions	where is the warmest weather in the united states in december?
+wqr001929	/sports/sports_team/championships	what year did yankees win their first world series?
+wqr001939	/government/politician/government_positions_held	what political experience did abraham lincoln have?
+wqr001939	/government/government_position_held/office_position_or_title	what political experience did abraham lincoln have?
+wqr001944	/visual_art/visual_artist/associated_periods_or_movements	what technique did vincent van gogh use in his paintings?
+wqr001949	/government/governmental_jurisdiction/government_bodies	what is the legislature of missouri called?
+wqr001954	/military/military_conflict/locations	where was the battle of appomattox located?
+wqr001954	/time/event/locations	where was the battle of appomattox located?
+wqr001959	/government/governmental_jurisdiction/governing_officials	who was the governor of missouri in 1996?
+wqr001959	/government/government_position_held/office_holder	who was the governor of missouri in 1996?
+wqr001964	/location/country/languages_spoken	what language does the country italy speak?
+wqr001964	/location/country/official_language	what language does the country italy speak?
+wqr001969	/sports/sports_team/championships	what years did the yankees win the championship?
+wqr001974	/people/person/parents	who were queen elizabeth 1 parents?
+wqr001979	/people/person/profession	who's betty white?
+wqr001979	/type/object/type	who's betty white?
+wqr001979	/common/topic/notable_for	who's betty white?
+wqr001984	/people/deceased_person/cause_of_death	what kind of cancer killed larry hagman have?
+wqr001984	/medicine/disease/includes_diseases	what kind of cancer killed larry hagman have?
+wqr001984	/type/object/name	what kind of cancer killed larry hagman have?
+wqr001989	/location/location/containedby	what country was the treaty of versailles written?
+wqr001994	/sports/sports_team/arena_stadium	where is the denver broncos stadium located?
+wqr001994	/sports/sports_team/venue	where is the denver broncos stadium located?
+wqr001994	/sports/team_venue_relationship/venue	where is the denver broncos stadium located?
+wqr001999	/location/country/languages_spoken	what languages do people speak in switzerland?
+wqr001999	/location/country/official_language	what languages do people speak in switzerland?
+wqr002004	/people/person/education	where ulysses s grant go to school?
+wqr002004	/education/education/institution	where ulysses s grant go to school?
+wqr002014	/location/capital_of_administrative_division/capital_of	what county is stockton ca located in?
+wqr002014	/location/administrative_division_capital_relationship/administrative_division	what county is stockton ca located in?
+wqr002014	/location/hud_county_place/county	what county is stockton ca located in?
+wqr002014	/location/location/containedby	what county is stockton ca located in?
+wqr002019	/government/governmental_jurisdiction/governing_officials	who is the leader of syria now?
+wqr002019	/government/government_position_held/appointed_by	who is the leader of syria now?
+wqr002019	/government/governmental_jurisdiction/governing_officials	who is the leader of syria now?
+wqr002019	/government/government_position_held/office_holder	who is the leader of syria now?
+wqr002024	/military/military_combatant/force_deployments	what two countries is the us at war with?
+wqr002024	/military/force_strength/military_conflict	what two countries is the us at war with?
+wqr002029	/military/military_conflict/locations	where was battle of verdun located?
+wqr002029	/time/event/locations	where was battle of verdun located?
+wqr002034	/people/ethnicity/languages_spoken	what language do iraqi people speak?
+wqr002039	/film/film_character/portrayed_in_films	who plays jacob black in twilight?
+wqr002039	/film/performance/actor	who plays jacob black in twilight?
+wqr002039	/award/award_nominated_work/award_nominations	who plays jacob black in twilight?
+wqr002039	/award/award_nomination/award_nominee	who plays jacob black in twilight?
+wqr002039	/award/award_winning_work/awards_won	who plays jacob black in twilight?
+wqr002039	/award/award_honor/award_winner	who plays jacob black in twilight?
+wqr002044	/military/military_combatant/military_commanders	when did the italian fascists came to power?
+wqr002044	/military/military_command/military_conflict	when did the italian fascists came to power?
+wqr002049	/olympics/olympic_athlete/medals_won	when did ian thorpe become famous?
+wqr002049	/olympics/olympic_medal_honor/olympics	when did ian thorpe become famous?
+wqr002049	/olympics/olympic_athlete/country	when did ian thorpe become famous?
+wqr002049	/olympics/olympic_athlete_affiliation/olympics	when did ian thorpe become famous?
+wqr002054	/people/person/education	where did mitt romney go to elementary school?
+wqr002054	/education/education/institution	where did mitt romney go to elementary school?
+wqr002059	/award/award_winner/awards_won	what year magic johnson retired?
+wqr002059	/award/award_honor/year	what year magic johnson retired?
+wqr002059	/sports/pro_athlete/teams	what year magic johnson retired?
+wqr002059	/sports/sports_team_roster/to	what year magic johnson retired?
+wqr002064	/people/person/place_of_birth	where is shakira from originally?
+wqr002064	/people/person/places_lived	where is shakira from originally?
+wqr002064	/people/place_lived/location	where is shakira from originally?
+wqr002069	/location/country/languages_spoken	what language chile speak?
+wqr002069	/location/country/official_language	what language chile speak?
+wqr002074	/sports/pro_athlete/teams	what team did john madden play football for?
+wqr002074	/sports/sports_team_roster/team	what team did john madden play football for?
+wqr002074	/sports/drafted_athlete/drafted	what team did john madden play football for?
+wqr002074	/sports/sports_league_draft_pick/team	what team did john madden play football for?
+wqr002079	/sports/sports_team/championships	what years the steelers won the super bowl?
+wqr002079	/time/recurring_event/instances	what years the steelers won the super bowl?
+wqr002079	/award/award_nominee/award_nominations	what years the steelers won the super bowl?
+wqr002079	/award/award_nomination/notes_description	what years the steelers won the super bowl?
+wqr002079	/award/award_winner/awards_won	what years the steelers won the super bowl?
+wqr002079	/award/award_honor/notes_description	what years the steelers won the super bowl?
+wqr002079	/sports/sports_championship/events	what years the steelers won the super bowl?
+wqr002084	/travel/transport_terminus/travel_destinations_served	what time is in london heathrow?
+wqr002084	/travel/transportation/mode_of_transportation	what time is in london heathrow?
+wqr002084	/travel/travel_destination/how_to_get_here	what time is in london heathrow?
+wqr002084	/travel/transportation/mode_of_transportation	what time is in london heathrow?
+wqr002094	/people/person/place_of_birth	what city did elvis presley grew up in?
+wqr002094	/people/person/places_lived	what city did elvis presley grew up in?
+wqr002094	/people/place_lived/location	what city did elvis presley grew up in?
+wqr002099	/people/person/profession	who was philip randolph?
+wqr002104	/location/citytown/postal_codes	what is the zip code for clarksville tn?
+wqr002109	/location/location/containedby	where is the university of alabama?
+wqr002109	/organization/organization/headquarters	where is the university of alabama?
+wqr002109	/location/mailing_address/citytown	where is the university of alabama?
+wqr002109	/organization/organization/headquarters	where is the university of alabama?
+wqr002109	/location/mailing_address/country	where is the university of alabama?
+wqr002109	/organization/organization/headquarters	where is the university of alabama?
+wqr002109	/location/mailing_address/state_province_region	where is the university of alabama?
+wqr002114	/people/person/nationality	what country did james watt come from?
+wqr002124	/people/person/profession	what did camille grammer do for a living?
+wqr002124	/common/topic/notable_for	what did camille grammer do for a living?
+wqr002129	/location/country/form_of_government	what is the government structure of germany?
+wqr002134	/people/person/education	where did william mckinley go to high school?
+wqr002134	/education/education/institution	where did william mckinley go to high school?
+wqr002139	/olympics/olympic_athlete/medals_won	when did shawn johnson won the gold medal?
+wqr002139	/olympics/olympic_medal_honor/olympics	when did shawn johnson won the gold medal?
+wqr002139	/olympics/olympic_athlete/country	when did shawn johnson won the gold medal?
+wqr002139	/olympics/olympic_athlete_affiliation/olympics	when did shawn johnson won the gold medal?
+wqr002139	/tv/tv_personality/tv_regular_appearances	when did shawn johnson won the gold medal?
+wqr002139	/tv/tv_regular_personal_appearance/program	when did shawn johnson won the gold medal?
+wqr002144	/book/author/works_written	what books did frances hodgson burnett wrote?
+wqr002144	/film/film_story_contributor/film_story_credits	what books did frances hodgson burnett wrote?
+wqr002149	/award/award_nominee/award_nominations	who did stephenie meyer play in twilight?
+wqr002149	/award/award_nomination/nominated_for	who did stephenie meyer play in twilight?
+wqr002149	/film/actor/film	who did stephenie meyer play in twilight?
+wqr002149	/film/performance/film	who did stephenie meyer play in twilight?
+wqr002149	/film/film_story_contributor/film_story_credits	who did stephenie meyer play in twilight?
+wqr002149	/film/producer/film	who did stephenie meyer play in twilight?
+wqr002159	/people/person/education	what school did sir isaac newton go to?
+wqr002159	/education/education/institution	what school did sir isaac newton go to?
+wqr002164	/fictional_universe/ethnicity_in_fiction/characters_of_this_ethnicity	what age do scottish people go to university?
+wqr002169	/tv/tv_character/appeared_in_tv_episodes	who played wesley crusher on star trek the next generation?
+wqr002169	/tv/tv_guest_role/actor	who played wesley crusher on star trek the next generation?
+wqr002169	/film/film_character/portrayed_in_films	who played wesley crusher on star trek the next generation?
+wqr002169	/film/performance/actor	who played wesley crusher on star trek the next generation?
+wqr002169	/tv/tv_character/appeared_in_tv_program	who played wesley crusher on star trek the next generation?
+wqr002169	/tv/regular_tv_appearance/actor	who played wesley crusher on star trek the next generation?
+wqr002169	/tv/tv_program/regular_cast	who played wesley crusher on star trek the next generation?
+wqr002169	/tv/regular_tv_appearance/actor	who played wesley crusher on star trek the next generation?
+wqr002174	/military/military_conflict/locations	where was the battle of verdun ww1?
+wqr002174	/time/event/locations	where was the battle of verdun ww1?
+wqr002179	/people/person/parents	what is shakespeare's parents names?
+wqr002184	/people/deceased_person/place_of_death	where did sir richard grenville explore?
+wqr002189	/location/country/languages_spoken	what is modern egyptian language?
+wqr002189	/location/country/official_language	what is modern egyptian language?
+wqr002194	/book/literary_series/works_in_this_series	what are the names of harry potter books in order?
+wqr002199	/symbols/name_source/namesakes	what did isaac newton contribute to science?
+wqr002204	/location/location/time_zones	what time zone is it in california?
+wqr002209	/sports/sports_team/championships	when did the celtics win championship?
+wqr002214	/geography/river/origin	where does hudson river start?
+wqr002219	/location/citytown/postal_codes	what is arlington texas zip code?
+wqr002224	/language/human_language/main_country	where is arabic used?
+wqr002224	/language/human_language/countries_spoken_in	where is arabic used?
+wqr002229	/people/ethnicity/included_in_group	where were the chickasaw indians located?
+wqr002234	/tv/tv_character/appeared_in_tv_episodes	who played mickey on days of our lives?
+wqr002234	/tv/tv_guest_role/actor	who played mickey on days of our lives?
+wqr002234	/tv/tv_character/appeared_in_tv_program	who played mickey on days of our lives?
+wqr002234	/tv/regular_tv_appearance/actor	who played mickey on days of our lives?
+wqr002234	/film/film_character/portrayed_in_films	who played mickey on days of our lives?
+wqr002234	/film/performance/actor	who played mickey on days of our lives?
+wqr002239	/people/deceased_person/place_of_death	where did kate chopin grow up?
+wqr002239	/people/person/place_of_birth	where did kate chopin grow up?
+wqr002239	/people/person/places_lived	where did kate chopin grow up?
+wqr002239	/people/place_lived/location	where did kate chopin grow up?
+wqr002244	/people/person/place_of_birth	where is luke bryan from?
+wqr002249	/people/person/place_of_birth	where did captain james cook grow up?
+wqr002254	/sports/pro_athlete/teams	what school did michael jordan play for?
+wqr002254	/sports/sports_team_roster/team	what school did michael jordan play for?
+wqr002259	/organization/organization_founder/organizations_founded	what does rupert murdoch own 2012?
+wqr002259	/people/person/employment_history	what does rupert murdoch own 2012?
+wqr002259	/business/employment_tenure/company	what does rupert murdoch own 2012?
+wqr002259	/business/board_member/organization_board_memberships	what does rupert murdoch own 2012?
+wqr002259	/organization/organization_board_membership/organization	what does rupert murdoch own 2012?
+wqr002259	/business/board_member/leader_of	what does rupert murdoch own 2012?
+wqr002259	/organization/leadership/organization	what does rupert murdoch own 2012?
+wqr002264	/people/deceased_person/cause_of_death	what did anna nicole smith died from?
+wqr002269	/people/person/education	where did jackie kennedy go to college?
+wqr002269	/education/education/institution	where did jackie kennedy go to college?
+wqr002274	/location/statistical_region/minimum_wage	what is the money called in spain?
+wqr002274	/measurement_unit/recurring_money_value/currency	what is the money called in spain?
+wqr002274	/location/country/currency_used	what is the money called in spain?
+wqr002279	/location/country/national_anthem	when was the civil war in libya?
+wqr002279	/government/national_anthem_of_a_country/official_anthem_since	when was the civil war in libya?
+wqr002279	/location/country/national_anthem	when was the civil war in libya?
+wqr002279	/government/national_anthem_of_a_country/official_anthem_until	when was the civil war in libya?
+wqr002279	/location/statistical_region/foreign_direct_investment_net_inflows	when was the civil war in libya?
+wqr002279	/measurement_unit/dated_money_value/valid_date	when was the civil war in libya?
+wqr002279	/location/statistical_region/merchandise_trade_percent_of_gdp	when was the civil war in libya?
+wqr002279	/measurement_unit/dated_percentage/date	when was the civil war in libya?
+wqr002279	/location/statistical_region/prevalence_of_undernourisment	when was the civil war in libya?
+wqr002279	/measurement_unit/dated_percentage/date	when was the civil war in libya?
+wqr002284	/geography/lake/basin_countries	which countries border lake victoria?
+wqr002284	/location/location/adjoin_s	which countries border lake victoria?
+wqr002284	/location/adjoining_relationship/adjoins	which countries border lake victoria?
+wqr002289	/people/deceased_person/place_of_death	what place did thomas jefferson died?
+wqr002289	/people/person/places_lived	what place did thomas jefferson died?
+wqr002289	/people/place_lived/location	what place did thomas jefferson died?
+wqr002294	/people/person/spouse_s	who is steve nash married to?
+wqr002294	/people/marriage/spouse	who is steve nash married to?
+wqr002304	/language/human_language/region	where is spanish springs nv?
+wqr002314	/location/country/currency_used	what currency do you use in costa rica?
+wqr002319	/location/country/languages_spoken	what is the official language of the ukraine?
+wqr002319	/location/country/official_language	what is the official language of the ukraine?
+wqr002324	/sports/pro_athlete/teams	what team did joe hart play for before man city?
+wqr002324	/sports/sports_team_roster/team	what team did joe hart play for before man city?
+wqr002329	/fictional_universe/fictional_character/appears_in_these_fictional_universes	where did willy wonka take place?
+wqr002334	/people/person/profession	who is cameron crowe?
+wqr002339	/people/person/profession	what does tim gunn do for a living?
+wqr002339	/type/object/type	what does tim gunn do for a living?
+wqr002344	/fictional_universe/character_occupation/characters_with_this_occupation	who was the first jedi master?
+wqr002344	/fictional_universe/fictional_organization/members	who was the first jedi master?
+wqr002354	/sports/sports_team/championships	what years have the ravens won the super bowl?
+wqr002354	/sports/sports_championship/events	what years have the ravens won the super bowl?
+wqr002359	/people/deceased_person/place_of_death	where did thomas jefferson died?
+wqr002359	/people/person/places_lived	where did thomas jefferson died?
+wqr002359	/people/place_lived/location	where did thomas jefferson died?
+wqr002364	/location/location/containedby	where is ibrahim chatta from?
+wqr002369	/people/person/nationality	what country is george washington carver from?
+wqr002374	/tv/tv_program/regular_cast	who is the actor that plays rico in hannah montana?
+wqr002374	/tv/regular_tv_appearance/actor	who is the actor that plays rico in hannah montana?
+wqr002379	/location/capital_of_administrative_division/capital_of	where can i register to vote in urbana il?
+wqr002379	/location/administrative_division_capital_relationship/administrative_division	where can i register to vote in urbana il?
+wqr002379	/location/hud_county_place/county	where can i register to vote in urbana il?
+wqr002379	/location/location/containedby	where can i register to vote in urbana il?
+wqr002384	/people/person/profession	what did dr carter g woodson do?
+wqr002384	/common/topic/notable_for	what did dr carter g woodson do?
+wqr002384	/common/topic/notable_types	what did dr carter g woodson do?
+wqr002384	/type/object/type	what did dr carter g woodson do?
+wqr002389	/people/person/religion	what did charles dickens believe in?
+wqr002394	/location/location/time_zones	in what timezone is arizona?
+wqr002399	/location/country/currency_formerly_used	what currency do i take to turkey?
+wqr002399	/location/country/currency_used	what currency do i take to turkey?
+wqr002404	/fictional_universe/fictional_character/married_to	who is jason morgan married to in real life?
+wqr002404	/fictional_universe/marriage_of_fictional_characters/spouses	who is jason morgan married to in real life?
+wqr002404	/fictional_universe/fictional_character/romantically_involved_with	who is jason morgan married to in real life?
+wqr002404	/fictional_universe/romantic_involvement/partner	who is jason morgan married to in real life?
+wqr002409	/people/deceased_person/place_of_death	where did antoine laurent lavoisier die?
+wqr002414	/tv/tv_character/appeared_in_tv_program	who plays dante falconeri?
+wqr002414	/tv/regular_tv_appearance/actor	who plays dante falconeri?
+wqr002419	/government/politician/party	what party was lincoln affiliated with?
+wqr002419	/government/political_party_tenure/party	what party was lincoln affiliated with?
+wqr002419	/organization/organization_founder/organizations_founded	what party was lincoln affiliated with?
+wqr002424	/people/person/education	what college did kris humphries play for?
+wqr002424	/education/education/institution	what college did kris humphries play for?
+wqr002424	/sports/drafted_athlete/drafted	what college did kris humphries play for?
+wqr002424	/sports/sports_league_draft_pick/school	what college did kris humphries play for?
+wqr002429	/location/country/form_of_government	what type of government does japan currently have?
+wqr002439	/basketball/basketball_player/player_statistics	who did kevin garnett play for before celtics?
+wqr002439	/basketball/basketball_player_stats/team	who did kevin garnett play for before celtics?
+wqr002439	/sports/drafted_athlete/drafted	who did kevin garnett play for before celtics?
+wqr002439	/sports/sports_league_draft_pick/team	who did kevin garnett play for before celtics?
+wqr002439	/sports/pro_athlete/teams	who did kevin garnett play for before celtics?
+wqr002439	/sports/sports_team_roster/team	who did kevin garnett play for before celtics?
+wqr002439	/sports/sports_award_winner/awards	who did kevin garnett play for before celtics?
+wqr002439	/sports/sports_award/team	who did kevin garnett play for before celtics?
+wqr002444	/sports/sports_team/arena_stadium	where is st louis cardinals stadium?
+wqr002444	/sports/sports_team/venue	where is st louis cardinals stadium?
+wqr002444	/sports/team_venue_relationship/venue	where is st louis cardinals stadium?
+wqr002449	/location/country/administrative_divisions	what four countries are in the united kingdom?
+wqr002449	/location/country/first_level_divisions	what four countries are in the united kingdom?
+wqr002454	/aviation/airport/hub_for	what airlines fly into ontario international airport?
+wqr002459	/award/award_winner/awards_won	what movies has halle berry starred in?
+wqr002459	/award/award_honor/honored_for	what movies has halle berry starred in?
+wqr002459	/film/actor/film	what movies has halle berry starred in?
+wqr002459	/film/performance/film	what movies has halle berry starred in?
+wqr002459	/award/award_nominee/award_nominations	what movies has halle berry starred in?
+wqr002459	/award/award_nomination/nominated_for	what movies has halle berry starred in?
+wqr002459	/film/actor/film	what movies has halle berry starred in?
+wqr002459	/film/performance/character	what movies has halle berry starred in?
+wqr002459	/film/producer/films_executive_produced	what movies has halle berry starred in?
+wqr002459	/tv/tv_producer/programs_produced	what movies has halle berry starred in?
+wqr002459	/tv/tv_producer_term/program	what movies has halle berry starred in?
+wqr002464	/people/person/education	what school did michael jordan go to?
+wqr002464	/education/education/institution	what school did michael jordan go to?
+wqr002464	/sports/drafted_athlete/drafted	what school did michael jordan go to?
+wqr002464	/sports/sports_league_draft_pick/school	what school did michael jordan go to?
+wqr002469	/location/country/currency_used	what's the egyptian currency?
+wqr002474	/sports/sports_award_type/winners	who won the fa cup in 2008?
+wqr002474	/sports/sports_award/award_winner	who won the fa cup in 2008?
+wqr002479	/organization/organization/leadership	where does honda play soccer?
+wqr002479	/organization/leadership/role	where does honda play soccer?
+wqr002484	/sports/sports_team_owner/teams_owned	what all does stan kroenke own?
+wqr002484	/business/board_member/leader_of	what all does stan kroenke own?
+wqr002484	/organization/leadership/organization	what all does stan kroenke own?
+wqr002484	/business/board_member/organization_board_memberships	what all does stan kroenke own?
+wqr002484	/organization/organization_board_membership/organization	what all does stan kroenke own?
+wqr002489	/government/political_party/country	what the australian liberal party stands for?
+wqr002489	/organization/organization/geographic_scope	what the australian liberal party stands for?
+wqr002489	/type/object/name	what the australian liberal party stands for?
+wqr002499	/sports/pro_athlete/teams	who did plaxico burress sign with 2012?
+wqr002499	/sports/sports_team_roster/team	who did plaxico burress sign with 2012?
+wqr002499	/sports/drafted_athlete/drafted	who did plaxico burress sign with 2012?
+wqr002499	/sports/sports_league_draft_pick/team	who did plaxico burress sign with 2012?
+wqr002504	/people/person/place_of_birth	where did carmen electra grow up?
+wqr002509	/people/person/education	where did robert hooke get his education?
+wqr002509	/education/education/institution	where did robert hooke get his education?
+wqr002514	/location/location/time_zones	what time is kansas in?
+wqr002519	/people/person/nationality	what is osama bin laden race?
+wqr002519	/people/person/places_lived	what is osama bin laden race?
+wqr002519	/people/place_lived/location	what is osama bin laden race?
+wqr002524	/medicine/notable_person_with_medical_condition/condition	what disease michael jackson?
+wqr002529	/sports/sports_team/season_record	when did tom brady join the patriots?
+wqr002529	/sports/sports_team_season_record/season	when did tom brady join the patriots?
+wqr002529	/sports/sports_award_winner/awards	when did tom brady join the patriots?
+wqr002529	/sports/sports_award/season	when did tom brady join the patriots?
+wqr002534	/military/military_commander/military_commands	what battles did robert e lee participate in?
+wqr002534	/military/military_command/military_conflict	what battles did robert e lee participate in?
+wqr002534	/military/military_person/participated_in_conflicts	what battles did robert e lee participate in?
+wqr002539	/baseball/baseball_player/batting_stats	what team did albert pujols play for?
+wqr002539	/baseball/batting_statistics/team	what team did albert pujols play for?
+wqr002539	/sports/pro_athlete/teams	what team did albert pujols play for?
+wqr002539	/sports/sports_team_roster/team	what team did albert pujols play for?
+wqr002539	/sports/drafted_athlete/drafted	what team did albert pujols play for?
+wqr002539	/sports/sports_league_draft_pick/team	what team did albert pujols play for?
+wqr002544	/travel/travel_destination/tourist_attractions	what are fun things to do in seattle wa?
+wqr002544	/location/location/contains	what are fun things to do in seattle wa?
+wqr002549	/fictional_universe/fictional_setting/languages	where does the roman language come from?
+wqr002549	/location/country/official_language	where does the roman language come from?
+wqr002549	/type/object/name	where does the roman language come from?
+wqr002554	/tv/tv_program/regular_cast	who played hannah montana best friend?
+wqr002554	/tv/regular_tv_appearance/actor	who played hannah montana best friend?
+wqr002559	/government/politician/government_positions_held	what type of political system is headed by queen elizabeth ii?
+wqr002559	/government/government_position_held/basic_title	what type of political system is headed by queen elizabeth ii?
+wqr002559	/common/topic/notable_for	what type of political system is headed by queen elizabeth ii?
+wqr002559	/common/topic/notable_types	what type of political system is headed by queen elizabeth ii?
+wqr002559	/type/object/type	what type of political system is headed by queen elizabeth ii?
+wqr002564	/people/deceased_person/place_of_death	where did gary coleman live when he died?
+wqr002569	/sports/sports_team/arena_stadium	where do the houston rockets play basketball?
+wqr002569	/sports/sports_team/venue	where do the houston rockets play basketball?
+wqr002569	/sports/team_venue_relationship/venue	where do the houston rockets play basketball?
+wqr002574	/fictional_universe/fictional_language/where_spoken	which english team won the champions league first?
+wqr002579	/people/deceased_person/cause_of_death	what did alvin smith died from?
+wqr002584	/location/country/currency_used	what currency in dominican republic should i bring?
+wqr002589	/travel/travel_destination/tourist_attractions	what to do in panama city beach for spring break?
+wqr002589	/location/location/contains	what to do in panama city beach for spring break?
+wqr002594	/american_football/football_coach/coaching_history	where did rich rodriguez get fired?
+wqr002594	/american_football/football_historical_coach_position/team	where did rich rodriguez get fired?
+wqr002599	/people/person/employment_history	what channel is anderson cooper talk show on?
+wqr002599	/business/employment_tenure/company	what channel is anderson cooper talk show on?
+wqr002604	/people/person/education	what prep school did romney attend?
+wqr002604	/education/education/institution	what prep school did romney attend?
+wqr002609	/tv/tv_program/regular_cast	who speaks stewie on family guy?
+wqr002609	/tv/regular_tv_appearance/actor	who speaks stewie on family guy?
+wqr002609	/award/award_nominated_work/award_nominations	who speaks stewie on family guy?
+wqr002609	/award/award_nomination/award_nominee	who speaks stewie on family guy?
+wqr002609	/award/award_winning_work/awards_won	who speaks stewie on family guy?
+wqr002609	/award/award_honor/award_winner	who speaks stewie on family guy?
+wqr002609	/cvg/game_character/games	who speaks stewie on family guy?
+wqr002609	/cvg/game_performance/voice_actor	who speaks stewie on family guy?
+wqr002609	/fictional_universe/fictional_character/character_created_by	who speaks stewie on family guy?
+wqr002609	/film/film_character/portrayed_in_films	who speaks stewie on family guy?
+wqr002609	/film/performance/actor	who speaks stewie on family guy?
+wqr002609	/tv/tv_character/appeared_in_tv_program	who speaks stewie on family guy?
+wqr002609	/tv/regular_tv_appearance/actor	who speaks stewie on family guy?
+wqr002609	/tv/tv_program/program_creator	who speaks stewie on family guy?
+wqr002609	/tv/tv_program/recurring_writers	who speaks stewie on family guy?
+wqr002609	/tv/tv_program_writer_relationship/writer	who speaks stewie on family guy?
+wqr002609	/tv/tv_program/tv_producer	who speaks stewie on family guy?
+wqr002609	/tv/tv_producer_term/producer	who speaks stewie on family guy?
+wqr002614	/location/country/currency_used	what type of money does jamaica use?
+wqr002619	/people/person/spouse_s	who is lamar odom married too?
+wqr002619	/people/marriage/spouse	who is lamar odom married too?
+wqr002624	/military/military_person/participated_in_conflicts	what wars did robert e lee lead?
+wqr002624	/military/military_commander/military_commands	what wars did robert e lee lead?
+wqr002624	/military/military_command/military_conflict	what wars did robert e lee lead?
+wqr002629	/award/award_nominated_work/award_nominations	who plays walter in fringe?
+wqr002629	/award/award_nomination/award_nominee	who plays walter in fringe?
+wqr002629	/tv/tv_character/appeared_in_tv_program	who plays walter in fringe?
+wqr002629	/tv/regular_tv_appearance/actor	who plays walter in fringe?
+wqr002629	/tv/tv_program/regular_cast	who plays walter in fringe?
+wqr002629	/tv/regular_tv_appearance/actor	who plays walter in fringe?
+wqr002634	/sports/sports_team/championships	in what years did the new york yankees win the world series?
+wqr002639	/location/location/time_zones	what is time zone in new orleans?
+wqr002644	/language/human_language/region	where did the hopi indians live?
+wqr002649	/people/person/nationality	where is alex smith from?
+wqr002654	/film/film_character/portrayed_in_films	who plays moira on the l word?
+wqr002654	/film/performance/actor	who plays moira on the l word?
+wqr002659	/location/location/partially_contained_by	where did romans go?
+wqr002659	/location/partial_containment_relationship/partially_contained_by	where did romans go?
+wqr002664	/location/statistical_region/places_exported_to	who are the main trading partners of china?
+wqr002664	/location/imports_and_exports/exported_to	who are the main trading partners of china?
+wqr002664	/location/statistical_region/places_imported_from	who are the main trading partners of china?
+wqr002664	/location/imports_and_exports/imported_from	who are the main trading partners of china?
+wqr002664	/location/location/adjoin_s	who are the main trading partners of china?
+wqr002664	/location/adjoining_relationship/adjoins	who are the main trading partners of china?
+wqr002669	/film/film_location/featured_in_films	what to do in new orleans with kids?
+wqr002674	/location/location/containedby	where is usc from?
+wqr002674	/organization/organization/headquarters	where is usc from?
+wqr002674	/location/mailing_address/country	where is usc from?
+wqr002674	/government/governmental_body/jurisdiction	where is usc from?
+wqr002674	/organization/organization/headquarters	where is usc from?
+wqr002674	/location/mailing_address/citytown	where is usc from?
+wqr002674	/organization/organization/headquarters	where is usc from?
+wqr002674	/location/mailing_address/state_province_region	where is usc from?
+wqr002679	/location/location/time_zones	what is my timezone in california?
+wqr002684	/sports/sports_team/arena_stadium	where do the broncos play?
+wqr002684	/sports/sports_team/venue	where do the broncos play?
+wqr002684	/sports/team_venue_relationship/venue	where do the broncos play?
+wqr002689	/organization/organization/founders	who started up mcdonalds?
+wqr002694	/location/statistical_region/religions	what is the most practiced religion in the united states?
+wqr002694	/location/religion_percentage/religion	what is the most practiced religion in the united states?
+wqr002699	/people/person/spouse_s	who has britney spears married?
+wqr002699	/people/marriage/spouse	who has britney spears married?
+wqr002699	/celebrities/celebrity/sexual_relationships	who has britney spears married?
+wqr002699	/celebrities/romantic_relationship/celebrity	who has britney spears married?
+wqr002704	/book/book_subject/works	how much does the average american pay in taxes over their lifetime?
+wqr002709	/travel/travel_destination/tourist_attractions	what to do in panama city beach in february?
+wqr002709	/location/location/contains	what to do in panama city beach in february?
+wqr002714	/people/appointee/position	who nominated stephen g. breyer?
+wqr002714	/people/appointment/appointed_by	who nominated stephen g. breyer?
+wqr002719	/people/deceased_person/cause_of_death	what did robin gibb died from?
+wqr002729	/location/location/contains	what airport fly into for maui?
+wqr002734	/location/country/languages_spoken	what language do argentina use?
+wqr002734	/location/country/official_language	what language do argentina use?
+wqr002744	/location/country/capital	what is the dominican republic's capital?
+wqr002749	/location/statistical_region/religions	what are the major religions in poland?
+wqr002749	/location/religion_percentage/religion	what are the major religions in poland?
+wqr002754	/tv/tv_program/regular_cast	who played as barney?
+wqr002754	/tv/regular_tv_appearance/actor	who played as barney?
+wqr002759	/location/location/time_zones	what times is it in texas?
+wqr002764	/people/person/nationality	what country was bin laden from?
+wqr002764	/people/person/places_lived	what country was bin laden from?
+wqr002764	/people/place_lived/location	what country was bin laden from?
+wqr002769	/military/military_combatant/military_commanders	who was the prime minister of australia in 1958?
+wqr002769	/military/military_command/military_commander	who was the prime minister of australia in 1958?
+wqr002774	/music/artist/genre	what kind of music did michael jackson sing?
+wqr002774	/common/topic/notable_for	what kind of music did michael jackson sing?
+wqr002779	/people/person/profession	who was the real erin brockovich?
+wqr002779	/common/topic/notable_for	who was the real erin brockovich?
+wqr002784	/film/actor/film	what movies does tupac act in?
+wqr002784	/film/performance/film	what movies does tupac act in?
+wqr002784	/music/producer/releases_produced	what movies does tupac act in?
+wqr002789	/common/topic/alias	what unicef stands for?
+wqr002794	/organization/organization/headquarters	what country volvo cars made?
+wqr002794	/location/mailing_address/country	what country volvo cars made?
+wqr002799	/people/person/profession	what does anderson cooper do?
+wqr002804	/people/person/employment_history	where did dmitri mendeleev teach?
+wqr002804	/business/employment_tenure/company	where did dmitri mendeleev teach?
+wqr002809	/people/deceased_person/place_of_death	where did jerome david salinger died?
+wqr002814	/ice_hockey/hockey_team/coach	who is the head coach of the chicago blackhawks?
+wqr002819	/sports/sports_team_location/teams	what are the major sports played in venezuela?
+wqr002824	/people/person/spouse_s	who did alicia keys have a baby with?
+wqr002824	/people/marriage/spouse	who did alicia keys have a baby with?
+wqr002829	/people/person/education	what college chris paul go to?
+wqr002829	/education/education/institution	what college chris paul go to?
+wqr002829	/sports/drafted_athlete/drafted	what college chris paul go to?
+wqr002829	/sports/sports_league_draft_pick/school	what college chris paul go to?
+wqr002834	/location/statistical_region/religions	what are major religions in the united states?
+wqr002834	/location/religion_percentage/religion	what are major religions in the united states?
+wqr002834	/education/field_of_study/students_majoring	what are major religions in the united states?
+wqr002834	/education/education/specialization	what are major religions in the united states?
+wqr002839	/location/country/languages_spoken	what kind of language does switzerland speak?
+wqr002839	/location/country/official_language	what kind of language does switzerland speak?
+wqr002844	/people/deceased_person/place_of_death	where is jack daniel buried?
+wqr002844	/people/person/place_of_birth	where is jack daniel buried?
+wqr002849	/people/person/education	where was f scott fitzgerald education?
+wqr002849	/education/education/institution	where was f scott fitzgerald education?
+wqr002854	/travel/travel_destination/tourist_attractions	where to go in phnom penh cambodia?
+wqr002854	/location/location/contains	where to go in phnom penh cambodia?
+wqr002859	/people/person/profession	who is francis bacon and what did he do?
+wqr002859	/type/object/type	who is francis bacon and what did he do?
+wqr002859	/common/topic/notable_for	who is francis bacon and what did he do?
+wqr002864	/people/person/education	what university did tony romo go to?
+wqr002864	/education/education/institution	what university did tony romo go to?
+wqr002874	/people/person/profession	who was vladimir lenin and why was he important?
+wqr002874	/type/object/type	who was vladimir lenin and why was he important?
+wqr002874	/common/topic/notable_for	who was vladimir lenin and why was he important?
+wqr002874	/common/topic/notable_types	who was vladimir lenin and why was he important?
+wqr002879	/people/person/education	what college did steve jobs attend?
+wqr002879	/education/education/institution	what college did steve jobs attend?
+wqr002884	/basketball/basketball_player/player_statistics	what team did magic johnson play for?
+wqr002884	/basketball/basketball_player_stats/team	what team did magic johnson play for?
+wqr002884	/sports/sports_award_winner/awards	what team did magic johnson play for?
+wqr002884	/sports/sports_award/team	what team did magic johnson play for?
+wqr002884	/sports/pro_athlete/teams	what team did magic johnson play for?
+wqr002884	/sports/sports_team_roster/team	what team did magic johnson play for?
+wqr002889	/film/film_character/portrayed_in_films	who does the voice of kitt in knight rider?
+wqr002889	/film/performance/actor	who does the voice of kitt in knight rider?
+wqr002889	/tv/tv_character/appeared_in_tv_episodes	who does the voice of kitt in knight rider?
+wqr002889	/tv/tv_guest_role/actor	who does the voice of kitt in knight rider?
+wqr002889	/tv/tv_character/appeared_in_tv_program	who does the voice of kitt in knight rider?
+wqr002889	/tv/regular_tv_appearance/actor	who does the voice of kitt in knight rider?
+wqr002889	/tv/tv_program/regular_cast	who does the voice of kitt in knight rider?
+wqr002889	/tv/regular_tv_appearance/actor	who does the voice of kitt in knight rider?
+wqr002894	/travel/travel_destination/tourist_attractions	what are historical places in new york?
+wqr002894	/location/location/contains	what are historical places in new york?
+wqr002899	/sports/sports_team/championships	when did miami dolphins win super bowl?
+wqr002904	/people/person/places_lived	where did lauren conrad live?
+wqr002904	/people/place_lived/location	where did lauren conrad live?
+wqr002904	/people/person/place_of_birth	where did lauren conrad live?
+wqr002909	/people/person/employment_history	where did matthias schleiden do his work?
+wqr002909	/business/employment_tenure/company	where did matthias schleiden do his work?
+wqr002914	/film/film_character/portrayed_in_films	how much indiana jones movies are there?
+wqr002914	/film/performance/film	how much indiana jones movies are there?
+wqr002914	/cvg/game_character/games	how much indiana jones movies are there?
+wqr002914	/cvg/game_performance/game	how much indiana jones movies are there?
+wqr002924	/government/governmental_jurisdiction/official_symbols	what kind of fish do you catch in florida?
+wqr002924	/location/location_symbol_relationship/symbol	what kind of fish do you catch in florida?
+wqr002929	/location/place_with_neighborhoods/neighborhoods	where to live near seattle wa?
+wqr002934	/people/deceased_person/place_of_burial	where was abraham buried?
+wqr002944	/government/politician/government_positions_held	what country is barack obama from?
+wqr002944	/government/government_position_held/jurisdiction_of_office	what country is barack obama from?
+wqr002944	/people/measured_person/sizes	what country is barack obama from?
+wqr002944	/fashion/clothing_size/region	what country is barack obama from?
+wqr002944	/people/person/nationality	what country is barack obama from?
+wqr002949	/government/politician/election_campaigns	when did romney first run for president?
+wqr002954	/government/politician/government_positions_held	what job did george w bush have?
+wqr002954	/government/government_position_held/office_position_or_title	what job did george w bush have?
+wqr002959	/people/person/profession	what was howard carter's job?
+wqr002964	/government/governmental_jurisdiction/governing_officials	who won governor in connecticut 2010?
+wqr002964	/government/government_position_held/office_holder	who won governor in connecticut 2010?
+wqr002969	/book/book_subject/works	where was the vietnam war located?
+wqr002969	/military/military_conflict/locations	where was the vietnam war located?
+wqr002969	/time/event/locations	where was the vietnam war located?
+wqr002974	/people/person/profession	what was antonio vivaldi known for?
+wqr002979	/people/person/place_of_birth	where did george harrison live before he died?
+wqr002979	/people/person/places_lived	where did george harrison live before he died?
+wqr002979	/people/place_lived/location	where did george harrison live before he died?
+wqr002984	/people/person/place_of_birth	where was president chester arthur born?
+wqr002989	/location/location/time_zones	what time is it in lake havasu city arizona?
+wqr002994	/location/location/adjoin_s	which states share borders with virginia?
+wqr002994	/location/adjoining_relationship/adjoins	which states share borders with virginia?
+wqr003004	/film/film_character/portrayed_in_films	who did the voice of kitt in knight rider?
+wqr003004	/film/performance/actor	who did the voice of kitt in knight rider?
+wqr003004	/tv/tv_character/appeared_in_tv_episodes	who did the voice of kitt in knight rider?
+wqr003004	/tv/tv_guest_role/actor	who did the voice of kitt in knight rider?
+wqr003004	/tv/tv_character/appeared_in_tv_program	who did the voice of kitt in knight rider?
+wqr003004	/tv/regular_tv_appearance/actor	who did the voice of kitt in knight rider?
+wqr003004	/tv/tv_program/regular_cast	who did the voice of kitt in knight rider?
+wqr003004	/tv/regular_tv_appearance/actor	who did the voice of kitt in knight rider?
+wqr003009	/sports/pro_athlete/teams	what teams did jim harbaugh play for?
+wqr003009	/sports/sports_team_roster/team	what teams did jim harbaugh play for?
+wqr003014	/people/deceased_person/cause_of_death	what year did johnny cash die and how old was he?
+wqr003019	/fictional_universe/fictional_character/character_created_by	who is the voice actor for eric cartman?
+wqr003019	/film/film_character/portrayed_in_films	who is the voice actor for eric cartman?
+wqr003019	/film/performance/actor	who is the voice actor for eric cartman?
+wqr003019	/tv/tv_character/appeared_in_tv_program	who is the voice actor for eric cartman?
+wqr003019	/tv/regular_tv_appearance/actor	who is the voice actor for eric cartman?
+wqr003024	/medicine/notable_person_with_medical_condition/condition	what illness does michael j fox have?
+wqr003029	/film/actor/film	what movie queen latifah play in?
+wqr003029	/film/performance/film	what movie queen latifah play in?
+wqr003029	/award/award_winner/awards_won	what movie queen latifah play in?
+wqr003029	/award/award_honor/honored_for	what movie queen latifah play in?
+wqr003029	/award/award_nominee/award_nominations	what movie queen latifah play in?
+wqr003029	/award/award_nomination/nominated_for	what movie queen latifah play in?
+wqr003029	/film/producer/films_executive_produced	what movie queen latifah play in?
+wqr003034	/people/person/education	where did dr martin luther king get his doctorate?
+wqr003034	/education/education/institution	where did dr martin luther king get his doctorate?
+wqr003039	/people/ethnicity/languages_spoken	what language does egyptians use?
+wqr003044	/location/country/currency_used	what is afghanistan money called?
+wqr003049	/olympics/olympic_host_city/olympics_hosted	what is atlanta ga famous for?
+wqr003049	/type/object/name	what is atlanta ga famous for?
+wqr003054	/location/administrative_division/capital	where is the best place to stay in aruba?
+wqr003054	/location/administrative_division_capital_relationship/capital	where is the best place to stay in aruba?
+wqr003054	/location/country/capital	where is the best place to stay in aruba?
+wqr003054	/location/location/contains	where is the best place to stay in aruba?
+wqr003064	/location/capital_of_administrative_division/capital_of	what province is toronto canada located in?
+wqr003064	/location/administrative_division_capital_relationship/administrative_division	what province is toronto canada located in?
+wqr003064	/location/location/containedby	what province is toronto canada located in?
+wqr003069	/location/country/form_of_government	what political system is in china?
+wqr003074	/government/governmental_jurisdiction/governing_officials	what is a famous person from massachusetts?
+wqr003074	/government/government_position_held/office_holder	what is a famous person from massachusetts?
+wqr003079	/people/person/place_of_birth	where does jeb bush live?
+wqr003079	/people/person/places_lived	where does jeb bush live?
+wqr003079	/people/place_lived/location	where does jeb bush live?
+wqr003084	/location/statistical_region/places_imported_from	what country does japan export to?
+wqr003084	/location/imports_and_exports/imported_from	what country does japan export to?
+wqr003084	/location/statistical_region/places_exported_to	what country does japan export to?
+wqr003084	/location/imports_and_exports/exported_to	what country does japan export to?
+wqr003089	/location/location/containedby	which province is calgary canada in?
+wqr003094	/common/topic/notable_for	who is aidan quinn?
+wqr003094	/people/person/profession	who is aidan quinn?
+wqr003104	/people/person/education	where does spencer pratt go to school?
+wqr003104	/education/education/institution	where does spencer pratt go to school?
+wqr003109	/people/person/education	what colleges did alice walker attend?
+wqr003109	/education/education/institution	what colleges did alice walker attend?
+wqr003114	/common/topic/alias	what is the hawaii time zone?
+wqr003119	/symbols/name_source/namesakes	who was gregor mendel and what did he contribute to science?
+wqr003129	/location/country/form_of_government	what is the political system in argentina?
+wqr003134	/location/location/containedby	what continent is mexico located on?
+wqr003139	/people/ethnicity/languages_spoken	what language do most native americans speak?
+wqr003144	/people/person/education	where did andrew young go to school?
+wqr003144	/education/education/institution	where did andrew young go to school?
+wqr003149	/location/capital_of_administrative_division/capital_of	what county is duluth in?
+wqr003149	/location/administrative_division_capital_relationship/administrative_division	what county is duluth in?
+wqr003149	/location/hud_county_place/county	what county is duluth in?
+wqr003149	/location/location/containedby	what county is duluth in?
+wqr003159	/people/person/quotations	what oprah thinks about god?
+wqr003164	/people/deceased_person/place_of_death	where did martin luther king jr get shot?
+wqr003169	/location/country/currency_used	what is the currency in the republic of congo?
+wqr003174	/location/location/adjoin_s	what countries does germany share borders with?
+wqr003174	/location/adjoining_relationship/adjoins	what countries does germany share borders with?
+wqr003174	/military/military_combatant/military_conflicts	what countries does germany share borders with?
+wqr003174	/military/military_combatant_group/combatants	what countries does germany share borders with?
+wqr003179	/location/capital_of_administrative_division/capital_of	what county is clearwater fl in?
+wqr003179	/location/administrative_division_capital_relationship/administrative_division	what county is clearwater fl in?
+wqr003179	/location/hud_county_place/county	what county is clearwater fl in?
+wqr003179	/location/location/containedby	what county is clearwater fl in?
+wqr003189	/location/country/capital	what is the capital city of west germany?
+wqr003194	/broadcast/producer/location	where does president barack obama live?
+wqr003194	/people/person/places_lived	where does president barack obama live?
+wqr003194	/people/place_lived/location	where does president barack obama live?
+wqr003199	/people/person/education	what highschool did khloe kardashian go to?
+wqr003199	/education/education/institution	what highschool did khloe kardashian go to?
+wqr003204	/location/location/contains	what countries make up great britain and what are their capitals?
+wqr003209	/government/politician/government_positions_held	where was george washington originally from?
+wqr003209	/government/government_position_held/district_represented	where was george washington originally from?
+wqr003214	/people/person/parents	what is father name of salman khan?
+wqr003219	/location/country/currency_used	what money should i bring to dominican?
+wqr003224	/people/ethnicity/languages_spoken	what do egyptians speak?
+wqr003229	/location/country/form_of_government	what type of monarchy did england have during the glorious revolution?
+wqr003234	/location/country/currency_used	what currency is used in germany 2012?
+wqr003234	/location/country/gdp_nominal	what currency is used in germany 2012?
+wqr003234	/measurement_unit/dated_money_value/currency	what currency is used in germany 2012?
+wqr003234	/location/country/gdp_nominal_per_capita	what currency is used in germany 2012?
+wqr003234	/measurement_unit/dated_money_value/currency	what currency is used in germany 2012?
+wqr003239	/american_football/football_team/historical_coaching_staff	who coached the dallas cowboys in 1996?
+wqr003239	/american_football/football_historical_coach_position/coach	who coached the dallas cowboys in 1996?
+wqr003244	/government/government_office_or_title/office_holders	who was the president of the us in 1971?
+wqr003244	/government/government_position_held/office_holder	who was the president of the us in 1971?
+wqr003249	/award/award_nominee/award_nominations	what show does tamera mowry play on?
+wqr003249	/award/award_nomination/nominated_for	what show does tamera mowry play on?
+wqr003249	/tv/tv_actor/starring_roles	what show does tamera mowry play on?
+wqr003249	/tv/regular_tv_appearance/series	what show does tamera mowry play on?
+wqr003249	/award/award_winner/awards_won	what show does tamera mowry play on?
+wqr003249	/award/award_honor/honored_for	what show does tamera mowry play on?
+wqr003249	/tv/tv_personality/tv_regular_appearances	what show does tamera mowry play on?
+wqr003249	/tv/tv_regular_personal_appearance/program	what show does tamera mowry play on?
+wqr003254	/location/location/partially_contains	what religion are most people in pakistan?
+wqr003254	/location/location/partiallycontains	what religion are most people in pakistan?
+wqr003254	/location/partial_containment_relationship/partially_contains	what religion are most people in pakistan?
+wqr003259	/basketball/basketball_player/player_statistics	what team did kobe bryant play for first?
+wqr003259	/basketball/basketball_player_stats/team	what team did kobe bryant play for first?
+wqr003259	/sports/sports_award_winner/awards	what team did kobe bryant play for first?
+wqr003259	/sports/sports_award/team	what team did kobe bryant play for first?
+wqr003259	/people/person/employment_history	what team did kobe bryant play for first?
+wqr003259	/business/employment_tenure/company	what team did kobe bryant play for first?
+wqr003259	/sports/pro_athlete/teams	what team did kobe bryant play for first?
+wqr003259	/sports/sports_team_roster/team	what team did kobe bryant play for first?
+wqr003264	/book/book_subject/works	what is american pie about song?
+wqr003279	/organization/organization_founder/organizations_founded	what organization did dr. carter g. woodson found?
+wqr003284	/law/inventor/inventions	what inventions did leonardo da vinci made?
+wqr003289	/music/artist/origin	where did tim mcgraw grew up?
+wqr003289	/people/person/place_of_birth	where did tim mcgraw grew up?
+wqr003294	/sports/pro_athlete/teams	who does sonny bill williams play for 2012?
+wqr003294	/sports/sports_team_roster/team	who does sonny bill williams play for 2012?
+wqr003304	/travel/travel_destination/tourist_attractions	what do do in nashville tn?
+wqr003304	/location/location/contains	what do do in nashville tn?
+wqr003309	/location/country/form_of_government	what type of government does the former soviet union have?
+wqr003319	/film/film_character/portrayed_in_films	who played dorothy in the film wizard of oz?
+wqr003319	/film/performance/actor	who played dorothy in the film wizard of oz?
+wqr003319	/film/film/starring	who played dorothy in the film wizard of oz?
+wqr003319	/film/performance/actor	who played dorothy in the film wizard of oz?
+wqr003319	/film/film/dubbing_performances	who played dorothy in the film wizard of oz?
+wqr003319	/film/dubbing_performance/actor	who played dorothy in the film wizard of oz?
+wqr003319	/film/film_character/portrayed_in_films_dubbed	who played dorothy in the film wizard of oz?
+wqr003319	/film/dubbing_performance/actor	who played dorothy in the film wizard of oz?
+wqr003319	/tv/tv_program/regular_cast	who played dorothy in the film wizard of oz?
+wqr003319	/tv/regular_tv_appearance/actor	who played dorothy in the film wizard of oz?
+wqr003324	/tv/tv_character/appeared_in_tv_program	who plays jim halpert?
+wqr003324	/tv/regular_tv_appearance/actor	who plays jim halpert?
+wqr003329	/people/person/place_of_birth	where does jamie chung live?
+wqr003329	/people/person/places_lived	where does jamie chung live?
+wqr003329	/people/place_lived/location	where does jamie chung live?
+wqr003334	/tv/tv_program/program_creator	who voices ray in archer?
+wqr003334	/tv/tv_program/recurring_writers	who voices ray in archer?
+wqr003334	/tv/tv_program_writer_relationship/writer	who voices ray in archer?
+wqr003334	/tv/tv_program/regular_cast	who voices ray in archer?
+wqr003334	/tv/regular_tv_appearance/actor	who voices ray in archer?
+wqr003334	/tv/tv_program/tv_producer	who voices ray in archer?
+wqr003334	/tv/tv_producer_term/producer	who voices ray in archer?
+wqr003339	/film/film_character/portrayed_in_films	who plays lola bunny on the looney tunes show?
+wqr003339	/film/performance/actor	who plays lola bunny on the looney tunes show?
+wqr003339	/tv/tv_program/regular_cast	who plays lola bunny on the looney tunes show?
+wqr003339	/tv/regular_tv_appearance/actor	who plays lola bunny on the looney tunes show?
+wqr003339	/tv/tv_character/appeared_in_tv_program	who plays lola bunny on the looney tunes show?
+wqr003339	/tv/regular_tv_appearance/actor	who plays lola bunny on the looney tunes show?
+wqr003344	/people/person/places_lived	where did frank baum live?
+wqr003344	/people/place_lived/location	where did frank baum live?
+wqr003349	/language/human_language/language_family	where the latin language come from?
+wqr003354	/people/person/education	where did michael jackson went to school?
+wqr003354	/education/education/institution	where did michael jackson went to school?
+wqr003364	/book/author/works_written	what children's books did suzanne collins wrote?
+wqr003364	/book/author/book_editions_published	what children's books did suzanne collins wrote?
+wqr003364	/award/award_nominee/award_nominations	what children's books did suzanne collins wrote?
+wqr003364	/award/award_nomination/nominated_for	what children's books did suzanne collins wrote?
+wqr003369	/location/administrative_division/second_level_division_of	where did gettysburg start?
+wqr003369	/location/location/containedby	where did gettysburg start?
+wqr003369	/military/military_conflict/combatants	where did gettysburg start?
+wqr003369	/military/military_combatant_group/combatants	where did gettysburg start?
+wqr003369	/military/military_conflict/commanders	where did gettysburg start?
+wqr003369	/military/military_command/military_combatant	where did gettysburg start?
+wqr003369	/organization/organization/headquarters	where did gettysburg start?
+wqr003369	/location/mailing_address/country	where did gettysburg start?
+wqr003374	/film/actor/film	who does paul walker play in fast and furious?
+wqr003374	/film/performance/character	who does paul walker play in fast and furious?
+wqr003374	/film/film/starring	who does paul walker play in fast and furious?
+wqr003374	/film/performance/character	who does paul walker play in fast and furious?
+wqr003379	/symbols/namesake/named_after	where does the name melbourne come from?
+wqr003384	/location/country/languages_spoken	what language does people from denmark speak?
+wqr003384	/location/country/official_language	what language does people from denmark speak?
+wqr003394	/government/politician/government_positions_held	where did patrick henry live?
+wqr003394	/government/government_position_held/district_represented	where did patrick henry live?
+wqr003399	/location/country/form_of_government	what form of government is the philippines?
+wqr003404	/food/beer_country_region/beers_from_here	what food is from china?
+wqr003409	/location/location/contains	what is south america made up of?
+wqr003409	/location/location/contains_major_portion_of	what is south america made up of?
+wqr003409	/location/location/partiallycontains	what is south america made up of?
+wqr003409	/location/partial_containment_relationship/partially_contains	what is south america made up of?
+wqr003414	/location/country/form_of_government	what type of government does fiji have 2010?
+wqr003419	/government/governmental_jurisdiction/agencies	where to stay in bermuda tripadvisor?
+wqr003419	/organization/organization_scope/organizations_with_this_scope	where to stay in bermuda tripadvisor?
+wqr003424	/sports/sports_award_winner/awards	what year doug williams won the super bowl?
+wqr003424	/sports/sports_award/season	what year doug williams won the super bowl?
+wqr003434	/travel/travel_destination/tourist_attractions	what can you visit in london?
+wqr003434	/location/location/contains	what can you visit in london?
+wqr003439	/location/country/languages_spoken	what dialects are spoken in the uk?
+wqr003439	/location/country/official_language	what dialects are spoken in the uk?
+wqr003444	/basketball/basketball_player/player_statistics	what team does kareem abdul jabbar play for?
+wqr003444	/basketball/basketball_player_stats/team	what team does kareem abdul jabbar play for?
+wqr003444	/sports/sports_award_winner/awards	what team does kareem abdul jabbar play for?
+wqr003444	/sports/sports_award/team	what team does kareem abdul jabbar play for?
+wqr003444	/sports/pro_athlete/teams	what team does kareem abdul jabbar play for?
+wqr003444	/sports/sports_team_roster/team	what team does kareem abdul jabbar play for?
+wqr003444	/sports/drafted_athlete/drafted	what team does kareem abdul jabbar play for?
+wqr003444	/sports/sports_league_draft_pick/team	what team does kareem abdul jabbar play for?
+wqr003449	/book/author/works_written	what did jean jacques rousseau write?
+wqr003459	/film/actor/film	what movies have gerard butler been in?
+wqr003459	/film/performance/film	what movies have gerard butler been in?
+wqr003459	/award/award_nominee/award_nominations	what movies have gerard butler been in?
+wqr003459	/award/award_nomination/nominated_for	what movies have gerard butler been in?
+wqr003459	/award/award_winner/awards_won	what movies have gerard butler been in?
+wqr003459	/award/award_honor/honored_for	what movies have gerard butler been in?
+wqr003459	/tv/tv_actor/starring_roles	what movies have gerard butler been in?
+wqr003459	/tv/regular_tv_appearance/series	what movies have gerard butler been in?
+wqr003464	/award/award_winner/awards_won	when did michael jordan started playing basketball in the nba?
+wqr003464	/award/award_honor/year	when did michael jordan started playing basketball in the nba?
+wqr003464	/organization/organization/leadership	when did michael jordan started playing basketball in the nba?
+wqr003464	/organization/leadership/to	when did michael jordan started playing basketball in the nba?
+wqr003464	/people/person/education	when did michael jordan started playing basketball in the nba?
+wqr003464	/education/education/end_date	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/pro_athlete/career_start	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/pro_athlete/sports_played_professionally	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/pro_sports_played/career_start	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/pro_athlete/teams	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/sports_team_roster/from	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/pro_athlete/teams	when did michael jordan started playing basketball in the nba?
+wqr003464	/sports/sports_team_roster/to	when did michael jordan started playing basketball in the nba?
+wqr003469	/sports/sports_league/teams	how much mlb teams are there?
+wqr003469	/sports/sports_league_participation/team	how much mlb teams are there?
+wqr003474	/people/deceased_person/place_of_burial	where is poe buried now?
+wqr003479	/location/country/currency_used	what type of money does brazil have?
+wqr003484	/language/human_language/countries_spoken_in	what present day countries use english as their national language?
+wqr003484	/language/human_language/main_country	what present day countries use english as their national language?
+wqr003489	/time/recurring_event/instances	what is the australian open called?
+wqr003499	/people/deceased_person/place_of_death	where did harriet tubman live after the civil war?
+wqr003499	/people/person/places_lived	where did harriet tubman live after the civil war?
+wqr003499	/people/place_lived/location	where did harriet tubman live after the civil war?
+wqr003499	/people/person/spouse_s	where did harriet tubman live after the civil war?
+wqr003499	/people/marriage/location_of_ceremony	where did harriet tubman live after the civil war?
+wqr003504	/time/event/includes_event	what happened after the invasion of normandy?
+wqr003504	/location/location/events	what happened after the invasion of normandy?
+wqr003509	/location/country/currency_used	what is the currency of mexico called?
+wqr003509	/type/object/name	what is the currency of mexico called?
+wqr003514	/people/deceased_person/place_of_death	where did andreas vesalius die?
+wqr003519	/people/person/place_of_birth	where was emperor qin shi huang born?
+wqr003524	/film/actor/film	what movies gerard butler in?
+wqr003524	/film/performance/film	what movies gerard butler in?
+wqr003524	/award/award_nominee/award_nominations	what movies gerard butler in?
+wqr003524	/award/award_nomination/nominated_for	what movies gerard butler in?
+wqr003524	/award/award_winner/awards_won	what movies gerard butler in?
+wqr003524	/award/award_honor/honored_for	what movies gerard butler in?
+wqr003524	/tv/tv_actor/starring_roles	what movies gerard butler in?
+wqr003524	/tv/regular_tv_appearance/series	what movies gerard butler in?
+wqr003529	/film/actor/film	what other movies is liam hemsworth in?
+wqr003529	/film/performance/film	what other movies is liam hemsworth in?
+wqr003529	/award/award_nominee/award_nominations	what other movies is liam hemsworth in?
+wqr003529	/award/award_nomination/nominated_for	what other movies is liam hemsworth in?
+wqr003529	/award/award_winner/awards_won	what other movies is liam hemsworth in?
+wqr003529	/award/award_honor/honored_for	what other movies is liam hemsworth in?
+wqr003534	/government/political_appointer/appointees	who was the secretary of state when richard nixon was president?
+wqr003534	/government/government_position_held/office_holder	who was the secretary of state when richard nixon was president?
+wqr003534	/government/government_office_category/officeholders	who was the secretary of state when richard nixon was president?
+wqr003534	/government/government_position_held/office_holder	who was the secretary of state when richard nixon was president?
+wqr003539	/people/person/places_lived	where does t boone pickens live?
+wqr003539	/people/place_lived/location	where does t boone pickens live?
+wqr003544	/language/human_language/countries_spoken_in	where is arabic the official language?
+wqr003544	/language/human_language/main_country	where is arabic the official language?
+wqr003549	/meteorology/tropical_cyclone/affected_areas	where did hurricane irene?
+wqr003554	/sports/sports_team_location/teams	what sports do they have in china?
+wqr003559	/tv/tv_program/regular_cast	what season did jason priestley leave 90210?
+wqr003559	/tv/regular_tv_appearance/seasons	what season did jason priestley leave 90210?
+wqr003559	/tv/tv_actor/starring_roles	what season did jason priestley leave 90210?
+wqr003559	/tv/regular_tv_appearance/seasons	what season did jason priestley leave 90210?
+wqr003559	/tv/tv_program/seasons	what season did jason priestley leave 90210?
+wqr003564	/organization/organization_scope/organizations_with_this_scope	what does the soviet star represent?
+wqr003569	/tv/tv_character/appeared_in_tv_program	who plays marvin eriksen?
+wqr003569	/tv/regular_tv_appearance/actor	who plays marvin eriksen?
+wqr003574	/basketball/basketball_player/player_statistics	what team does derek fisher play for 2012?
+wqr003574	/basketball/basketball_player_stats/team	what team does derek fisher play for 2012?
+wqr003574	/sports/pro_athlete/teams	what team does derek fisher play for 2012?
+wqr003574	/sports/sports_team_roster/team	what team does derek fisher play for 2012?
+wqr003574	/people/person/employment_history	what team does derek fisher play for 2012?
+wqr003574	/business/employment_tenure/company	what team does derek fisher play for 2012?
+wqr003574	/sports/drafted_athlete/drafted	what team does derek fisher play for 2012?
+wqr003574	/sports/sports_league_draft_pick/team	what team does derek fisher play for 2012?
+wqr003579	/location/location/containedby	where are you if you're in khartoum?
+wqr003584	/government/politician/election_campaigns	what year did mitt romney first run for president?
+wqr003589	/geography/river/mouth	where does the st. joe river start?
+wqr003594	/location/country/form_of_government	what kind of government does iran have today?
+wqr003599	/cvg/computer_game_region/versions_released_in_this_region	what games do japanese people play?
+wqr003604	/travel/travel_destination/tourist_attractions	what to see near austin?
+wqr003609	/people/person/parents	who is kristen stewart parents?
+wqr003614	/basketball/basketball_player/player_statistics	what team does lamar odom play for 2013?
+wqr003614	/basketball/basketball_player_stats/team	what team does lamar odom play for 2013?
+wqr003614	/sports/pro_athlete/teams	what team does lamar odom play for 2013?
+wqr003614	/sports/sports_team_roster/team	what team does lamar odom play for 2013?
+wqr003619	/common/topic/image	where is italian spoken around the world?
+wqr003619	/language/human_language/countries_spoken_in	where is italian spoken around the world?
+wqr003619	/language/human_language/main_country	where is italian spoken around the world?
+wqr003619	/type/object/name	where is italian spoken around the world?
+wqr003624	/people/person/education	where did will smith go to high school?
+wqr003624	/education/education/institution	where did will smith go to high school?
+wqr003629	/people/person/profession	what was caesar augustus known for?
+wqr003629	/type/object/type	what was caesar augustus known for?
+wqr003629	/common/topic/notable_for	what was caesar augustus known for?
+wqr003629	/common/topic/notable_types	what was caesar augustus known for?
+wqr003634	/government/politician/party	who does christine gregoire represent?
+wqr003634	/government/political_party_tenure/party	who does christine gregoire represent?
+wqr003639	/people/person/spouse_s	who did heidi klum date before seal?
+wqr003639	/people/marriage/spouse	who did heidi klum date before seal?
+wqr003644	/location/location/containedby	where the murray river located?
+wqr003654	/location/location/adjoin_s	where are the libyan refugees going?
+wqr003654	/location/adjoining_relationship/adjoins	where are the libyan refugees going?
+wqr003659	/location/statistical_region/places_imported_from	where does the uk import from?
+wqr003659	/location/imports_and_exports/imported_from	where does the uk import from?
+wqr003659	/military/military_combatant/military_conflicts	where does the uk import from?
+wqr003659	/military/military_combatant_group/combatants	where does the uk import from?
+wqr003659	/location/statistical_region/places_exported_to	where does the uk import from?
+wqr003659	/location/imports_and_exports/exported_to	where does the uk import from?
+wqr003664	/people/person/parents	who is abraham descended from?
+wqr003669	/location/location/containedby	where is the spratly islands located?
+wqr003674	/book/author/works_written	what did charles dickens writer?
+wqr003674	/film/film_story_contributor/film_story_credits	what did charles dickens writer?
+wqr003674	/book/author/book_editions_published	what did charles dickens writer?
+wqr003674	/award/award_nominee/award_nominations	what did charles dickens writer?
+wqr003674	/award/award_nomination/nominated_for	what did charles dickens writer?
+wqr003674	/fictional_universe/fictional_character_creator/fictional_characters_created	what did charles dickens writer?
+wqr003679	/language/human_language/language_family	into what language family does english fall?
+wqr003684	/sports/professional_sports_team/owner_s	who owns the sf giants owner?
+wqr003689	/symbols/name_source/namesakes	what was karl marx beliefs?
+wqr003694	/location/country/currency_used	what type of money do you use in cuba?
+wqr003699	/tv/tv_character/appeared_in_tv_episodes	who plays riley finn on buffy the vampire slayer?
+wqr003699	/tv/tv_guest_role/actor	who plays riley finn on buffy the vampire slayer?
+wqr003699	/tv/tv_character/appeared_in_tv_program	who plays riley finn on buffy the vampire slayer?
+wqr003699	/tv/regular_tv_appearance/actor	who plays riley finn on buffy the vampire slayer?
+wqr003704	/tv/tv_character/appeared_in_tv_program	who voices anakin in the clone wars?
+wqr003704	/tv/regular_tv_appearance/actor	who voices anakin in the clone wars?
+wqr003704	/tv/tv_program/regular_cast	who voices anakin in the clone wars?
+wqr003704	/tv/regular_tv_appearance/actor	who voices anakin in the clone wars?
+wqr003709	/book/book_subject/works	what is the holy book in taoism?
+wqr003709	/religion/religion/texts	what is the holy book in taoism?
+wqr003714	/sports/pro_athlete/teams	what professional baseball team did michael jordan play for?
+wqr003714	/sports/sports_team_roster/team	what professional baseball team did michael jordan play for?
+wqr003719	/location/location/containedby	where is mount vernon texas?
+wqr003719	/location/capital_of_administrative_division/capital_of	where is mount vernon texas?
+wqr003719	/location/administrative_division_capital_relationship/administrative_division	where is mount vernon texas?
+wqr003719	/location/hud_county_place/county	where is mount vernon texas?
+wqr003724	/people/person/spouse_s	who is timothy hutton married to?
+wqr003724	/people/marriage/spouse	who is timothy hutton married to?
+wqr003729	/medicine/notable_person_with_medical_condition/condition	what happened to mike tyson?
+wqr003734	/government/politician/party	what party did paul keating belong to?
+wqr003734	/government/political_party_tenure/party	what party did paul keating belong to?
+wqr003739	/location/location/time_zones	what time does arkansas play football today?
+wqr003744	/people/person/education	what college did russell wilson go to?
+wqr003744	/education/education/institution	what college did russell wilson go to?
+wqr003749	/government/governmental_jurisdiction/government	what type of government does mexico use?
+wqr003754	/baseball/baseball_player/batting_stats	what team does pudge rodriguez play for?
+wqr003754	/baseball/batting_statistics/team	what team does pudge rodriguez play for?
+wqr003754	/sports/pro_athlete/teams	what team does pudge rodriguez play for?
+wqr003754	/sports/sports_team_roster/team	what team does pudge rodriguez play for?
+wqr003759	/sports/sports_team/arena_stadium	where is texas rangers home stadium?
+wqr003759	/sports/sports_team/venue	where is texas rangers home stadium?
+wqr003759	/sports/team_venue_relationship/venue	where is texas rangers home stadium?
+wqr003764	/sports/sports_team/coaches	who is the coach of inter milan now?
+wqr003764	/sports/sports_team_coach_tenure/coach	who is the coach of inter milan now?
+wqr003764	/soccer/football_team/manager	who is the coach of inter milan now?
+wqr003764	/soccer/football_team_management_tenure/manager	who is the coach of inter milan now?
+wqr003769	/location/capital_of_administrative_division/capital_of	what county is orlando fl in?
+wqr003769	/location/administrative_division_capital_relationship/administrative_division	what county is orlando fl in?
+wqr003769	/location/hud_county_place/county	what county is orlando fl in?
+wqr003769	/location/location/containedby	what county is orlando fl in?
+wqr003774	/religion/religion/holidays	what are the holydays of obligation in the catholic church 2013?

@@ -18,6 +18,7 @@ def get_args():
     parser.add_argument('--gpu', type=int, default=0)
     parser.add_argument('--seed', type=int, default=1111, help='random seed for reproducing results')
     parser.add_argument('--cuda', action='store_true', help='use CUDA')
+    parser.add_argument('--device', type=int, default=0, help='GPU device to use')
     parser.add_argument('--save_path', type=str, default='saved_checkpoints')
     parser.add_argument('--resume_snapshot', type=str, default='')
     args = parser.parse_args()
