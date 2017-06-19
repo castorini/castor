@@ -1,5 +1,4 @@
-data/*
-data/glove/
+data/
 resources/
 saved_checkpoints/
 __pycache__/
