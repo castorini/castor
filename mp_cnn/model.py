@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -16,6 +17,9 @@ class MPCNN(nn.Module):
         self.per_dim_conv_layers = {}
 
         for ws in filter_widths:
+            if np.isinf(ws):
+                continue
+
             self.holistic_conv_layers[ws] = nn.Sequential(
                 nn.Conv1d(n_word_dim, n_holistic_filters, ws),
                 nn.Tanh()
@@ -30,12 +34,16 @@ class MPCNN(nn.Module):
         block_a = {}
         block_b = {}
         for ws in self.filter_widths:
-            holistic_conv_out = self.holistic_conv_layers[ws](sent)
+            holistic_conv_out = self.holistic_conv_layers[ws](sent) if not np.isinf(ws) else sent
             block_a[ws] = {
                 'max': F.max_pool1d(holistic_conv_out, holistic_conv_out.size()[2]),
                 'min': F.max_pool1d(-1 * holistic_conv_out, holistic_conv_out.size()[2]),
                 'mean': F.avg_pool1d(holistic_conv_out, holistic_conv_out.size()[2])
             }
+
+            # only compute per-dimension convolution for non-infinity widths
+            if np.isinf(ws):
+                continue
 
             per_dim_conv_out = self.per_dim_conv_layers[ws](sent)
             per_dim_conv_out = per_dim_conv_out.view(self.n_word_dim, self.n_per_dim_filters, -1)
@@ -49,7 +57,6 @@ class MPCNN(nn.Module):
         sent1_block_a, sent1_block_b = self._get_blocks_for_sentence(sent1)
         sent2_block_a, sent2_block_b = self._get_blocks_for_sentence(sent2)
 
-        # TODO handle ws = infinity
         # TODO implement similarity measurement layer and fully-connected layer
         # return dummy return values for now
         return Variable(torch.Tensor([0, 0]))

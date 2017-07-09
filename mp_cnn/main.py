@@ -45,6 +45,6 @@ if __name__ == '__main__':
 
     train_loader = torch.utils.data.DataLoader(MPCNNDataset(args.dataset_folder, DatasetType.TRAIN, word_index, embedding), batch_size=1)
 
-    filter_widths = [1, 2, 3]
+    filter_widths = [1, 2, 3, np.inf]
     model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths)
     train(model, train_loader, args.epochs)
