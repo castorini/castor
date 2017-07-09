@@ -53,7 +53,7 @@ class MPCNNDataset(data.Dataset):
 
     def _get_sentence_embeddings(self, sentence, word_index, embedding):
         tokens = sentence.split(' ')
-        sentence_embedding = torch.zeros(300, len(tokens))
+        sentence_embedding = torch.Tensor(300, len(tokens)).normal_(0, 1)
         found_pos, found_emb_idx = [], []
         for i, token in enumerate(tokens):
             if token in word_index:
@@ -61,7 +61,6 @@ class MPCNNDataset(data.Dataset):
                 found_emb_idx.append(word_index[token])
 
         found_word_vecs = embedding(Variable(torch.LongTensor(found_emb_idx)))
-        # TODO Handle unknown word vector
         for i, v in enumerate(found_pos):
             sentence_embedding[:, v] = found_word_vecs[i].data
         return sentence_embedding
