@@ -23,6 +23,7 @@ logger.addHandler(ch)
 
 
 def train(model, train_loader, epochs):
+    # TODO implement actual training
     for batch_idx, (sentences, labels) in enumerate(train_loader):
         sent_a, sent_b = sentences['a'], sentences['b']
         output = model(Variable(sent_a), Variable(sent_b))
@@ -35,6 +36,8 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 10)')
     parser.add_argument('--holistic_filters', type=int, default=300, metavar='N', help='number of holistic filters')
     parser.add_argument('--per_dim_filters', type=int, default=20, metavar='N', help='number of per-dimension filters')
+    parser.add_argument('--hidden_units', type=int, default=150, metavar='N', help='number of hidden units in each of the two hidden layers')
+    parser.add_argument('--num_classes', type=int, default=5, metavar='N', help='number of classes of the label. SICK has 5 classes and MSRVID has 6.')
     args = parser.parse_args()
 
     torch.manual_seed(1234)
@@ -46,5 +49,5 @@ if __name__ == '__main__':
     train_loader = torch.utils.data.DataLoader(MPCNNDataset(args.dataset_folder, DatasetType.TRAIN, word_index, embedding), batch_size=1)
 
     filter_widths = [1, 2, 3, np.inf]
-    model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths)
+    model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, args.num_classes)
     train(model, train_loader, args.epochs)

@@ -7,7 +7,7 @@ from torch.autograd import Variable
 
 class MPCNN(nn.Module):
 
-    def __init__(self, n_word_dim, n_holistic_filters, n_per_dim_filters, filter_widths):
+    def __init__(self, n_word_dim, n_holistic_filters, n_per_dim_filters, filter_widths, hidden_layer_units, num_classes):
         super(MPCNN, self).__init__()
 
         self.n_word_dim = n_word_dim
@@ -29,6 +29,19 @@ class MPCNN(nn.Module):
                 nn.Conv1d(n_word_dim, n_word_dim * n_per_dim_filters, ws, groups=n_word_dim),
                 nn.Tanh()
             )
+
+        # compute number of inputs to first hidden layer
+        COMP_1_COMPONENTS, COMP_2_COMPONENTS = 3, 2
+        n_feat_h = 3 * len(self.filter_widths) * COMP_2_COMPONENTS
+        n_feat_v = 3 * (len(self.filter_widths) ** 2) * COMP_1_COMPONENTS + 2 * (len(self.filter_widths) - 1) * n_per_dim_filters * COMP_1_COMPONENTS
+        n_feat = n_feat_h + n_feat_v
+
+        self.final_layers = nn.Sequential(
+            nn.Linear(n_feat, hidden_layer_units),
+            nn.Tanh(),
+            nn.Linear(hidden_layer_units, num_classes),
+            nn.LogSoftmax()
+        )
 
     def _get_blocks_for_sentence(self, sent):
         block_a = {}
@@ -97,6 +110,5 @@ class MPCNN(nn.Module):
         feat_v = self._algo_2_vert_comp(sent1_block_a, sent2_block_a, sent1_block_b, sent2_block_b)
         feat_all = torch.cat([feat_h, feat_v])
 
-        # TODO implement fully-connected layer
-        # return dummy return values for now
-        return Variable(torch.Tensor([0, 0]))
+        preds = self.final_layers(feat_all)
+        return preds
