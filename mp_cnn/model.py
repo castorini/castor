@@ -26,25 +26,29 @@ class MPCNN(nn.Module):
                 nn.Tanh()
             )
 
-    def forward(self, sent1, sent2):
+    def _get_blocks_for_sentence(self, sent):
         block_a = {}
         block_b = {}
         for ws in self.filter_widths:
-            holistic_conv_out = self.holistic_conv_layers[ws](sent1)
+            holistic_conv_out = self.holistic_conv_layers[ws](sent)
             block_a[ws] = {
                 'max': F.max_pool1d(holistic_conv_out, holistic_conv_out.size()[2]),
                 'min': F.max_pool1d(-1 * holistic_conv_out, holistic_conv_out.size()[2]),
                 'mean': F.avg_pool1d(holistic_conv_out, holistic_conv_out.size()[2])
             }
 
-            per_dim_conv_out = self.per_dim_conv_layers[ws](sent1)
+            per_dim_conv_out = self.per_dim_conv_layers[ws](sent)
             per_dim_conv_out = per_dim_conv_out.view(self.n_word_dim, self.n_per_dim_filters, -1)
             block_b[ws] = {
                 'max': F.max_pool2d(per_dim_conv_out, (1, per_dim_conv_out.size()[2])),
                 'min': F.max_pool2d(-1 * per_dim_conv_out, (1, per_dim_conv_out.size()[2]))
             }
+        return block_a, block_b
 
-        # TODO run through conv/poolinf for sent2 as well
+    def forward(self, sent1, sent2):
+        sent1_block_a, sent1_block_b = self._get_blocks_for_sentence(sent1)
+        sent2_block_a, sent2_block_b = self._get_blocks_for_sentence(sent2)
+
         # TODO handle ws = infinity
         # TODO implement similarity measurement layer and fully-connected layer
         # return dummy return values for now
