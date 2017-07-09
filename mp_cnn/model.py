@@ -36,9 +36,9 @@ class MPCNN(nn.Module):
         for ws in self.filter_widths:
             holistic_conv_out = self.holistic_conv_layers[ws](sent) if not np.isinf(ws) else sent
             block_a[ws] = {
-                'max': F.max_pool1d(holistic_conv_out, holistic_conv_out.size()[2]),
-                'min': F.max_pool1d(-1 * holistic_conv_out, holistic_conv_out.size()[2]),
-                'mean': F.avg_pool1d(holistic_conv_out, holistic_conv_out.size()[2])
+                'max': F.max_pool1d(holistic_conv_out, holistic_conv_out.size()[2]).view(-1, self.n_word_dim),
+                'min': F.max_pool1d(-1 * holistic_conv_out, holistic_conv_out.size()[2]).view(-1, self.n_word_dim),
+                'mean': F.avg_pool1d(holistic_conv_out, holistic_conv_out.size()[2]).view(-1, self.n_word_dim)
             }
 
             # only compute per-dimension convolution for non-infinity widths
@@ -46,17 +46,57 @@ class MPCNN(nn.Module):
                 continue
 
             per_dim_conv_out = self.per_dim_conv_layers[ws](sent)
-            per_dim_conv_out = per_dim_conv_out.view(self.n_word_dim, self.n_per_dim_filters, -1)
             block_b[ws] = {
-                'max': F.max_pool2d(per_dim_conv_out, (1, per_dim_conv_out.size()[2])),
-                'min': F.max_pool2d(-1 * per_dim_conv_out, (1, per_dim_conv_out.size()[2]))
+                'max': F.max_pool1d(per_dim_conv_out, per_dim_conv_out.size()[2]).view(-1, self.n_word_dim, self.n_per_dim_filters),
+                'min': F.max_pool1d(-1 * per_dim_conv_out, per_dim_conv_out.size()[2]).view(-1, self.n_word_dim, self.n_per_dim_filters)
             }
         return block_a, block_b
 
+    def _algo_1_horiz_comp(self, sent1_block_a, sent2_block_a):
+        comparison_feats = []
+        for pool in ('max', 'min', 'mean'):
+            for ws in self.filter_widths:
+                x1 = sent1_block_a[ws][pool]
+                x2 = sent2_block_a[ws][pool]
+                comparison_feats.append(F.cosine_similarity(x1, x2))
+                comparison_feats.append(F.pairwise_distance(x1, x2))
+        return torch.cat(comparison_feats).view(-1)
+
+    def _algo_2_vert_comp(self, sent1_block_a, sent2_block_a, sent1_block_b, sent2_block_b):
+        comparison_feats = []
+        for pool in ('max', 'min', 'mean'):
+            for ws1 in self.filter_widths:
+                x1 = sent1_block_a[ws1][pool]
+                for ws2 in self.filter_widths:
+                    x2 = sent2_block_a[ws2][pool]
+                    comparison_feats.append(F.cosine_similarity(x1, x2))
+                    comparison_feats.append(F.pairwise_distance(x1, x2))
+                    comparison_feats.append(torch.abs(x1 - x2).sum())
+
+        for pool in ('max', 'min'):
+            ws_no_inf = [w for w in self.filter_widths if not np.isinf(w)]
+            for ws in ws_no_inf:
+                oG_1B = sent1_block_b[ws][pool]
+                oG_2B = sent2_block_b[ws][pool]
+                for i in range(0, self.n_per_dim_filters):
+                    x1 = oG_1B[:, :, i]
+                    x2 = oG_2B[:, :, i]
+                    comparison_feats.append(F.cosine_similarity(x1, x2))
+                    comparison_feats.append(F.pairwise_distance(x1, x2))
+                    comparison_feats.append(torch.abs(x1 - x2).sum())
+
+        return torch.cat(comparison_feats).view(-1)
+
     def forward(self, sent1, sent2):
+        # Sentence modeling module
         sent1_block_a, sent1_block_b = self._get_blocks_for_sentence(sent1)
         sent2_block_a, sent2_block_b = self._get_blocks_for_sentence(sent2)
 
-        # TODO implement similarity measurement layer and fully-connected layer
+        # Similarity measurement layer
+        feat_h = self._algo_1_horiz_comp(sent1_block_a, sent2_block_a)
+        feat_v = self._algo_2_vert_comp(sent1_block_a, sent2_block_a, sent1_block_b, sent2_block_b)
+        feat_all = torch.cat([feat_h, feat_v])
+
+        # TODO implement fully-connected layer
         # return dummy return values for now
         return Variable(torch.Tensor([0, 0]))
