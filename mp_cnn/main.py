@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 
 import numpy as np
 import torch
@@ -8,6 +9,7 @@ from torch.autograd import Variable
 import torch.optim as optim
 
 from dataset import DatasetType, MPCNNDatasetFactory
+from evaluation import MPCNNEvaluatorFactory
 from model import MPCNN
 
 # logging setup
@@ -39,17 +41,13 @@ def train(model, optimizer, train_loader, epoch, sample, log_interval):
             )
 
 
-def test(model, loader):
-    model.eval()
-    test_loss = 0
-    for sentences, labels in test_loader:
-        sent_a, sent_b = Variable(sentences['a'], volatile=True), Variable(sentences['b'], volatile=True)
-        labels = Variable(labels, volatile=True)
-        output = model(sent_a, sent_b)
-        test_loss += F.kl_div(output, labels, size_average=False).data[0]
-
-    test_loss /= len(test_loader.dataset)
-    print('\nTest set: Average loss: {:.4f}\n'.format(test_loss))
+def test(dev_evaluator, test_evaluator):
+    dev_scores, metric_names = dev_evaluator.get_scores()
+    test_scores, _ = test_evaluator.get_scores()
+    logger.info('Dev/Test evaluation metrics:')
+    logger.info('\t'.join([' '] + metric_names))
+    logger.info('\t'.join(['dev'] + list(map(str, dev_scores))))
+    logger.info('\t'.join(['test'] + list(map(str, test_scores))))
 
 
 if __name__ == '__main__':
@@ -76,7 +74,18 @@ if __name__ == '__main__':
     filter_widths = [1, 2, 3, np.inf]
     model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, args.num_classes)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.regularization)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader)
+    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader)
 
+    epoch_times = []
     for epoch in range(1, args.epochs + 1):
+        start = time.time()
+        logger.info('Epoch {} started...'.format(epoch))
         train(model, optimizer, train_loader, epoch, args.sample, args.log_interval)
-        test(model, test_loader)
+        test(dev_evaluator, test_evaluator)
+        end = time.time()
+        duration = end - start
+        logger.info('Epoch {} finished in {:.2f} minutes'.format(epoch, duration / 60))
+        epoch_times.append(duration)
+
+    logger.info('Training and evaluation took {:.2f} minutes overall...'.format(sum(epoch_times) / 60))
