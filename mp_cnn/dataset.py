@@ -1,9 +1,24 @@
 from enum import Enum
+import math
 import os
 
 import torch
 from torch.autograd import Variable
+import torch.nn.functional as F
 import torch.utils.data as data
+
+import preprocessing
+
+# logging setup
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
 class DatasetType(Enum):
@@ -12,12 +27,33 @@ class DatasetType(Enum):
     DEV = 3
 
 
+class MPCNNDatasetFactory(object):
+    """
+    Get the corresponding Dataset class for a particular dataset.
+    """
+    @staticmethod
+    def get_dataset(dataset_name, word_vectors_file):
+        if dataset_name == 'sick':
+            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN), batch_size=1)
+        elif dataset_name == 'msrvid':
+            raise NotImplementedError('msrvid Dataset is not yet implemented.')
+        else:
+            raise ValueError('{} is not a valid dataset.'.format(dataset_name))
+
+        word_index, embedding = preprocessing.get_glove_embedding(word_vectors_file, train_loader.dataset.dataset_root)
+        logger.info('Finished loading GloVe embedding for vocab in data...')
+
+        train_loader.dataset.initialize(word_index, embedding)
+        return train_loader
+
+
 class MPCNNDataset(data.Dataset):
     train_folder = 'train'
     test_folder = 'test'
     dev_folder = 'dev'
+    dataset_root = None  # subclass will override this
 
-    def __init__(self, dataset_root, dataset_type, word_index, embedding):
+    def __init__(self, dataset_type):
         if not isinstance(dataset_type, DatasetType):
             raise ValueError('dataset_type ({}) must be of type DatasetType enum'.format(dataset_type))
 
@@ -28,19 +64,23 @@ class MPCNNDataset(data.Dataset):
         else:
             subfolder = MPCNNDataset.dev_folder
 
-        dataset_dir = os.path.join(dataset_root, subfolder)
-        if not os.path.exists(dataset_dir):
-            raise RuntimeError('{} does not exist'.format(dataset_dir))
+        self.dataset_dir = os.path.join(self.dataset_root, subfolder)
+        if not os.path.exists(self.dataset_dir):
+            raise RuntimeError('{} does not exist'.format(self.dataset_dir))
 
-        sent_a = self._load(dataset_dir, 'a.txt')
-        sent_b = self._load(dataset_dir, 'b.txt')
+    def initialize(self, word_index, embedding):
+        """
+        Convert sentences into sentence embeddings.
+        """
+        sent_a = self._load(self.dataset_dir, 'a.txt')
+        sent_b = self._load(self.dataset_dir, 'b.txt')
         self.sentences = []
         for i in range(len(sent_a)):
             sent_pair = {}
             sent_pair['a'] = self._get_sentence_embeddings(sent_a[i], word_index, embedding)
             sent_pair['b'] = self._get_sentence_embeddings(sent_b[i], word_index, embedding)
             self.sentences.append(sent_pair)
-        self.labels = self._load(dataset_dir, 'sim.txt', float)
+        self.labels = self._load(self.dataset_dir, 'sim.txt', float)
 
     def _load(self, dataset_dir, fname, type_converter=str):
         data = []
@@ -70,3 +110,36 @@ class MPCNNDataset(data.Dataset):
 
     def __len__(self):
         return len(self.labels)
+
+
+class SICKDataset(MPCNNDataset):
+
+    dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'sick')
+
+    def __init__(self, dataset_type):
+        super(SICKDataset, self).__init__(dataset_type)
+
+    def initialize(self, word_index, embedding):
+        super(SICKDataset, self).initialize(word_index, embedding)
+        # convert label to 5 probability classes
+        new_labels = torch.zeros(self.__len__(), 5)
+        for i, sim in enumerate(self.labels):
+            ceil, floor = math.ceil(sim), math.floor(sim)
+            if ceil == floor:
+                new_labels[i][floor - 1] = 1
+            else:
+                new_labels[i][floor - 1] = ceil - sim
+                new_labels[i][ceil - 1] = sim - floor
+
+        self.labels = new_labels
+
+
+class MSRVIDDataset(MPCNNDataset):
+
+    dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'msrvid')
+
+    def __init__(self, dataset_type):
+        super(MSRVIDDataset, self).__init__(dataset_type)
+
+    def initialize(self, word_index, embedding):
+        super(MSRVIDDataset, self).initialize(word_index, embedding)
