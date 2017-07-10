@@ -32,9 +32,16 @@ class MPCNNDatasetFactory(object):
     Get the corresponding Dataset class for a particular dataset.
     """
     @staticmethod
-    def get_dataset(dataset_name, word_vectors_file):
+    def get_dataset(dataset_name, word_vectors_file, sample):
+        extra_args = {}
+        if sample:
+            sample_indices = list(range(sample))
+            subset_random_sampler = data.sampler.SubsetRandomSampler(sample_indices)
+            extra_args['sampler'] = subset_random_sampler
         if dataset_name == 'sick':
-            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN), batch_size=1)
+            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN), batch_size=1, **extra_args)
+            test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST), batch_size=1, **extra_args)
+            dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV), batch_size=1, **extra_args)
         elif dataset_name == 'msrvid':
             raise NotImplementedError('msrvid Dataset is not yet implemented.')
         else:
@@ -44,7 +51,9 @@ class MPCNNDatasetFactory(object):
         logger.info('Finished loading GloVe embedding for vocab in data...')
 
         train_loader.dataset.initialize(word_index, embedding)
-        return train_loader
+        test_loader.dataset.initialize(word_index, embedding)
+        dev_loader.dataset.initialize(word_index, embedding)
+        return train_loader, test_loader, dev_loader
 
 
 class MPCNNDataset(data.Dataset):

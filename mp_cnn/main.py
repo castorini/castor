@@ -22,21 +22,34 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def train(model, optimizer, train_loader, epoch, log_interval):
+def train(model, optimizer, train_loader, epoch, sample, log_interval):
     model.train()
     for batch_idx, (sentences, labels) in enumerate(train_loader):
-        sent_a, sent_b = sentences['a'], sentences['b']
+        sent_a, sent_b = Variable(sentences['a']), Variable(sentences['b'])
+        labels = Variable(labels)
         optimizer.zero_grad()
-        output = model(Variable(sent_a), Variable(sent_b))
-        target = Variable(labels)
-        loss = F.kl_div(output, target)
+        output = model(sent_a, sent_b)
+        loss = F.kl_div(output, labels)
         loss.backward()
         optimizer.step()
         if batch_idx % log_interval == 0:
             logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(sentences), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.data[0])
+                epoch, batch_idx * 1, len(train_loader) if not sample else sample,
+                100. * batch_idx / (len(train_loader) if not sample else sample), loss.data[0])
             )
+
+
+def test(model, loader):
+    model.eval()
+    test_loss = 0
+    for sentences, labels in test_loader:
+        sent_a, sent_b = Variable(sentences['a'], volatile=True), Variable(sentences['b'], volatile=True)
+        labels = Variable(labels, volatile=True)
+        output = model(sent_a, sent_b)
+        test_loss += F.kl_div(output, labels, size_average=False).data[0]
+
+    test_loss /= len(test_loader.dataset)
+    print('\nTest set: Average loss: {:.4f}\n'.format(test_loss))
 
 
 if __name__ == '__main__':
@@ -47,6 +60,7 @@ if __name__ == '__main__':
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR', help='learning rate (default: 0.01)')
     parser.add_argument('--momentum', type=float, default=0.5, metavar='M', help='SGD momentum (default: 0.5)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N', help='how many batches to wait before logging training status')
+    parser.add_argument('--sample', type=int, default=0, metavar='N', help='how many examples to take from each dataset, meant for quickly testing entire end-to-end pipeline (default: all)')
     parser.add_argument('--regularization', type=float, default=0.0001, metavar='REG', help='SGD regularization (default: 0.0001)')
     parser.add_argument('--holistic_filters', type=int, default=300, metavar='N', help='number of holistic filters')
     parser.add_argument('--per_dim_filters', type=int, default=20, metavar='N', help='number of per-dimension filters')
@@ -57,11 +71,12 @@ if __name__ == '__main__':
     torch.manual_seed(1234)
     np.random.seed(1234)
 
-    train_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file)
+    train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file, args.sample)
 
     filter_widths = [1, 2, 3, np.inf]
     model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, args.num_classes)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.regularization)
 
     for epoch in range(1, args.epochs + 1):
-        train(model, optimizer, train_loader, epoch, args.log_interval)
+        train(model, optimizer, train_loader, epoch, args.sample, args.log_interval)
+        test(model, test_loader)
