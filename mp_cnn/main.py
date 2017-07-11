@@ -24,7 +24,7 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def train(model, optimizer, train_loader, epoch, sample, log_interval):
+def train(model, optimizer, train_loader, epoch, batch_size, sample, log_interval):
     model.train()
     for batch_idx, (sentences, labels) in enumerate(train_loader):
         sent_a, sent_b = Variable(sentences['a']), Variable(sentences['b'])
@@ -36,7 +36,8 @@ def train(model, optimizer, train_loader, epoch, sample, log_interval):
         optimizer.step()
         if batch_idx % log_interval == 0:
             logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * 1, len(train_loader) if not sample else sample,
+                epoch, min(batch_idx * batch_size, len(train_loader.dataset)),
+                len(train_loader.dataset) if not sample else sample,
                 100. * batch_idx / (len(train_loader) if not sample else sample), loss.data[0])
             )
 
@@ -58,6 +59,7 @@ if __name__ == '__main__':
     parser.add_argument('--word-vectors-file', help='word vectors file', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe', 'glove.840B.300d.txt'))
     parser.add_argument('--skip-training', help='will load pre-trained model', action='store_true')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
+    parser.add_argument('--batch-size', type=int, default=1, metavar='N', help='input batch size for training (default: 1)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 10)')
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR', help='learning rate (default: 0.01)')
     parser.add_argument('--momentum', type=float, default=0.5, metavar='M', help='SGD momentum (default: 0.5)')
@@ -77,15 +79,15 @@ if __name__ == '__main__':
     if args.cuda:
         torch.cuda.manual_seed(args.seed)
 
-    train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file, args.cuda, args.sample)
+    train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file, args.batch_size, args.cuda, args.sample)
 
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, train_loader.dataset.num_classes)
     if args.cuda:
         model.cuda()
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.regularization)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.cuda)
-    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader, args.cuda)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.cuda)
+    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader, args.batch_size, args.cuda)
 
     if not args.skip_training:
         epoch_times = []
@@ -94,7 +96,7 @@ if __name__ == '__main__':
         for epoch in range(1, args.epochs + 1):
             start = time.time()
             logger.info('Epoch {} started...'.format(epoch))
-            train(model, optimizer, train_loader, epoch, args.sample, args.log_interval)
+            train(model, optimizer, train_loader, epoch, args.batch_size, args.sample, args.log_interval)
             dev_scores, test_scores = test(dev_evaluator, test_evaluator)
             end = time.time()
             duration = end - start

@@ -32,16 +32,17 @@ class MPCNNDatasetFactory(object):
     Get the corresponding Dataset class for a particular dataset.
     """
     @staticmethod
-    def get_dataset(dataset_name, word_vectors_file, cuda, sample):
-        extra_args = {}
+    def get_dataset(dataset_name, word_vectors_file, batch_size, cuda, sample):
+        extra_args = {'shuffle': True}
         if sample:
             sample_indices = list(range(sample))
             subset_random_sampler = data.sampler.SubsetRandomSampler(sample_indices)
             extra_args['sampler'] = subset_random_sampler
+            extra_args['shuffle'] = False
         if dataset_name == 'sick':
-            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN, cuda), batch_size=1, **extra_args)
-            test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST, cuda), batch_size=1, **extra_args)
-            dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV, cuda), batch_size=1, **extra_args)
+            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN, cuda), batch_size=batch_size, **extra_args)
+            test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST, cuda), batch_size=batch_size, **extra_args)
+            dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV, cuda), batch_size=batch_size, **extra_args)
         elif dataset_name == 'msrvid':
             raise NotImplementedError('msrvid Dataset is not yet implemented.')
         else:
@@ -80,6 +81,7 @@ class MPCNNDataset(data.Dataset):
             raise RuntimeError('{} does not exist'.format(self.dataset_dir))
 
         self.cuda = cuda
+        self.max_length = -10000
 
     def initialize(self, word_index, embedding):
         """
@@ -87,11 +89,21 @@ class MPCNNDataset(data.Dataset):
         """
         sent_a = self._load(self.dataset_dir, 'a.txt')
         sent_b = self._load(self.dataset_dir, 'b.txt')
+
+        # obtain max sentence length to use as dimension for padding to support batching
+        sent_a_tokens, sent_b_tokens = [], []
+        for i in range(len(sent_a)):
+            sa_tokens = sent_a[i].split(' ')
+            sb_tokens = sent_b[i].split(' ')
+            self.max_length = max(self.max_length, len(sa_tokens), len(sb_tokens))
+            sent_a_tokens.append(sa_tokens)
+            sent_b_tokens.append(sb_tokens)
+
         self.sentences = []
         for i in range(len(sent_a)):
             sent_pair = {}
-            sent_pair['a'] = self._get_sentence_embeddings(sent_a[i], word_index, embedding)
-            sent_pair['b'] = self._get_sentence_embeddings(sent_b[i], word_index, embedding)
+            sent_pair['a'] = self._get_sentence_embeddings(sent_a_tokens[i], word_index, embedding)
+            sent_pair['b'] = self._get_sentence_embeddings(sent_b_tokens[i], word_index, embedding)
             self.sentences.append(sent_pair)
         self.labels = self._load(self.dataset_dir, 'sim.txt', float)
 
@@ -104,9 +116,9 @@ class MPCNNDataset(data.Dataset):
                 data.append(item)
         return data
 
-    def _get_sentence_embeddings(self, sentence, word_index, embedding):
-        tokens = sentence.split(' ')
-        sentence_embedding = torch.Tensor(300, len(tokens)).normal_(0, 1)
+    def _get_sentence_embeddings(self, tokens, word_index, embedding):
+        sentence_embedding = torch.zeros(300, self.max_length)
+        sentence_embedding[:, :len(tokens)].normal_(0, 1)
         found_pos, found_emb_idx = [], []
         for i, token in enumerate(tokens):
             if token in word_index:

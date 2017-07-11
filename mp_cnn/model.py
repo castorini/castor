@@ -74,20 +74,22 @@ class MPCNN(nn.Module):
             for ws in self.filter_widths:
                 x1 = sent1_block_a[ws][pool]
                 x2 = sent2_block_a[ws][pool]
-                comparison_feats.append(F.cosine_similarity(x1, x2))
+                batch_size = x1.size()[0]
+                comparison_feats.append(F.cosine_similarity(x1, x2).view(batch_size, 1))
                 comparison_feats.append(F.pairwise_distance(x1, x2))
-        return torch.cat(comparison_feats).view(-1)
+        return torch.cat(comparison_feats, dim=1)
 
     def _algo_2_vert_comp(self, sent1_block_a, sent2_block_a, sent1_block_b, sent2_block_b):
         comparison_feats = []
         for pool in ('max', 'min', 'mean'):
             for ws1 in self.filter_widths:
                 x1 = sent1_block_a[ws1][pool]
+                batch_size = x1.size()[0]
                 for ws2 in self.filter_widths:
                     x2 = sent2_block_a[ws2][pool]
-                    comparison_feats.append(F.cosine_similarity(x1, x2))
+                    comparison_feats.append(F.cosine_similarity(x1, x2).view(batch_size, 1))
                     comparison_feats.append(F.pairwise_distance(x1, x2))
-                    comparison_feats.append(torch.abs(x1 - x2).sum())
+                    comparison_feats.append(torch.abs(x1 - x2).sum(dim=1).view(batch_size, 1))
 
         for pool in ('max', 'min'):
             ws_no_inf = [w for w in self.filter_widths if not np.isinf(w)]
@@ -97,11 +99,11 @@ class MPCNN(nn.Module):
                 for i in range(0, self.n_per_dim_filters):
                     x1 = oG_1B[:, :, i]
                     x2 = oG_2B[:, :, i]
-                    comparison_feats.append(F.cosine_similarity(x1, x2))
+                    comparison_feats.append(F.cosine_similarity(x1, x2).view(batch_size, 1))
                     comparison_feats.append(F.pairwise_distance(x1, x2))
-                    comparison_feats.append(torch.abs(x1 - x2).sum())
+                    comparison_feats.append(torch.abs(x1 - x2).sum(dim=1).view(batch_size, 1))
 
-        return torch.cat(comparison_feats).view(-1)
+        return torch.cat(comparison_feats, dim=1)
 
     def forward(self, sent1, sent2):
         # Sentence modeling module
@@ -111,7 +113,7 @@ class MPCNN(nn.Module):
         # Similarity measurement layer
         feat_h = self._algo_1_horiz_comp(sent1_block_a, sent2_block_a)
         feat_v = self._algo_2_vert_comp(sent1_block_a, sent2_block_a, sent1_block_b, sent2_block_b)
-        feat_all = torch.cat([feat_h, feat_v])
+        feat_all = torch.cat([feat_h, feat_v], dim=1)
 
         preds = self.final_layers(feat_all)
         return preds

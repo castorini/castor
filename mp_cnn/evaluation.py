@@ -9,9 +9,9 @@ class MPCNNEvaluatorFactory(object):
     Get the corresponding Evaluator class for a particular dataset.
     """
     @staticmethod
-    def get_evaluator(dataset_name, model, data_loader, cuda):
+    def get_evaluator(dataset_name, model, data_loader, batch_size, cuda):
         if dataset_name == 'sick':
-            return SICKEvaluator(model, data_loader, cuda)
+            return SICKEvaluator(model, data_loader, batch_size, cuda)
         elif dataset_name == 'msrvid':
             raise NotImplementedError('msrvid Evaluator is not yet implemented.')
         else:
@@ -23,9 +23,10 @@ class Evaluator(object):
     Evaluates performance of model on a Dataset, using metrics specific to the Dataset.
     """
 
-    def __init__(self, model, data_loader, cuda):
+    def __init__(self, model, data_loader, batch_size, cuda):
         self.model = model
         self.data_loader = data_loader
+        self.batch_size = batch_size
         self.cuda = cuda
 
     def get_scores(self):
@@ -39,12 +40,12 @@ class Evaluator(object):
 
 class SICKEvaluator(Evaluator):
 
-    def __init__(self, model, data_loader, cuda):
-        super(SICKEvaluator, self).__init__(model, data_loader, cuda)
+    def __init__(self, model, data_loader, batch_size, cuda):
+        super(SICKEvaluator, self).__init__(model, data_loader, batch_size, cuda)
 
     def get_scores(self):
         self.model.eval()
-        predict_classes = torch.arange(1, 6)
+        predict_classes = torch.arange(1,6).expand(self.batch_size, 5)
         if self.cuda:
             predict_classes = predict_classes.cuda()
         test_kl_div_loss = 0
@@ -55,9 +56,16 @@ class SICKEvaluator(Evaluator):
             labels = Variable(labels, volatile=True)
             output = self.model(sent_a, sent_b)
             test_kl_div_loss += F.kl_div(output, labels, size_average=False).data[0]
-            true_labels.append(predict_classes.dot(labels.data.view(5)))
-            predictions.append(predict_classes.dot(output.data.exp()))
+            # handle last batch which might have smaller size
+            if len(predict_classes) != len(sent_a):
+                predict_classes = torch.arange(1,6).expand(len(sent_a), 5)
+                if self.cuda:
+                    predict_classes = predict_classes.cuda()
+            true_labels.append((predict_classes * labels.data).sum(dim=1))
+            predictions.append((predict_classes * output.data.exp()).sum(dim=1))
 
+        predictions = torch.cat(predictions).cpu().numpy()
+        true_labels = torch.cat(true_labels).cpu().numpy()
         test_kl_div_loss /= len(self.data_loader.dataset)
         pearson_r = pearsonr(predictions, true_labels)[0]
         spearman_r = spearmanr(predictions, true_labels)[0]
