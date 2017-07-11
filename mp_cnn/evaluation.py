@@ -9,9 +9,9 @@ class MPCNNEvaluatorFactory(object):
     Get the corresponding Evaluator class for a particular dataset.
     """
     @staticmethod
-    def get_evaluator(dataset_name, model, data_loader):
+    def get_evaluator(dataset_name, model, data_loader, cuda):
         if dataset_name == 'sick':
-            return SICKEvaluator(model, data_loader)
+            return SICKEvaluator(model, data_loader, cuda)
         elif dataset_name == 'msrvid':
             raise NotImplementedError('msrvid Evaluator is not yet implemented.')
         else:
@@ -23,9 +23,10 @@ class Evaluator(object):
     Evaluates performance of model on a Dataset, using metrics specific to the Dataset.
     """
 
-    def __init__(self, model, data_loader):
+    def __init__(self, model, data_loader, cuda):
         self.model = model
         self.data_loader = data_loader
+        self.cuda = cuda
 
     def get_scores(self):
         """
@@ -38,12 +39,14 @@ class Evaluator(object):
 
 class SICKEvaluator(Evaluator):
 
-    def __init__(self, model, data_loader):
-        super(SICKEvaluator, self).__init__(model, data_loader)
+    def __init__(self, model, data_loader, cuda):
+        super(SICKEvaluator, self).__init__(model, data_loader, cuda)
 
     def get_scores(self):
         self.model.eval()
         predict_classes = torch.arange(1, 6)
+        if self.cuda:
+            predict_classes = predict_classes.cuda()
         test_kl_div_loss = 0
         predictions = []
         true_labels = []

@@ -32,16 +32,16 @@ class MPCNNDatasetFactory(object):
     Get the corresponding Dataset class for a particular dataset.
     """
     @staticmethod
-    def get_dataset(dataset_name, word_vectors_file, sample):
+    def get_dataset(dataset_name, word_vectors_file, cuda, sample):
         extra_args = {}
         if sample:
             sample_indices = list(range(sample))
             subset_random_sampler = data.sampler.SubsetRandomSampler(sample_indices)
             extra_args['sampler'] = subset_random_sampler
         if dataset_name == 'sick':
-            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN), batch_size=1, **extra_args)
-            test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST), batch_size=1, **extra_args)
-            dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV), batch_size=1, **extra_args)
+            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN, cuda), batch_size=1, **extra_args)
+            test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST, cuda), batch_size=1, **extra_args)
+            dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV, cuda), batch_size=1, **extra_args)
         elif dataset_name == 'msrvid':
             raise NotImplementedError('msrvid Dataset is not yet implemented.')
         else:
@@ -64,7 +64,7 @@ class MPCNNDataset(data.Dataset):
     dataset_root = None
     num_classes = None
 
-    def __init__(self, dataset_type):
+    def __init__(self, dataset_type, cuda):
         if not isinstance(dataset_type, DatasetType):
             raise ValueError('dataset_type ({}) must be of type DatasetType enum'.format(dataset_type))
 
@@ -78,6 +78,8 @@ class MPCNNDataset(data.Dataset):
         self.dataset_dir = os.path.join(self.dataset_root, subfolder)
         if not os.path.exists(self.dataset_dir):
             raise RuntimeError('{} does not exist'.format(self.dataset_dir))
+
+        self.cuda = cuda
 
     def initialize(self, word_index, embedding):
         """
@@ -114,7 +116,7 @@ class MPCNNDataset(data.Dataset):
         found_word_vecs = embedding(Variable(torch.LongTensor(found_emb_idx)))
         for i, v in enumerate(found_pos):
             sentence_embedding[:, v] = found_word_vecs[i].data
-        return sentence_embedding
+        return sentence_embedding.cuda() if self.cuda else sentence_embedding
 
     def __getitem__(self, idx):
         return self.sentences[idx], self.labels[idx]
@@ -128,8 +130,8 @@ class SICKDataset(MPCNNDataset):
     dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'sick')
     num_classes = 5
 
-    def __init__(self, dataset_type):
-        super(SICKDataset, self).__init__(dataset_type)
+    def __init__(self, dataset_type, cuda):
+        super(SICKDataset, self).__init__(dataset_type, cuda)
 
     def initialize(self, word_index, embedding):
         super(SICKDataset, self).initialize(word_index, embedding)
@@ -143,7 +145,7 @@ class SICKDataset(MPCNNDataset):
                 new_labels[i][floor - 1] = ceil - sim
                 new_labels[i][ceil - 1] = sim - floor
 
-        self.labels = new_labels
+        self.labels = new_labels.cuda() if self.cuda else new_labels
 
 
 class MSRVIDDataset(MPCNNDataset):
@@ -151,8 +153,8 @@ class MSRVIDDataset(MPCNNDataset):
     dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'msrvid')
     num_classes = 6
 
-    def __init__(self, dataset_type):
-        super(MSRVIDDataset, self).__init__(dataset_type)
+    def __init__(self, dataset_type, cuda):
+        super(MSRVIDDataset, self).__init__(dataset_type, cuda)
 
     def initialize(self, word_index, embedding):
         super(MSRVIDDataset, self).initialize(word_index, embedding)

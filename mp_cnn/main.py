@@ -55,30 +55,37 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch implementation of Multi-Perspective CNN')
     parser.add_argument('model_outfile', help='file to save final model')
     parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid]', default='sick')
-    parser.add_argument('--word_vectors_file', help='word vectors file', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe', 'glove.840B.300d.txt'))
+    parser.add_argument('--word-vectors-file', help='word vectors file', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe', 'glove.840B.300d.txt'))
     parser.add_argument('--skip-training', help='will load pre-trained model', action='store_true')
+    parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
     parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 10)')
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR', help='learning rate (default: 0.01)')
     parser.add_argument('--momentum', type=float, default=0.5, metavar='M', help='SGD momentum (default: 0.5)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N', help='how many batches to wait before logging training status')
     parser.add_argument('--sample', type=int, default=0, metavar='N', help='how many examples to take from each dataset, meant for quickly testing entire end-to-end pipeline (default: all)')
     parser.add_argument('--regularization', type=float, default=0.0001, metavar='REG', help='SGD regularization (default: 0.0001)')
-    parser.add_argument('--max_window_size', type=int, default=3, metavar='N', help='windows sizes will be [1,max_window_size] and infinity')
-    parser.add_argument('--holistic_filters', type=int, default=300, metavar='N', help='number of holistic filters')
-    parser.add_argument('--per_dim_filters', type=int, default=20, metavar='N', help='number of per-dimension filters')
-    parser.add_argument('--hidden_units', type=int, default=150, metavar='N', help='number of hidden units in each of the two hidden layers')
+    parser.add_argument('--max-window-size', type=int, default=3, metavar='N', help='windows sizes will be [1,max_window_size] and infinity')
+    parser.add_argument('--holistic-filters', type=int, default=300, metavar='N', help='number of holistic filters')
+    parser.add_argument('--per-dim-filters', type=int, default=20, metavar='N', help='number of per-dimension filters')
+    parser.add_argument('--hidden-units', type=int, default=150, metavar='N', help='number of hidden units in each of the two hidden layers')
+    parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
     args = parser.parse_args()
+    args.cuda = not args.no_cuda and torch.cuda.is_available()
 
-    torch.manual_seed(1234)
-    np.random.seed(1234)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if args.cuda:
+        torch.cuda.manual_seed(args.seed)
 
-    train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file, args.sample)
+    train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file, args.cuda, args.sample)
 
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, train_loader.dataset.num_classes)
+    if args.cuda:
+        model.cuda()
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.regularization)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader)
-    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.cuda)
+    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader, args.cuda)
 
     if not args.skip_training:
         epoch_times = []
