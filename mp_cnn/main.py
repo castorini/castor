@@ -48,22 +48,25 @@ def test(dev_evaluator, test_evaluator):
     logger.info('\t'.join([' '] + metric_names))
     logger.info('\t'.join(['dev'] + list(map(str, dev_scores))))
     logger.info('\t'.join(['test'] + list(map(str, test_scores))))
+    return dev_scores, test_scores
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch implementation of Multi-Perspective CNN')
+    parser.add_argument('model_outfile', help='file to save final model')
     parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid]', default='sick')
     parser.add_argument('--word_vectors_file', help='word vectors file', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe', 'glove.840B.300d.txt'))
+    parser.add_argument('--skip-training', help='will load pre-trained model', action='store_true')
     parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 10)')
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR', help='learning rate (default: 0.01)')
     parser.add_argument('--momentum', type=float, default=0.5, metavar='M', help='SGD momentum (default: 0.5)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N', help='how many batches to wait before logging training status')
     parser.add_argument('--sample', type=int, default=0, metavar='N', help='how many examples to take from each dataset, meant for quickly testing entire end-to-end pipeline (default: all)')
     parser.add_argument('--regularization', type=float, default=0.0001, metavar='REG', help='SGD regularization (default: 0.0001)')
+    parser.add_argument('--max_window_size', type=int, default=3, metavar='N', help='windows sizes will be [1,max_window_size] and infinity')
     parser.add_argument('--holistic_filters', type=int, default=300, metavar='N', help='number of holistic filters')
     parser.add_argument('--per_dim_filters', type=int, default=20, metavar='N', help='number of per-dimension filters')
     parser.add_argument('--hidden_units', type=int, default=150, metavar='N', help='number of hidden units in each of the two hidden layers')
-    parser.add_argument('--num_classes', type=int, default=5, metavar='N', help='number of classes of the label. SICK has 5 classes and MSRVID has 6.')
     args = parser.parse_args()
 
     torch.manual_seed(1234)
@@ -71,21 +74,31 @@ if __name__ == '__main__':
 
     train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_file, args.sample)
 
-    filter_widths = [1, 2, 3, np.inf]
-    model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, args.num_classes)
+    filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
+    model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, train_loader.dataset.num_classes)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.regularization)
     test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader)
     dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader)
 
-    epoch_times = []
-    for epoch in range(1, args.epochs + 1):
-        start = time.time()
-        logger.info('Epoch {} started...'.format(epoch))
-        train(model, optimizer, train_loader, epoch, args.sample, args.log_interval)
-        test(dev_evaluator, test_evaluator)
-        end = time.time()
-        duration = end - start
-        logger.info('Epoch {} finished in {:.2f} minutes'.format(epoch, duration / 60))
-        epoch_times.append(duration)
+    if not args.skip_training:
+        epoch_times = []
+        # TODO assuming the higher the score the better, this is not always true. Make more generic.
+        best_dev_score = -1
+        for epoch in range(1, args.epochs + 1):
+            start = time.time()
+            logger.info('Epoch {} started...'.format(epoch))
+            train(model, optimizer, train_loader, epoch, args.sample, args.log_interval)
+            dev_scores, test_scores = test(dev_evaluator, test_evaluator)
+            end = time.time()
+            duration = end - start
+            logger.info('Epoch {} finished in {:.2f} minutes'.format(epoch, duration / 60))
+            epoch_times.append(duration)
 
-    logger.info('Training and evaluation took {:.2f} minutes overall...'.format(sum(epoch_times) / 60))
+            if dev_scores[0] > best_dev_score:
+                best_dev_score = dev_scores[0]
+                torch.save(model, args.model_outfile)
+
+        logger.info('Training took {:.2f} minutes overall...'.format(sum(epoch_times) / 60))
+    else:
+        model = torch.load(args.model_outfile)
+        test(dev_evaluator, test_evaluator)

@@ -60,7 +60,9 @@ class MPCNNDataset(data.Dataset):
     train_folder = 'train'
     test_folder = 'test'
     dev_folder = 'dev'
-    dataset_root = None  # subclass will override this
+    # subclass will override fields below
+    dataset_root = None
+    num_classes = None
 
     def __init__(self, dataset_type):
         if not isinstance(dataset_type, DatasetType):
@@ -124,6 +126,7 @@ class MPCNNDataset(data.Dataset):
 class SICKDataset(MPCNNDataset):
 
     dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'sick')
+    num_classes = 5
 
     def __init__(self, dataset_type):
         super(SICKDataset, self).__init__(dataset_type)
@@ -146,6 +149,7 @@ class SICKDataset(MPCNNDataset):
 class MSRVIDDataset(MPCNNDataset):
 
     dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'msrvid')
+    num_classes = 6
 
     def __init__(self, dataset_type):
         super(MSRVIDDataset, self).__init__(dataset_type)
