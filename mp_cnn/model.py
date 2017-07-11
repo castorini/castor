@@ -13,22 +13,25 @@ class MPCNN(nn.Module):
         self.n_word_dim = n_word_dim
         self.n_per_dim_filters = n_per_dim_filters
         self.filter_widths = filter_widths
-        self.holistic_conv_layers = {}
-        self.per_dim_conv_layers = {}
+        holistic_conv_layers = []
+        per_dim_conv_layers = []
 
         for ws in filter_widths:
             if np.isinf(ws):
                 continue
 
-            self.holistic_conv_layers[ws] = nn.Sequential(
+            holistic_conv_layers.append(nn.Sequential(
                 nn.Conv1d(n_word_dim, n_holistic_filters, ws),
                 nn.Tanh()
-            )
+            ))
 
-            self.per_dim_conv_layers[ws] = nn.Sequential(
+            per_dim_conv_layers.append(nn.Sequential(
                 nn.Conv1d(n_word_dim, n_word_dim * n_per_dim_filters, ws, groups=n_word_dim),
                 nn.Tanh()
-            )
+            ))
+
+        self.holistic_conv_layers = nn.ModuleList(holistic_conv_layers)
+        self.per_dim_conv_layers = nn.ModuleList(per_dim_conv_layers)
 
         # compute number of inputs to first hidden layer
         COMP_1_COMPONENTS, COMP_2_COMPONENTS = 3, 2
@@ -47,7 +50,7 @@ class MPCNN(nn.Module):
         block_a = {}
         block_b = {}
         for ws in self.filter_widths:
-            holistic_conv_out = self.holistic_conv_layers[ws](sent) if not np.isinf(ws) else sent
+            holistic_conv_out = self.holistic_conv_layers[ws - 1](sent) if not np.isinf(ws) else sent
             block_a[ws] = {
                 'max': F.max_pool1d(holistic_conv_out, holistic_conv_out.size()[2]).view(-1, self.n_word_dim),
                 'min': F.max_pool1d(-1 * holistic_conv_out, holistic_conv_out.size()[2]).view(-1, self.n_word_dim),
@@ -58,7 +61,7 @@ class MPCNN(nn.Module):
             if np.isinf(ws):
                 continue
 
-            per_dim_conv_out = self.per_dim_conv_layers[ws](sent)
+            per_dim_conv_out = self.per_dim_conv_layers[ws - 1](sent)
             block_b[ws] = {
                 'max': F.max_pool1d(per_dim_conv_out, per_dim_conv_out.size()[2]).view(-1, self.n_word_dim, self.n_per_dim_filters),
                 'min': F.max_pool1d(-1 * per_dim_conv_out, per_dim_conv_out.size()[2]).view(-1, self.n_word_dim, self.n_per_dim_filters)
