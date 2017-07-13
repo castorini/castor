@@ -34,6 +34,7 @@ class MPCNNDatasetFactory(object):
     @staticmethod
     def get_dataset(dataset_name, word_vectors_file, batch_size, cuda, sample):
         extra_args = {'shuffle': True}
+        dev_loader = None
         if sample:
             sample_indices = list(range(sample))
             subset_random_sampler = data.sampler.SubsetRandomSampler(sample_indices)
@@ -44,7 +45,8 @@ class MPCNNDatasetFactory(object):
             test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST, cuda), batch_size=batch_size, **extra_args)
             dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV, cuda), batch_size=batch_size, **extra_args)
         elif dataset_name == 'msrvid':
-            raise NotImplementedError('msrvid Dataset is not yet implemented.')
+            train_loader = torch.utils.data.DataLoader(MSRVIDDataset(DatasetType.TRAIN, cuda), batch_size=batch_size, **extra_args)
+            test_loader = torch.utils.data.DataLoader(MSRVIDDataset(DatasetType.TEST, cuda), batch_size=batch_size, **extra_args)
         else:
             raise ValueError('{} is not a valid dataset.'.format(dataset_name))
 
@@ -53,7 +55,8 @@ class MPCNNDatasetFactory(object):
 
         train_loader.dataset.initialize(word_index, embedding)
         test_loader.dataset.initialize(word_index, embedding)
-        dev_loader.dataset.initialize(word_index, embedding)
+        if dev_loader is not None:
+            dev_loader.dataset.initialize(word_index, embedding)
         return train_loader, test_loader, dev_loader
 
 
@@ -147,8 +150,7 @@ class SICKDataset(MPCNNDataset):
 
     def initialize(self, word_index, embedding):
         super(SICKDataset, self).initialize(word_index, embedding)
-        # convert label to 5 probability classes
-        new_labels = torch.zeros(self.__len__(), 5)
+        new_labels = torch.zeros(self.__len__(), self.num_classes)
         for i, sim in enumerate(self.labels):
             ceil, floor = math.ceil(sim), math.floor(sim)
             if ceil == floor:
@@ -170,3 +172,13 @@ class MSRVIDDataset(MPCNNDataset):
 
     def initialize(self, word_index, embedding):
         super(MSRVIDDataset, self).initialize(word_index, embedding)
+        new_labels = torch.zeros(self.__len__(), self.num_classes)
+        for i, sim in enumerate(self.labels):
+            ceil, floor = math.ceil(sim), math.floor(sim)
+            if ceil == floor:
+                new_labels[i][floor] = 1
+            else:
+                new_labels[i][floor] = ceil - sim
+                new_labels[i][ceil] = sim - floor
+
+        self.labels = new_labels.cuda() if self.cuda else new_labels
