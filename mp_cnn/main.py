@@ -38,7 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch-size', type=int, default=64, metavar='N', help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 10)')
     parser.add_argument('--lr', type=float, default=0.001, metavar='LR', help='learning rate (default: 0.001)')
-    parser.add_argument('--momentum', type=float, default=0.5, metavar='M', help='SGD momentum (default: 0.5)')
+    parser.add_argument('--epsilon', type=float, default=1e-8, metavar='M', help='Adam epsilon (default: 1e-8)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N', help='how many batches to wait before logging training status')
     parser.add_argument('--sample', type=int, default=0, metavar='N', help='how many examples to take from each dataset, meant for quickly testing entire end-to-end pipeline (default: all)')
     parser.add_argument('--regularization', type=float, default=0.0001, metavar='REG', help='Regularization for the optimizer (default: 0.0001)')
@@ -61,8 +61,7 @@ if __name__ == '__main__':
     model = MPCNN(300, args.holistic_filters, args.per_dim_filters, filter_widths, args.hidden_units, train_loader.dataset.num_classes)
     if args.cuda:
         model.cuda()
-    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.regularization)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.cuda)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.regularization, eps=args.epsilon)
     dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader, args.batch_size, args.cuda)
 
     trainer = MPCNNTrainerFactory.get_trainer(args.dataset, model, optimizer, train_loader, args.batch_size, args.sample, args.log_interval, args.model_outfile, dev_evaluator)
@@ -72,6 +71,7 @@ if __name__ == '__main__':
     else:
         model = torch.load(args.model_outfile)
 
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.cuda)
     scores, metric_names = test_evaluator.get_scores()
     logger.info('Evaluation metrics for test')
     logger.info('\t'.join([' '] + metric_names))
