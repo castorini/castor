@@ -10,6 +10,9 @@ class MPCNNEvaluatorFactory(object):
     """
     @staticmethod
     def get_evaluator(dataset_name, model, data_loader, batch_size, cuda):
+        if data_loader is None:
+            return None
+
         if dataset_name == 'sick':
             return SICKEvaluator(model, data_loader, batch_size, cuda)
         elif dataset_name == 'msrvid':
