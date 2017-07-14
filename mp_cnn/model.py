@@ -34,7 +34,7 @@ class MPCNN(nn.Module):
         self.per_dim_conv_layers = nn.ModuleList(per_dim_conv_layers)
 
         # compute number of inputs to first hidden layer
-        COMP_1_COMPONENTS, COMP_2_COMPONENTS = 3, 2
+        COMP_1_COMPONENTS, COMP_2_COMPONENTS = 2 + n_word_dim, 2
         n_feat_h = 3 * len(self.filter_widths) * COMP_2_COMPONENTS
         n_feat_v = 3 * (len(self.filter_widths) ** 2) * COMP_1_COMPONENTS + 2 * (len(self.filter_widths) - 1) * n_per_dim_filters * COMP_1_COMPONENTS
         n_feat = n_feat_h + n_feat_v
@@ -89,7 +89,7 @@ class MPCNN(nn.Module):
                     x2 = sent2_block_a[ws2][pool]
                     comparison_feats.append(F.cosine_similarity(x1, x2).view(batch_size, 1))
                     comparison_feats.append(F.pairwise_distance(x1, x2))
-                    comparison_feats.append(torch.abs(x1 - x2).sum(dim=1).view(batch_size, 1))
+                    comparison_feats.append(torch.abs(x1 - x2))
 
         for pool in ('max', 'min'):
             ws_no_inf = [w for w in self.filter_widths if not np.isinf(w)]
@@ -101,7 +101,7 @@ class MPCNN(nn.Module):
                     x2 = oG_2B[:, :, i]
                     comparison_feats.append(F.cosine_similarity(x1, x2).view(batch_size, 1))
                     comparison_feats.append(F.pairwise_distance(x1, x2))
-                    comparison_feats.append(torch.abs(x1 - x2).sum(dim=1).view(batch_size, 1))
+                    comparison_feats.append(torch.abs(x1 - x2))
 
         return torch.cat(comparison_feats, dim=1)
 
