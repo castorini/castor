@@ -114,7 +114,7 @@ class MPCNNDataset(data.Dataset):
         data = []
         with open(os.path.join(dataset_dir, fname), 'r') as f:
             for line in f:
-                stripped_line = line.rstrip()
+                stripped_line = line.rstrip('.\n')
                 item = type_converter(stripped_line)
                 data.append(item)
         return data

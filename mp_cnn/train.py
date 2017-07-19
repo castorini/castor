@@ -25,11 +25,11 @@ class MPCNNTrainerFactory(object):
     Get the corresponding Trainer class for a particular dataset.
     """
     @staticmethod
-    def get_trainer(dataset_name, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, dev_evaluator=None):
+    def get_trainer(dataset_name, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator=None):
         if dataset_name == 'sick':
-            return SICKTrainer(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, dev_evaluator)
+            return SICKTrainer(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator)
         elif dataset_name == 'msrvid':
-            return MSRVIDTrainer(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, dev_evaluator)
+            return MSRVIDTrainer(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator)
         else:
             raise ValueError('{} is not a valid dataset.'.format(dataset_name))
 
@@ -40,7 +40,7 @@ class Trainer(object):
     Abstraction for training a model on a Dataset.
     """
 
-    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, dev_evaluator=None):
+    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator=None):
         self.model = model
         self.optimizer = optimizer
         self.train_loader = train_loader
@@ -48,6 +48,8 @@ class Trainer(object):
         self.sample = sample
         self.log_interval = log_interval
         self.model_outfile = model_outfile
+        self.train_evaluator = train_evaluator
+        self.test_evaluator = test_evaluator
         self.dev_evaluator = dev_evaluator
 
     def evaluate(self, evaluator, dataset_name):
@@ -66,17 +68,19 @@ class Trainer(object):
 
 class SICKTrainer(Trainer):
 
-    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, dev_evaluator=None):
-        super(SICKTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, dev_evaluator)
+    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator=None):
+        super(SICKTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator)
 
     def train_epoch(self, epoch):
         self.model.train()
+        total_loss = 0
         for batch_idx, (sentences, labels) in enumerate(self.train_loader):
             sent_a, sent_b = Variable(sentences['a']), Variable(sentences['b'])
             labels = Variable(labels)
             self.optimizer.zero_grad()
             output = self.model(sent_a, sent_b)
             loss = F.kl_div(output, labels)
+            total_loss += loss.data[0]
             loss.backward()
             self.optimizer.step()
             if batch_idx % self.log_interval == 0:
@@ -85,8 +89,10 @@ class SICKTrainer(Trainer):
                     len(self.train_loader.dataset) if not self.sample else self.sample,
                     100. * batch_idx / (len(self.train_loader) if not self.sample else math.ceil(self.sample / self.batch_size)), loss.data[0])
                 )
+        return total_loss
 
     def train(self, epochs):
+        scheduler = ReduceLROnPlateau(self.optimizer, mode='max', factor=0.3, patience=2)
         epoch_times = []
         best_dev_score = -1
         for epoch in range(1, epochs + 1):
@@ -103,12 +109,15 @@ class SICKTrainer(Trainer):
             if dev_scores[0] > best_dev_score:
                 best_dev_score = dev_scores[0]
                 torch.save(self.model, self.model_outfile)
+            scheduler.step(dev_scores[0])
 
         logger.info('Training took {:.2f} minutes overall...'.format(sum(epoch_times) / 60))
 
 
-
 class MSRVIDTrainer(Trainer):
+
+    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator=None):
+        super(MSRVIDTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator)
 
     def train_epoch(self, epoch):
         self.model.train()
@@ -139,10 +148,11 @@ class MSRVIDTrainer(Trainer):
                     100. * batch_idx / (len(self.train_loader) if not self.sample else math.ceil(self.sample / self.batch_size)), loss.data[0])
                 )
 
+        self.evaluate(self.train_evaluator, 'train')
         return left_out_val_a, left_out_val_b, left_out_val_labels
 
     def train(self, epochs):
-        scheduler = ReduceLROnPlateau(self.optimizer, mode='max', factor=0.5)
+        scheduler = ReduceLROnPlateau(self.optimizer, mode='max', factor=0.3, patience=2)
         epoch_times = []
         best_dev_score = -1
         for epoch in range(1, epochs + 1):
@@ -162,7 +172,7 @@ class MSRVIDTrainer(Trainer):
             true_labels = true_labels.cpu().numpy()
             pearson_r = pearsonr(predictions, true_labels)[0]
             for param_group in self.optimizer.param_groups:
-                logger.info('Validation size: %s Pearson\'s R: %s', output.size()[0], pearson_r)
+                logger.info('Validation size: %s Pearson\'s r: %s', output.size()[0], pearson_r)
                 logger.info('Learning rate: %s', param_group['lr'])
                 break
             scheduler.step(pearson_r)
@@ -175,5 +185,7 @@ class MSRVIDTrainer(Trainer):
             if pearson_r > best_dev_score:
                 best_dev_score = pearson_r
                 torch.save(self.model, self.model_outfile)
+
+            self.evaluate(self.test_evaluator, 'test')
 
         logger.info('Training took {:.2f} minutes overall...'.format(sum(epoch_times) / 60))

@@ -62,15 +62,21 @@ if __name__ == '__main__':
     if args.cuda:
         model.cuda()
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.regularization, eps=args.epsilon)
+    train_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, train_loader, args.batch_size, args.cuda)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.cuda)
     dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader, args.batch_size, args.cuda)
 
-    trainer = MPCNNTrainerFactory.get_trainer(args.dataset, model, optimizer, train_loader, args.batch_size, args.sample, args.log_interval, args.model_outfile, dev_evaluator)
+    trainer = MPCNNTrainerFactory.get_trainer(args.dataset, model, optimizer, train_loader, args.batch_size, args.sample, args.log_interval, args.model_outfile, train_evaluator, test_evaluator, dev_evaluator)
 
     if not args.skip_training:
+        total_params = 0
+        for param in model.parameters():
+            size = [s for s in param.size()]
+            total_params += np.prod(size)
+        logger.info('Total number of parameters: %s', total_params)
         trainer.train(args.epochs)
-    else:
-        model = torch.load(args.model_outfile)
 
+    model = torch.load(args.model_outfile)
     test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.cuda)
     scores, metric_names = test_evaluator.get_scores()
     logger.info('Evaluation metrics for test')
