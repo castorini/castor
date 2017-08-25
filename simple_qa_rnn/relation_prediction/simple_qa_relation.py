@@ -1,20 +1,13 @@
 import os
+import torch
 
 from torchtext import data
-
-# most basic tokenizer - split on whitespace
-def my_tokenizer():
-    return lambda text: [tok for tok in text.split()]
 
 class SimpleQaRelationDataset(data.ZipDataset, data.TabularDataset):
 
     url = 'https://www.dropbox.com/s/tohrsllcfy7rch4/SimpleQuestions_v2.tgz'
     filename = 'SimpleQuestions_v2.tgz'
     dirname = 'SimpleQuestions_v2'
-
-    @staticmethod
-    def sort_key(ex):
-        return len(ex.question)
 
     @classmethod
     def splits(cls, text_field, label_field, root='../data',
@@ -43,8 +36,8 @@ class SimpleQaRelationDataset(data.ZipDataset, data.TabularDataset):
                 )
 
     @classmethod
-    def iters(cls, batch_size=32, device=0, root='.', wv_dir='.',
-                                wv_type=None, wv_dim='300d', **kwargs):
+    def iters(cls, args=None, questions=None, relations=None, train=None, dev=None, test=None, shuffleTrain=True,
+              batch_size=32, device=0, root='.', wv_dir='.', wv_type=None, wv_dim='300d', **kwargs):
         """Create iterator objects for splits of the Simple QA dataset.
         This is the simplest way to use the dataset, and assumes common
         defaults for field, vocabulary, and iterator parameters.
@@ -60,13 +53,25 @@ class SimpleQaRelationDataset(data.ZipDataset, data.TabularDataset):
                 train.dataset.fields['text'].vocab.vectors.
             Remaining keyword arguments: Passed to the splits method.
         """
-        TEXT = data.Field(tokenize=my_tokenizer())
-        LABEL = data.Field(sequential=False)
 
-        train, val, test = cls.splits(TEXT, LABEL, root=root, **kwargs)
+        # build vocab for questions
+        questions.build_vocab(train, dev, test)
 
-        TEXT.build_vocab(train, wv_dir=wv_dir, wv_type=wv_type, wv_dim=wv_dim)
-        LABEL.build_vocab(train)
+        # load word vectors if already saved or else load it from start and save it
+        if os.path.isfile(args.vector_cache):
+            questions.vocab.vectors = torch.load(args.vector_cache)
+        else:
+            questions.vocab.load_vectors(wv_dir=args.data_cache, wv_type=args.word_vectors, wv_dim=args.d_embed)
+            os.makedirs(os.path.dirname(args.vector_cache), exist_ok=True)
+            torch.save(questions.vocab.vectors, args.vector_cache)
 
-        return data.BucketIterator.splits(
-            (train, val, test), batch_size=batch_size, device=device)
+        # build vocab for relations
+        relations.build_vocab(train, dev, test)
+
+        # create iterators
+        train_iter = data.Iterator(train, batch_size=args.batch_size, device=args.gpu, train=True, repeat=False,
+                                   sort=False, shuffle=shuffleTrain)
+        dev_iter = data.Iterator(dev, batch_size=args.batch_size, device=args.gpu, train=False, sort=False)
+        test_iter = data.Iterator(test, batch_size=args.batch_size, device=args.gpu, train=False, sort=False)
+
+        return (train_iter, dev_iter, test_iter)
