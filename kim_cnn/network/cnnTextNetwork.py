@@ -103,6 +103,9 @@ class cnnTextNetwork(Configurable):
     acc_sents = 0 # count sents number for one log_interval
 
     epoch = 0
+    best_accuracy = 0
+    best_model = 0
+
     while True:
       for batch in self.train_minibatch():
         self.model.train()
@@ -144,6 +147,7 @@ class cnnTextNetwork(Configurable):
           print("## Validation: %5.2f" % (accuracy))
           if accuracy > best_score:
             best_score = accuracy
+            best_model = epoch
             valid_accuracy = accuracy
             print("## Update Model ##")
             torch.save(self.model, self.save_model_file)
@@ -152,6 +156,17 @@ class cnnTextNetwork(Configurable):
 
       epoch += 1
       accuracy = float(acc_corrects) / float(acc_sents) * 100
+
+      # if the new accuracy is better than the old accuracy by 1e-3
+      if accuracy - best_accuracy > 0.01:
+        best_accuracy = accuracy
+        best_model = epoch
+
+      # stop training if the accuracy remains the same over 5 epochs
+      if (epoch - best_model) >= 5:
+        print('No improvement since the last {} epochs. Stopping training'.format(epoch - best_model))
+        break
+
       print("[EPOCH] %d Accuracy: %5.2f" % (epoch, accuracy))
       acc_corrects = 0
       acc_sents = 0
