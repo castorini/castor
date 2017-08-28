@@ -147,7 +147,6 @@ class cnnTextNetwork(Configurable):
           print("## Validation: %5.2f" % (accuracy))
           if accuracy > best_score:
             best_score = accuracy
-            best_model = epoch
             valid_accuracy = accuracy
             print("## Update Model ##")
             torch.save(self.model, self.save_model_file)
