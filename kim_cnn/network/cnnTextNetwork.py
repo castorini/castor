@@ -156,8 +156,8 @@ class cnnTextNetwork(Configurable):
       epoch += 1
       accuracy = float(acc_corrects) / float(acc_sents) * 100
 
-      # if the new accuracy is better than the old accuracy by 1e-3
-      if accuracy - best_accuracy > 0.01:
+      # if the new accuracy is better than the old accuracy by 1e-3%
+      if accuracy - best_accuracy > 0.1:
         best_accuracy = accuracy
         best_model = epoch
 
