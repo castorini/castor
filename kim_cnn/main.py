@@ -19,7 +19,7 @@ if __name__=='__main__':
   argparser.add_argument('--test', action='store_true')
   argparser.add_argument('--load', action='store_true')
   argparser.add_argument('--seed', help='Random seed', type=int, default=3435)
-  argparser.add_argument('--num_threads', help='The number of threads to sue', type=int, default=4)
+  argparser.add_argument('--num_threads', help='The number of threads to use', type=int, default=4)
 
   args, extra_args = argparser.parse_known_args()
   # args.train = True/False ...
