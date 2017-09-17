@@ -17,7 +17,6 @@ class SmPlusPlus(nn.Module):
 
         print(questions_num, words_dim)
         n_classes = 2
-        Ks = 1
         ext_feats_size = 4
 
         if self.mode == 'multichannel':
@@ -36,16 +35,16 @@ class SmPlusPlus(nn.Module):
         self.conv_a = nn.Conv2d(input_channel, output_channel, (filter_width, words_dim), padding=(filter_width - 1, 0))
 
         self.dropout = nn.Dropout(config.dropout)
-        self.fc1 = nn.Linear(Ks * output_channel, target_class)
-        n_hidden = 2 * output_channel + (0 if self.use_ext else ext_feats_size)
+        # n_hidden = 2 * output_channel + (0 if self.use_ext else ext_feats_size)
 
+        n_hidden = 2 * output_channel
         self.hidden = nn.Linear(n_hidden, n_classes)
         self.logsoftmax = nn.LogSoftmax()
 
     def forward(self, x):
         x_question = x.question
         x_answer = x.answer
-        x_ext = x.ext
+        x_ext = x.ext_feat
 
         # this mode need not be tried
         if self.mode == 'rand':
@@ -55,20 +54,20 @@ class SmPlusPlus(nn.Module):
             x = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in x]  # max-over-time pooling
         # this is the actual SM model mode
         elif self.mode == 'static':
-            question = self.static_embed(x_question)
-            answer = self.static_embed(x_answer) # (batch, sent_len, embed_dim)
+            question = self.static_question_embed(x_question)
+            answer = self.static_answer_embed(x_answer) # (batch, sent_len, embed_dim)
             x = [F.tanh(self.conv_q(question)).squeeze(3), F.tanh(self.conv_a(answer)).squeeze(3)]
             x = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in x]  # max-over-time pooling
         elif self.mode == 'non-static':
-            question = self.non_static_embed(x_question)
-            answer = self.non_static_embed(x_answer) # (batch, sent_len, embed_dim)
+            question = self.nonstatic_question_embed(x_question)
+            answer = self.nonstatic_answer_embed(x_answer) # (batch, sent_len, embed_dim)
             x = [F.tanh(self.conv_q(question)).squeeze(3), F.tanh(self.conv_a(answer)).squeeze(3)]
             x = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in x]  # max-over-time pooling
         elif self.mode == 'multichannel':
-            question_static = self.static_embed(x_question)
-            answer_static = self.static_embed(x_answer)
-            question_nonstatic = self.non_static_embed(x_question)
-            answer_nonstatic = self.non_static_embed(x_answer)
+            question_static = self.static_question_embed(x_question)
+            answer_static = self.static_answer_embed(x_answer)
+            question_nonstatic = self.nonstatic_question_embed(x_question)
+            answer_nonstatic = self.nonstatic_answer_embed(x_answer)
             question = torch.stack([question_static, question_nonstatic], dim=1)
             answer = torch.stack([answer_static, answer_nonstatic], dim=1)
             x = [F.tanh(self.conv_q(question)).squeeze(3), F.tanh(self.conv_a(answer)).squeeze(3)]
@@ -77,11 +76,10 @@ class SmPlusPlus(nn.Module):
             print("Unsupported Mode")
             exit()
 
-        if x_ext:
-            x = torch.cat(x, x_ext)
-
+        x = torch.cat(x, 1)
+        # if x_ext:
+        #     x = torch.cat([x, x_ext], 1)
         x = self.dropout(x)
-        x = self.fc1(x) # (batch, target_size)
         x = self.hidden(x)
         logit = self.logsoftmax(x)
 

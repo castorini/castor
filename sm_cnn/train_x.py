@@ -54,6 +54,7 @@ EXTERNAL = data.Field(batch_first=True)
 LABEL = data.Field(sequential=False)
 train, dev, test = TrecDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
 
+QID.build_vocab(train)
 QUESTION.build_vocab(train, min_freq=2)
 ANSWER.build_vocab(train, min_freq=2)
 EXTERNAL.build_vocab(train, min_freq=2)
@@ -137,7 +138,6 @@ while True:
         n_total += batch.batch_size
         train_acc = 100. * n_correct / n_total
 
-        # shouldn't these be after the early stop?
         loss = criterion(scores, batch.label)
         loss.backward()
 
