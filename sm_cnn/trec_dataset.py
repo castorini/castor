@@ -12,5 +12,5 @@ class TrecDataset(data.TabularDataset):
         return super(TrecDataset, cls).splits(
             os.path.join(path, prefix_name), train, validation, test,
             format='TSV', fields=[('qid', question_id), ('label', label_field), ('question', question_field),
-                                  ('answer', answer_field), ('ext_feat', external_field), ]
+                                  ('answer', answer_field), ('ext_feat', external_field)]
         )
