@@ -26,4 +26,3 @@ def evaluate(instances):
     map = float(lines[0].strip().split()[-1])
     mrr = float(lines[1].strip().split()[-1])
     return map, mrr
-

@@ -71,7 +71,7 @@ QID.build_vocab(train, dev, test)
 QUESTION.build_vocab(train, dev, test)
 ANSWER.build_vocab(train, dev, test)
 EXTERNAL.build_vocab(train, dev, test)
-LABEL.build_vocab(train)
+LABEL.build_vocab(train, dev, test)
 
 
 QUESTION = set_vectors(QUESTION, args.vector_cache)
