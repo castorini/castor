@@ -31,15 +31,16 @@ def set_vectors(field, vector_path):
     return field
 
 
-def regularize_loss(self, loss):
+def regularize_loss(model, loss):
     flattened_params = []
+    reg = 1e-5
 
-    for p in self.model.parameters():
+    for p in model.parameters():
         f = p.data.clone()
         flattened_params.append(f.view(-1))
 
     fp = torch.cat(flattened_params)
-    loss = loss + 0.5 * self.reg * fp.norm() * fp.norm()
+    loss = loss + 0.5 * reg * fp.norm() * fp.norm()
     return loss
 
 # Set default configuration in : args.py
@@ -62,13 +63,13 @@ random.seed(args.seed)
 QID = data.Field(sequential=False)
 QUESTION = data.Field(batch_first=True)
 ANSWER = data.Field(batch_first=True)
-EXTERNAL = data.Field(batch_first=True)
+EXTERNAL = data.Field(sequential=False)
 LABEL = data.Field(sequential=False)
 train, dev, test = TrecDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
 
 QID.build_vocab(train, dev, test)
-QUESTION.build_vocab(train)
-ANSWER.build_vocab(train)
+QUESTION.build_vocab(train, dev, test)
+ANSWER.build_vocab(train, dev, test)
 EXTERNAL.build_vocab(train, dev, test)
 LABEL.build_vocab(train)
 
@@ -154,6 +155,7 @@ while True:
         train_acc = 100. * n_correct / n_total
 
         loss = criterion(scores, batch.label)
+        loss = regularize_loss(model, loss)
         loss.backward()
         optimizer.step()
 

@@ -48,6 +48,7 @@ class SmPlusPlus(nn.Module):
         x_question = x.question
         x_answer = x.answer
         x_ext = x.ext_feat
+        x_ext = self.static_external_embed(x_ext)
 
         if self.mode == 'rand':
             question = self.embed(x_question).unsqueeze(1)
@@ -80,10 +81,7 @@ class SmPlusPlus(nn.Module):
 
         if self.use_ext:
             x.append(x_ext)
-            print(x)
-            x = torch.cat(x, dim=1)
-        else:
-            x = torch.cat(x, 1)
+        x = torch.cat(x, 1)
 
         x = F.tanh(self.combined_feature_vector(x))
         x = self.dropout(x)
