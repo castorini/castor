@@ -36,7 +36,6 @@ class MPCNN(nn.Module):
 
         # compute number of inputs to first hidden layer
         COMP_1_COMPONENTS_HOLISTIC, COMP_1_COMPONENTS_PER_DIM, COMP_2_COMPONENTS = 2 + n_holistic_filters, 2 + n_word_dim, 2
-        EXT_FEATS = 4
         n_feat_h = 3 * len(self.filter_widths) * COMP_2_COMPONENTS
         n_feat_v = (
             # comparison units from holistic conv for min, max, mean pooling for non-infinite widths
