@@ -1,16 +1,11 @@
 import argparse
-import math
 import os
-import time
 
 import numpy as np
-from scipy.stats import pearsonr, spearmanr
 import torch
-import torch.nn.functional as F
-from torch.autograd import Variable
 import torch.optim as optim
 
-from dataset import DatasetType, MPCNNDatasetFactory
+from dataset import MPCNNDatasetFactory
 from evaluation import MPCNNEvaluatorFactory
 from model import MPCNN
 from train import MPCNNTrainerFactory

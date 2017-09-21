@@ -4,7 +4,6 @@ import time
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
-import torch.optim as optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from scipy.stats import pearsonr, spearmanr
 
