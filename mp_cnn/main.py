@@ -31,7 +31,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch implementation of Multi-Perspective CNN')
     parser.add_argument('model_outfile', help='file to save final model')
     parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid]', default='sick')
-    parser.add_argument('--word-vectors-file', help='word vectors file', default=os.path.join(os.pardir, 'data', 'GloVe', 'glove.840B.300d.txt'))
+    parser.add_argument('--word-vectors-file', help='word vectors file', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe', 'glove.840B.300d.txt'))
     parser.add_argument('--skip-training', help='will load pre-trained model', action='store_true')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training (default: false)')
     parser.add_argument('--batch-size', type=int, default=64, help='input batch size for training (default: 64)')

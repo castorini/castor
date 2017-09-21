@@ -70,8 +70,8 @@ class Trainer(object):
 
 class SICKTrainer(Trainer):
 
-    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator=None):
-        super(SICKTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator)
+    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, lr_reduce_factor, patience, train_evaluator, test_evaluator, dev_evaluator=None):
+        super(SICKTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, lr_reduce_factor, patience, train_evaluator, test_evaluator, dev_evaluator)
 
     def train_epoch(self, epoch):
         self.model.train()
@@ -121,8 +121,8 @@ class SICKTrainer(Trainer):
 
 class MSRVIDTrainer(Trainer):
 
-    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator=None):
-        super(MSRVIDTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, train_evaluator, test_evaluator, dev_evaluator)
+    def __init__(self, model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, lr_reduce_factor, patience, train_evaluator, test_evaluator, dev_evaluator=None):
+        super(MSRVIDTrainer, self).__init__(model, optimizer, train_loader, batch_size, sample, log_interval, model_outfile, lr_reduce_factor, patience, train_evaluator, test_evaluator, dev_evaluator)
 
     def train_epoch(self, epoch):
         self.model.train()
