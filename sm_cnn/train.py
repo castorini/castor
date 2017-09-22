@@ -144,7 +144,6 @@ while True:
     epoch += 1
     train_iter.init_epoch()
     n_correct, n_total = 0, 0
-    instance = []
 
     for batch_idx, batch in enumerate(train_iter):
         iterations += 1
@@ -165,6 +164,7 @@ while True:
             model.eval(); dev_iter.init_epoch()
             n_dev_correct = 0
             dev_losses = []
+            instance = []
             for dev_batch_idx, dev_batch in enumerate(dev_iter):
                 qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
                 true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]

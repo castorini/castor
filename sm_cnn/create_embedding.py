@@ -37,6 +37,5 @@ if __name__ == '__main__':
     parser.add_argument('--input', type=str, required=True)
     parser.add_argument('--vocab', type=str, required=True)
 
-
     args = parser.parse_args()
     convert(args.input, args.vocab)

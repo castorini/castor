@@ -86,6 +86,6 @@ class SmPlusPlus(nn.Module):
         x = F.tanh(self.combined_feature_vector(x))
         x = self.dropout(x)
         x = self.hidden(x)
-        logit = self.softmax(x)
+        # logit = self.softmax(x)
 
-        return logit
+        return x
