@@ -123,17 +123,17 @@ class MPCNNDataset(data.Dataset):
 
             tokens_a_set, tokens_b_set = set(sent_a_tokens[i]), set(sent_b_tokens[i])
             intersect = tokens_a_set & tokens_b_set
-            overlap = len(intersect) / len(tokens_a_set | tokens_b_set)
-            idf = 1 / np.prod([word_to_doc_cnt[w] for w in intersect])
-            idf_weighted_overlap = overlap * idf
+            overlap = len(intersect) / (len(tokens_a_set) + len(tokens_b_set))
+            df_overlap = sum(word_to_doc_cnt[w] for w in intersect)
+            df_weighted_overlap = df_overlap / (len(tokens_a_set) + len(tokens_b_set))
 
             tokens_a_set_no_stop = set(w for w in sent_a_tokens[i] if w not in stoplist)
             tokens_b_set_no_stop = set(w for w in sent_b_tokens[i] if w not in stoplist)
             intersect_no_stop = tokens_a_set_no_stop & tokens_b_set_no_stop
-            overlap_no_stop = len(intersect_no_stop) / len(tokens_a_set_no_stop | tokens_b_set_no_stop)
-            idf_no_stop = 1 / np.prod([word_to_doc_cnt[w] for w in intersect_no_stop])
-            idf_weighted_overlap_no_stop = overlap_no_stop * idf_no_stop
-            ext_feats = torch.Tensor([overlap, idf_weighted_overlap, overlap_no_stop, idf_weighted_overlap_no_stop])
+            overlap_no_stop = len(intersect_no_stop) / (len(tokens_a_set_no_stop) + len(tokens_b_set_no_stop))
+            df_no_stop = sum(word_to_doc_cnt[w] for w in intersect_no_stop)
+            df_weighted_overlap_no_stop = df_no_stop / (len(tokens_a_set_no_stop) + len(tokens_b_set_no_stop))
+            ext_feats = torch.Tensor([overlap, df_weighted_overlap, overlap_no_stop, df_weighted_overlap_no_stop])
             ext_feats = ext_feats.cuda() if self.cuda else ext_feats
             sent_pair['ext_feats'] = ext_feats
 
