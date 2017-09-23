@@ -12,7 +12,7 @@ def sst_tokenize(sentence):
     return words
 
 class SSTDataLoader(object):
-    def __init__(dirname, fmt="stsa.fine.{}", word2vec_file="word2vec.sst-1"):
+    def __init__(self, dirname, fmt="stsa.fine.{}", word2vec_file="word2vec.sst-1"):
         self.dirname = dirname
         self.fmt = fmt
         self.word2vec_file = word2vec_file
@@ -33,7 +33,7 @@ class SSTDataLoader(object):
                 for word in sst_tokenize(line):
                     if word not in id_dict and word not in unk_vocab_set:
                         unk_vocab_set.add(word)
-        return (id_dict, weights, list(unk_vocab_set))
+        return (id_dict, np.array(weights), list(unk_vocab_set))
 
     def load_sst_sets(self):
         set_names = ["phrases.train", "dev", "test"]
