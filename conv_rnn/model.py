@@ -10,7 +10,8 @@ class ConvRNNModel(nn.Module):
         embedding_dim = word_model.dim
         self.word_model = word_model
         self.hidden_size = config.get("hidden_size", 150)
-        self.batch_size = config.get("batch_size", 16)
+        fc_size = config.get("fc_size", 200)
+        self.batch_size = config.get("mbatch_size", 16)
         dropout = config.get("dropout_prob", 0.1)
         n_fmaps = config.get("n_feature_maps", 200)
         self.rnn_type = config.get("rnn_type", "LSTM")
@@ -26,8 +27,8 @@ class ConvRNNModel(nn.Module):
             raise ValueError
         self.conv = nn.Conv2d(1, n_fmaps, (1, self.hidden_size * 2))
         self.dropout = nn.Dropout(dropout)
-        self.fc1 = nn.Linear(n_fmaps + 2 * self.hidden_size, 300)
-        self.fc2 = nn.Linear(300, config.get("n_labels", 5))
+        self.fc1 = nn.Linear(n_fmaps + 2 * self.hidden_size, fc_size)
+        self.fc2 = nn.Linear(fc_size, config.get("n_labels", 5))
         self.epoch = 0
         self.best_dev = 0
 
