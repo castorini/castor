@@ -24,10 +24,10 @@ class ConvRNNModel(nn.Module):
             self.bi_rnn = nn.GRU(embedding_dim, self.hidden_size, 1, batch_first=True, bidirectional=True)
         else:
             raise ValueError
-        self.conv = nn.Conv2d(1, n_fmaps, (1, embedding_dim))
+        self.conv = nn.Conv2d(1, n_fmaps, (1, self.hidden_size * 2))
         self.dropout = nn.Dropout(dropout)
-        self.fc1 = nn.Linear(n_fmaps + 2 * self.hidden_size, 200)
-        self.fc2 = nn.Linear(200, config.get("n_labels", 5))
+        self.fc1 = nn.Linear(n_fmaps + 2 * self.hidden_size, 300)
+        self.fc2 = nn.Linear(300, config.get("n_labels", 5))
         self.epoch = 0
         self.best_dev = 0
 
@@ -51,7 +51,7 @@ class ConvRNNModel(nn.Module):
             h_0 = torch.autograd.Variable(torch.zeros(2, x.size(0), self.hidden_size).cuda())
             c_0 = torch.autograd.Variable(torch.zeros(2, x.size(0), self.hidden_size).cuda())
         if self.rnn_type == "LSTM":
-            rnn_seq, rnn_out = self.bi_rnn(x, (h_0, c_0)) # shape: (batch, seq len, 2 * hidden_size), (batch, 2, hidden_size)
+            rnn_seq, rnn_out = self.bi_rnn(x, (h_0, c_0)) # shape: (batch, seq len, 2 * hidden_size), (2, batch, hidden_size)
             rnn_out = rnn_out[0] # (h_0, c_0)
         else:
             rnn_seq, rnn_out = self.bi_rnn(x, h_0) # shape: (batch, 2, hidden_size)
@@ -62,7 +62,7 @@ class ConvRNNModel(nn.Module):
         out = [t.squeeze(1) for t in rnn_out.chunk(2, 1)]
         out.append(x)
         x = torch.cat(out, 1).squeeze(2)
-        x = self.dropout(x)
+        #x = self.dropout(x)
         x = nn_func.relu(self.fc1(x))
         return self.fc2(x)
 
@@ -76,7 +76,7 @@ class WordEmbeddingModel(nn.Module):
             last_id += 1
             self.lookup_table[word] = last_id
         self.dim = weights.shape[1]
-        self.weights = np.concatenate((weights, np.random.rand(len(unknown_vocab), self.dim) / 8 - 0.25))
+        self.weights = np.concatenate((weights, np.random.rand(len(unknown_vocab), self.dim) / 2 - 0.25))
         self.padding_idx = padding_idx
         self.embedding = nn.Embedding(vocab_size, self.dim, padding_idx=padding_idx)
         self.embedding.weight.data.copy_(torch.from_numpy(self.weights))

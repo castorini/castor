@@ -3,7 +3,7 @@ import os
 import re
 
 def sst_tokenize(sentence):
-    extraneous_pattern = re.compile(r"^(--lrb--|--rrb--|``|''|--|\.)$")
+    extraneous_pattern = re.compile(r"^(--lrb--|--rrb--|``|''|--)$")
     words = []
     for word in sentence.split():
         if re.match(extraneous_pattern, word):

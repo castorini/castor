@@ -12,13 +12,13 @@ def set_seed(seed=0):
     torch.cuda.manual_seed_all(seed)
     torch.manual_seed(seed)
     random.seed(seed)
-# Best dev: 0.5140781108083561
-# Test: 0.4737
+# Best dev: 0.5059
+# Test: 0.508
 def main():
     torch.cuda.set_device(1)
     set_seed(5)
     data_loader = data.SSTDataLoader("data")
-    conv_rnn = torch.load("model.pt")
+    conv_rnn = torch.load("saves/model.pt")
     conv_rnn.cuda()
     _, _, test_set = data_loader.load_sst_sets()
 
