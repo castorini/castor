@@ -23,8 +23,48 @@ def clip_weights(parameter, s=3):
         return
     parameter.weight.data.mul_(s / norm)
 
-def train(mbatch_size=64, n_epochs=30, restore=False, verbose=True):
-    torch.cuda.set_device(0)
+class GridSearch(object):
+    def __init__(self, params):
+        self.params = params
+        self.param_lengths = [len(param) for param in self.params]
+        self.indices = [1] * len(params)
+
+    def _update(self, carry_idx):
+        if carry_idx >= len(self.params):
+            return True
+        if self.indices[carry_idx] < self.param_lengths[carry_idx]:
+            self.indices[carry_idx] += 1
+            return False
+        else:
+            self.indices[carry_idx] = 1
+            return False or self._update(carry_idx + 1)
+
+    def __iter__(self):
+        self.stop_next = False
+        self.indices = [1] * len(self.params)
+        return self
+
+    def __next__(self):
+        if self.stop_next:
+            raise StopIteration
+        result = [param[idx - 1] for param, idx in zip(self.params, self.indices)]
+        self.indices[0] += 1
+        if self.indices[0] == self.param_lengths[0] + 1:
+            self.indices[0] = 1
+            self.stop_next = self._update(1)
+        return result
+
+def train(**kwargs):
+    mbatch_size = kwargs.get("mbatch_size", 64)
+    n_epochs = kwargs.get("n_epochs", 30)
+    restore = kwargs.get("restore", False)
+    verbose = kwargs.get("verbose", True)
+    lr = kwargs.get("lr", 5E-2)
+    weight_decay = kwargs.get("weight_decay", 1E-3)
+    schedule_factor = kwargs.get("schedule_factor", 0.4)
+    gradient_clip = kwargs.get("gradient_clip", 6)
+
+    torch.cuda.set_device(1)
     set_seed(5)
     data_loader = data.SSTDataLoader("data")
     if restore:
@@ -38,10 +78,10 @@ def train(mbatch_size=64, n_epochs=30, restore=False, verbose=True):
 
     criterion = nn.CrossEntropyLoss()
     parameters = list(filter(lambda p: p.requires_grad, conv_rnn.parameters()))
-    optimizer = torch.optim.Adadelta(parameters, lr=5E-2, weight_decay=1E-3)
+    optimizer = torch.optim.Adadelta(parameters, lr=lr, weight_decay=weight_decay)
     #optimizer = torch.optim.SGD(parameters, lr=5E-5, weight_decay=1E-3, nesterov=True, momentum=1E-4)
     train_set, dev_set, test_set = data_loader.load_sst_sets()
-    scheduler = ReduceLROnPlateau(optimizer, mode="max", patience=5, factor=0.33)
+    scheduler = ReduceLROnPlateau(optimizer, mode="max", factor=schedule_factor)
 
     for epoch in range(conv_rnn.epoch, n_epochs):
         conv_rnn.train()
@@ -63,7 +103,7 @@ def train(mbatch_size=64, n_epochs=30, restore=False, verbose=True):
             scores = conv_rnn(train_in)
             loss = criterion(scores, train_out)
             loss.backward()
-            torch.nn.utils.clip_grad_norm(parameters, 7)
+            torch.nn.utils.clip_grad_norm(parameters, gradient_clip)
             optimizer.step()
             i += mbatch_size
             if i % 16384 == 0:
@@ -82,7 +122,15 @@ def train(mbatch_size=64, n_epochs=30, restore=False, verbose=True):
     return conv_rnn.best_dev
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--batch-size", type=int, default=64)
-    dev_acc = train(mbatch_size=64, n_epochs=30, verbose=True, restore=False)
+    test_grid = [[0.6, 0.4, 0.2], [6, 7, 8], [1E-2, 1E-3, 1E-4]]
+    #test_grid=[[0.6],[6],[1E-3]]
+    max_params = None
+    max_acc = 0.
+    for schedule_factor, gradient_clip, weight_decay in GridSearch(test_grid):
+        dev_acc = train(mbatch_size=64, n_epochs=7, verbose=False, restore=False,
+                gradient_clip=gradient_clip, schedule_factor=schedule_factor, weight_decay=weight_decay)
+        if dev_acc > max_acc:
+            max_acc = dev_acc
+            max_params = [schedule_factor, gradient_clip, weight_decay]
+    print(max_params)
 
