@@ -8,8 +8,6 @@ import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-FLAGS = None
-
 def set_seed(seed=0):
     np.random.seed(seed)
     torch.cuda.manual_seed(seed)
@@ -71,27 +69,29 @@ def train(**kwargs):
     verbose = kwargs.get("verbose", True)
     lr = kwargs.get("lr", 5E-2)
     weight_decay = kwargs.get("weight_decay", 1E-3)
-    schedule_factor = kwargs.get("schedule_factor", 0.1)
-    gradient_clip = kwargs.get("gradient_clip", 6)
-    seed = kwargs.get("seed", 5)
+    schedule_factor = kwargs.get("schedule_factor", 0.2)
+    gradient_clip = kwargs.get("gradient_clip", 5)
+    seed = kwargs.get("seed", 3)
     patience = kwargs.get("patience", 20)
 
-    torch.cuda.set_device(1)
+    if not kwargs["no_cuda"]:
+        torch.cuda.set_device(1)
     set_seed(seed)
     data_loader = data.SSTDataLoader("data")
     if restore:
-        conv_rnn = torch.load("model.pt")
+        conv_rnn = torch.load(kwargs["input_file"])
     else:
         id_dict, weights, unk_vocab_list = data_loader.load_embed_data()
         word_model = model.SSTWordEmbeddingModel(id_dict, weights, unk_vocab_list)
-        word_model.cuda()
+        if not kwargs["no_cuda"]:
+            word_model.cuda()
         conv_rnn = model.ConvRNNModel(word_model, **kwargs)
-        conv_rnn.cuda()
+        if not kwargs["no_cuda"]:
+            conv_rnn.cuda()
 
     criterion = nn.CrossEntropyLoss()
     parameters = list(filter(lambda p: p.requires_grad, conv_rnn.parameters()))
     optimizer = torch.optim.Adadelta(parameters, lr=lr, weight_decay=weight_decay)
-    #optimizer = torch.optim.SGD(parameters, lr=5E-5, weight_decay=1E-3, nesterov=True, momentum=1E-4)
     train_set, dev_set, test_set = data_loader.load_sst_sets()
     scheduler = ReduceLROnPlateau(optimizer, mode="max", factor=schedule_factor, patience=patience)
 
@@ -109,8 +109,9 @@ def train(**kwargs):
             mbatch = train_set[i:i + mbatch_size]
             train_in, train_out = conv_rnn.convert_dataset(mbatch)
 
-            train_in.cuda()
-            train_out.cuda()
+            if not kwargs["no_cuda"]:
+                train_in.cuda()
+                train_out.cuda()
 
             scores = conv_rnn(train_in)
             loss = criterion(scores, train_out)
@@ -118,16 +119,16 @@ def train(**kwargs):
             torch.nn.utils.clip_grad_norm(parameters, gradient_clip)
             optimizer.step()
             i += mbatch_size
-            if i % 16384 == 0:
+            if i % (mbatch_size * 256) == 0:
                 conv_rnn.eval()
                 dev_in, dev_out = conv_rnn.convert_dataset(dev_set)
                 scores = conv_rnn(dev_in)
                 n_correct = (torch.max(scores, 1)[1].view(len(dev_set)).data == dev_out.data).sum()
                 accuracy = n_correct / len(dev_set)
-                scheduler.step(accuracy)
+                #scheduler.step(accuracy)
                 if accuracy > conv_rnn.best_dev:
                     conv_rnn.best_dev = accuracy
-                    torch.save(conv_rnn, "saves/model.pt")
+                    torch.save(conv_rnn, kwargs["output_file"])
                 if verbose:
                     print("Dev set accuracy: {}".format(accuracy))
                 conv_rnn.train()
@@ -164,8 +165,27 @@ def do_grid_search():
     print("Best params: {}".format(max_params))
 
 def main():
-    #train(mbatch_size=64, n_epochs=20, verbose=True)
-    do_random_search()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--mbatch_size", type=int)
+    parser.add_argument("--n_epochs", type=int)
+    parser.add_argument("--restore", default=False, action="store_true")
+    parser.add_argument("--lr", type=float)
+    parser.add_argument("--weight_decay", type=float)
+    parser.add_argument("--gradient_clip", type=float)
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--hidden_size", type=int)
+    parser.add_argument("--fc_size", type=int)
+    parser.add_argument("--dropout_prob", type=float)
+    parser.add_argument("--n_feature_maps", type=float)
+    parser.add_argument("--rnn_type", type=str)
+    parser.add_argument("--no_cuda", default=False, action="store_true")
+    parser.add_argument("--output_file", default="saves/model.pt", type=str)
+    parser.add_argument("--input_file", default="saves/model.pt", type=str)
+    kwargs = vars(parser.parse_args())
+    for k in list(kwargs.keys()):
+        if kwargs[k] is None:
+            del kwargs[k]
+    train(**kwargs)
 
 if __name__ == "__main__":
     main()

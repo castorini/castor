@@ -9,15 +9,20 @@ class ConvRNNModel(nn.Module):
         super().__init__()
         embedding_dim = word_model.dim
         self.word_model = word_model
-        self.hidden_size = config.get("hidden_size", 150)
+        self.hidden_size = config.get("hidden_size", 200)
         fc_size = config.get("fc_size", 200)
         self.batch_size = config.get("mbatch_size", 16)
         dropout = config.get("dropout_prob", 0.1)
         n_fmaps = config.get("n_feature_maps", 200)
         self.rnn_type = config.get("rnn_type", "LSTM")
 
-        self.h_0_cache = torch.autograd.Variable(torch.zeros(2, self.batch_size, self.hidden_size).cuda())
-        self.c_0_cache = torch.autograd.Variable(torch.zeros(2, self.batch_size, self.hidden_size).cuda())
+        self.h_0_cache = torch.autograd.Variable(torch.zeros(2, self.batch_size, self.hidden_size))
+        self.c_0_cache = torch.autograd.Variable(torch.zeros(2, self.batch_size, self.hidden_size))
+
+        if not config["no_cuda"]:
+            self.h_0_cache = self.h_0_cache.cuda()
+            self.h_0_cache = self.c_0_cache.cuda()
+        self.no_cuda = config["no_cuda"]
 
         if self.rnn_type == "LSTM":
             self.bi_rnn = nn.LSTM(embedding_dim, self.hidden_size, 1, batch_first=True, bidirectional=True)
@@ -35,9 +40,12 @@ class ConvRNNModel(nn.Module):
     def convert_dataset(self, dataset):
         model_in = dataset[:, 1].reshape(-1)
         model_out = dataset[:, 0].flatten().astype(np.int)
-        model_out = torch.autograd.Variable(torch.from_numpy(model_out).cuda())
+        model_out = torch.autograd.Variable(torch.from_numpy(model_out))
         model_in = self.preprocess(model_in)
-        model_in = torch.autograd.Variable(model_in).cuda()
+        model_in = torch.autograd.Variable(model_in)
+        if not self.no_cuda:
+            model_out = model_out.cuda()
+            model_in = model_in.cuda()
         return (model_in, model_out)
 
     def preprocess(self, sentences):
@@ -49,8 +57,11 @@ class ConvRNNModel(nn.Module):
             h_0 = self.h_0_cache
             c_0 = self.c_0_cache
         else:
-            h_0 = torch.autograd.Variable(torch.zeros(2, x.size(0), self.hidden_size).cuda())
-            c_0 = torch.autograd.Variable(torch.zeros(2, x.size(0), self.hidden_size).cuda())
+            h_0 = torch.autograd.Variable(torch.zeros(2, x.size(0), self.hidden_size))
+            c_0 = torch.autograd.Variable(torch.zeros(2, x.size(0), self.hidden_size))
+            if not self.no_cuda:
+                h_0 = h_0.cuda()
+                c_0 = c_0.cuda()
         if self.rnn_type == "LSTM":
             rnn_seq, rnn_out = self.bi_rnn(x, (h_0, c_0)) # shape: (batch, seq len, 2 * hidden_size), (2, batch, hidden_size)
             rnn_out = rnn_out[0] # (h_0, c_0)
