@@ -1,30 +1,28 @@
 import argparse
-import data
-import model
-import numpy as np
-import torch
-import torch.nn as nn
 import os
 import random
 
-def set_seed(seed=0):
-    np.random.seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.manual_seed(seed)
-    random.seed(seed)
+import numpy as np
+import torch
+import torch.nn as nn
+
+import data
+import model
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--no_cuda", action="store_true", default=False)
     parser.add_argument("--input_file", default="saves/model.pt", type=str)
     parser.add_argument("--data_dir", default="data", type=str)
+    parser.add_argument("--gpu_number", default=0, type=int)
     args = parser.parse_args()
 
-    torch.cuda.set_device(1)
-    set_seed(5)
+    model.set_seed(5, no_cuda=args.no_cuda)
     data_loader = data.SSTDataLoader(args.data_dir)
     conv_rnn = torch.load(args.input_file)
-    conv_rnn.cuda()
+    if not args.no_cuda:
+        torch.cuda.set_device(args.gpu_number)
+        conv_rnn.cuda()
     _, _, test_set = data_loader.load_sst_sets()
 
     conv_rnn.eval()

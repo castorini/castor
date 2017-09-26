@@ -1,6 +1,7 @@
-import numpy as np
 import os
 import re
+
+import numpy as np
 
 def sst_tokenize(sentence):
     extraneous_pattern = re.compile(r"^(--lrb--|--rrb--|``|''|--|\.)$")
@@ -45,4 +46,3 @@ class SSTDataLoader(object):
                     data_set.append((sentiment, sentence))
             return np.array(data_set)
         return [read_set(name) for name in set_names]
-

@@ -1,41 +1,43 @@
-import data
+import random
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as nn_func
+
+import data
 
 class ConvRNNModel(nn.Module):
     def __init__(self, word_model, **config):
         super().__init__()
         embedding_dim = word_model.dim
         self.word_model = word_model
-        self.hidden_size = config.get("hidden_size", 200)
-        fc_size = config.get("fc_size", 200)
-        self.batch_size = config.get("mbatch_size", 16)
-        dropout = config.get("dropout_prob", 0.1)
-        n_fmaps = config.get("n_feature_maps", 200)
-        self.rnn_type = config.get("rnn_type", "LSTM")
+        self.hidden_size = config["hidden_size"]
+        fc_size = config["fc_size"]
+        self.batch_size = config["mbatch_size"]
+        dropout = config["dropout_prob"]
+        n_fmaps = config["n_feature_maps"]
+        self.rnn_type = config["rnn_type"]
 
         self.h_0_cache = torch.autograd.Variable(torch.zeros(2, self.batch_size, self.hidden_size))
         self.c_0_cache = torch.autograd.Variable(torch.zeros(2, self.batch_size, self.hidden_size))
 
-        if not config["no_cuda"]:
-            self.h_0_cache = self.h_0_cache.cuda()
-            self.h_0_cache = self.c_0_cache.cuda()
         self.no_cuda = config["no_cuda"]
+        if not self.no_cuda:
+            self.h_0_cache = self.h_0_cache.cuda()
+            self.c_0_cache = self.c_0_cache.cuda()
 
-        if self.rnn_type == "LSTM":
+        if self.rnn_type.upper() == "LSTM":
             self.bi_rnn = nn.LSTM(embedding_dim, self.hidden_size, 1, batch_first=True, bidirectional=True)
-        elif self.rnn_type == "GRU":
+        elif self.rnn_type.upper() == "GRU":
             self.bi_rnn = nn.GRU(embedding_dim, self.hidden_size, 1, batch_first=True, bidirectional=True)
         else:
-            raise ValueError
+            raise ValueError("RNN type must be one of LSTM or GRU")
         self.conv = nn.Conv2d(1, n_fmaps, (1, self.hidden_size * 2))
-        self.dropout = nn.Dropout(dropout)
+        if dropout:
+            self.dropout = nn.Dropout(dropout)
         self.fc1 = nn.Linear(n_fmaps + 2 * self.hidden_size, fc_size)
-        self.fc2 = nn.Linear(fc_size, config.get("n_labels", 5))
-        self.epoch = 0
-        self.best_dev = 0
+        self.fc2 = nn.Linear(fc_size, config["n_labels"])
 
     def convert_dataset(self, dataset):
         model_in = dataset[:, 1].reshape(-1)
@@ -62,7 +64,7 @@ class ConvRNNModel(nn.Module):
             if not self.no_cuda:
                 h_0 = h_0.cuda()
                 c_0 = c_0.cuda()
-        if self.rnn_type == "LSTM":
+        if self.rnn_type.upper() == "LSTM":
             rnn_seq, rnn_out = self.bi_rnn(x, (h_0, c_0)) # shape: (batch, seq len, 2 * hidden_size), (2, batch, hidden_size)
             rnn_out = rnn_out[0] # (h_0, c_0)
         else:
@@ -74,7 +76,8 @@ class ConvRNNModel(nn.Module):
         out = [t.squeeze(1) for t in rnn_out.chunk(2, 1)]
         out.append(x)
         x = torch.cat(out, 1).squeeze(2)
-        #x = self.dropout(x)
+        if hasattr(self, "dropout"):
+            x = self.dropout(x)
         x = nn_func.relu(self.fc1(x))
         return self.fc2(x)
 
@@ -127,3 +130,11 @@ class SSTWordEmbeddingModel(WordEmbeddingModel):
         for indices in indices_list:
             indices.extend([self.padding_idx] * (max_len - len(indices))) 
         return indices_list
+
+def set_seed(seed=0, no_cuda=False):
+    np.random.seed(seed)
+    if not no_cuda:
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+    torch.manual_seed(seed)
+    random.seed(seed)

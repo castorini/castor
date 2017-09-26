@@ -1,25 +1,14 @@
 import argparse
-import data
-import model
-import numpy as np
 import os
-import random 
+import random
+
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-def set_seed(seed=0):
-    np.random.seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.manual_seed(seed)
-    random.seed(seed)
-
-def clip_weights(parameter, s=3):
-    norm = parameter.weight.data.norm()
-    if norm < s:
-        return
-    parameter.weight.data.mul_(s / norm)
+import data
+import model
 
 class RandomSearch(object):
     def __init__(self, params):
@@ -63,20 +52,18 @@ class GridSearch(object):
         return result
 
 def train(**kwargs):
-    mbatch_size = kwargs.get("mbatch_size", 64)
-    n_epochs = kwargs.get("n_epochs", 30)
-    restore = kwargs.get("restore", False)
-    verbose = kwargs.get("verbose", True)
-    lr = kwargs.get("lr", 5E-2)
-    weight_decay = kwargs.get("weight_decay", 1E-3)
-    schedule_factor = kwargs.get("schedule_factor", 0.2)
-    gradient_clip = kwargs.get("gradient_clip", 5)
-    seed = kwargs.get("seed", 3)
-    patience = kwargs.get("patience", 20)
+    mbatch_size = kwargs["mbatch_size"]
+    n_epochs = kwargs["n_epochs"]
+    restore = kwargs["restore"]
+    verbose = not kwargs["quiet"]
+    lr = kwargs["lr"]
+    weight_decay = kwargs["weight_decay"]
+    gradient_clip = kwargs["gradient_clip"]
+    seed = kwargs["seed"]
 
     if not kwargs["no_cuda"]:
         torch.cuda.set_device(1)
-    set_seed(seed)
+    model.set_seed(seed)
     data_loader = data.SSTDataLoader("data")
     if restore:
         conv_rnn = torch.load(kwargs["input_file"])
@@ -93,9 +80,9 @@ def train(**kwargs):
     parameters = list(filter(lambda p: p.requires_grad, conv_rnn.parameters()))
     optimizer = torch.optim.Adadelta(parameters, lr=lr, weight_decay=weight_decay)
     train_set, dev_set, test_set = data_loader.load_sst_sets()
-    scheduler = ReduceLROnPlateau(optimizer, mode="max", factor=schedule_factor, patience=patience)
+    best_dev = 0
 
-    for epoch in range(conv_rnn.epoch, n_epochs):
+    for epoch in range(n_epochs):
         conv_rnn.train()
         optimizer.zero_grad()
         np.random.shuffle(train_set)
@@ -125,21 +112,21 @@ def train(**kwargs):
                 scores = conv_rnn(dev_in)
                 n_correct = (torch.max(scores, 1)[1].view(len(dev_set)).data == dev_out.data).sum()
                 accuracy = n_correct / len(dev_set)
-                #scheduler.step(accuracy)
-                if accuracy > conv_rnn.best_dev:
-                    conv_rnn.best_dev = accuracy
+                if accuracy > best_dev:
+                    best_dev = accuracy
                     torch.save(conv_rnn, kwargs["output_file"])
                 if verbose:
                     print("Dev set accuracy: {}".format(accuracy))
                 conv_rnn.train()
-    return conv_rnn.best_dev
+    return best_dev
 
 def do_random_search():
     test_grid = [[0.15, 0.2], [4, 5, 6], [10, 20], [150, 200], [3, 4, 5], [200, 300], [200, 250]]
     max_params = None
     max_acc = 0.
-    for sf, gc, ptce, hid, seed, fc_size, fmaps in RandomSearch(test_grid):
-        print("Testing {}".format([sf, gc, ptce, hid, seed, fc_size, fmaps]))
+    for args in RandomSearch(test_grid):
+        sf, gc, ptce, hid, seed, fc_size, fmaps = args
+        print("Testing {}".format(args))
         dev_acc = train(mbatch_size=64, n_epochs=7, verbose=False, restore=False, gradient_clip=gc,
                 schedule_factor=sf, patience=ptce, hidden_size=hid, seed=seed, n_feature_maps=fmaps, 
                 fc_size=fc_size)
@@ -147,45 +134,35 @@ def do_random_search():
         if dev_acc > max_acc:
             print("Found current max")
             max_acc = dev_acc
-            max_params = [sf, gc, ptce, hid, seed, fc_size, fmaps]
-    print("Best params: {}".format(max_params))
-
-def do_grid_search():
-    test_grid = [[0.6, 0.4, 0.2], [6, 7, 8], [1E-2, 1E-3, 1E-4]]
-    max_params = None
-    max_acc = 0.
-    for schedule_factor, gradient_clip, weight_decay in GridSearch(test_grid):
-        print("Testing {}".format([schedule_factor, gradient_clip, weight_decay]))
-        dev_acc = train(mbatch_size=64, n_epochs=7, verbose=False, restore=False,
-                gradient_clip=gradient_clip, schedule_factor=schedule_factor, weight_decay=weight_decay)
-        print("Dev accuracy: {}".format(dev_acc))
-        if dev_acc > max_acc:
-            max_acc = dev_acc
-            max_params = [schedule_factor, gradient_clip, weight_decay]
+            max_params = args
     print("Best params: {}".format(max_params))
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mbatch_size", type=int)
-    parser.add_argument("--n_epochs", type=int)
-    parser.add_argument("--restore", default=False, action="store_true")
-    parser.add_argument("--lr", type=float)
-    parser.add_argument("--weight_decay", type=float)
-    parser.add_argument("--gradient_clip", type=float)
-    parser.add_argument("--seed", type=int)
-    parser.add_argument("--hidden_size", type=int)
-    parser.add_argument("--fc_size", type=int)
-    parser.add_argument("--dropout_prob", type=float)
-    parser.add_argument("--n_feature_maps", type=float)
-    parser.add_argument("--rnn_type", type=str)
-    parser.add_argument("--no_cuda", default=False, action="store_true")
-    parser.add_argument("--output_file", default="saves/model.pt", type=str)
+    parser.add_argument("--dropout_prob", default=0.5, type=float)
+    parser.add_argument("--fc_size", default=200, type=int)
+    parser.add_argument("--gpu_number", default=0, type=int)
+    parser.add_argument("--gradient_clip", default=5, type=float)
+    parser.add_argument("--hidden_size", default=200, type=int)
     parser.add_argument("--input_file", default="saves/model.pt", type=str)
-    kwargs = vars(parser.parse_args())
-    for k in list(kwargs.keys()):
-        if kwargs[k] is None:
-            del kwargs[k]
-    train(**kwargs)
+    parser.add_argument("--lr", default=5E-2, type=float)
+    parser.add_argument("--mbatch_size", default=64, type=int)
+    parser.add_argument("--n_epochs", default=30, type=int)
+    parser.add_argument("--n_feature_maps", default=200, type=float)
+    parser.add_argument("--n_labels", default=5, type=int)
+    parser.add_argument("--no_cuda", action="store_true", default=False)
+    parser.add_argument("--output_file", default="saves/model.pt", type=str)
+    parser.add_argument("--random_search", action="store_true", default=False)
+    parser.add_argument("--restore", action="store_true", default=False)
+    parser.add_argument("--rnn_type", choices=["lstm", "gru"], default="lstm", type=str)
+    parser.add_argument("--seed", default=3, type=int)
+    parser.add_argument("--quiet", action="store_true", default=False)
+    parser.add_argument("--weight_decay", default=1E-3, type=float)
+    args = parser.parse_args()
+    if args.random_search:
+        do_random_search()
+        return
+    train(**vars(args))
 
 if __name__ == "__main__":
     main()
