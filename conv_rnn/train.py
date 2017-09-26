@@ -120,16 +120,16 @@ def train(**kwargs):
                 conv_rnn.train()
     return best_dev
 
-def do_random_search():
-    test_grid = [[0.15, 0.2], [4, 5, 6], [10, 20], [150, 200], [3, 4, 5], [200, 300], [200, 250]]
+def do_random_search(given_params):
+    test_grid = [[0.15, 0.2], [4, 5, 6], [150, 200], [3, 4, 5], [200, 300], [200, 250]]
     max_params = None
     max_acc = 0.
     for args in RandomSearch(test_grid):
-        sf, gc, ptce, hid, seed, fc_size, fmaps = args
+        sf, gc, hid, seed, fc_size, fmaps = args
         print("Testing {}".format(args))
-        dev_acc = train(mbatch_size=64, n_epochs=7, verbose=False, restore=False, gradient_clip=gc,
-                schedule_factor=sf, patience=ptce, hidden_size=hid, seed=seed, n_feature_maps=fmaps, 
-                fc_size=fc_size)
+        given_params.update(dict(n_epochs=7, quiet=True, gradient_clip=gc, hidden_Size=hid, seed=seed, 
+            n_feature_maps=fmaps, fc_size=fc_size))
+        dev_acc = train(**given_params)
         print("Dev accuracy: {}".format(dev_acc))
         if dev_acc > max_acc:
             print("Found current max")
@@ -160,7 +160,7 @@ def main():
     parser.add_argument("--weight_decay", default=1E-3, type=float)
     args = parser.parse_args()
     if args.random_search:
-        do_random_search()
+        do_random_search(vars(args))
         return
     train(**vars(args))
 
