@@ -11,7 +11,6 @@ class SmPlusPlus(nn.Module):
         answers_num = config.answers_num
         words_dim = config.words_dim
         filter_width = config.filter_width
-        external_num = config.external_num
         self.mode = config.mode
         self.use_ext = config.use_ext
 
@@ -28,11 +27,8 @@ class SmPlusPlus(nn.Module):
         self.nonstatic_question_embed = nn.Embedding(questions_num, words_dim)
         self.static_answer_embed = nn.Embedding(answers_num, words_dim)
         self.nonstatic_answer_embed = nn.Embedding(answers_num, words_dim)
-        self.static_external_embed = nn.Embedding(external_num, 4)
-        self.nonstatic_external_embed = nn.Embedding(external_num, 4)
         self.static_question_embed.weight.requires_grad = False
         self.static_answer_embed.weight.requires_grad = False
-        self.static_external_embed.weight.requires_grad = False
 
         self.conv_q = nn.Conv2d(input_channel, output_channel, (filter_width, words_dim), padding=(filter_width - 1, 0))
         self.conv_a = nn.Conv2d(input_channel, output_channel, (filter_width, words_dim), padding=(filter_width - 1, 0))
@@ -42,13 +38,11 @@ class SmPlusPlus(nn.Module):
 
         self.combined_feature_vector = nn.Linear(n_hidden, n_hidden)
         self.hidden = nn.Linear(n_hidden, n_classes)
-        self.softmax = nn.Softmax()
 
     def forward(self, x):
         x_question = x.question
         x_answer = x.answer
         x_ext = x.ext_feat
-        x_ext = self.static_external_embed(x_ext)
 
         if self.mode == 'rand':
             question = self.embed(x_question).unsqueeze(1)
@@ -86,6 +80,5 @@ class SmPlusPlus(nn.Module):
         x = F.tanh(self.combined_feature_vector(x))
         x = self.dropout(x)
         x = self.hidden(x)
-        # logit = self.softmax(x)
 
         return x

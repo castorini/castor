@@ -1,38 +1,37 @@
-from argparse import ArgumentParser
 from tqdm import tqdm
 import array
 import torch
-import six
+import numpy as np
 
-def create_lookup(fname):
-    fname_pt = '{}.pt'.format(fname)
-    itos, vectors, dim = [], array.array('d'), None
-    with open(fname, 'r') as f:
-        lines = [line for line in f]
+from argparse import ArgumentParser
+
+
+def convert(fname, vocab):
+    save_file = '{}.pt'.format(fname)
+    stoi, vectors, dim = [], array.array('d'), None
+
+    vocab_size, dim = 2470719, 50
+    W = np.memmap(fname, dtype=np.double, shape=(vocab_size, dim))
+
+
     print("Loading vectors from {}".format(fname))
-    for line in tqdm(lines, total=len(lines)):
-        entries = line.strip().split('\t')
-        word, entries = entries[0], [float(item) for item in entries[1].split()]
-        if dim is None:
-            dim = len(entries)
-        try:
-            if isinstance(word, six.binary_type):
-                word = word.decode('utf-8')
-        except:
-            print('non-UTF8 token', repr(word), 'ignored')
-            continue
-        vectors.extend(float(x) for x in entries)
-        itos.append(word)
+    vectors = []
+    for line in tqdm(W, total=len(W)):
+        entry = line
+        vectors.extend(entry)
 
-    stoi = {word: i for i, word in enumerate(itos)}
     vectors = torch.Tensor(vectors).view(-1, dim)
-    print('saving vectors to', fname_pt)
-    torch.save((stoi, vectors, dim), fname_pt)
+
+    with open(vocab) as f:
+        stoi = {word.strip():i for i, word in enumerate(f)}
+
+    print('saving vectors to', save_file)
+    torch.save((stoi, vectors, dim), save_file)
 
 if __name__ == '__main__':
-    parser = ArgumentParser(description='create lookup')
+    parser = ArgumentParser(description='create word embedding')
     parser.add_argument('--input', type=str, required=True)
+    parser.add_argument('--vocab', type=str, required=True)
+
     args = parser.parse_args()
-
-    create_lookup(args.input)
-
+    convert(args.input, args.vocab)

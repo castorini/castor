@@ -5,6 +5,7 @@ import os
 import numpy as np
 
 from torchtext import data
+from torchtext import vocab
 from args import get_args
 from model import SmPlusPlus
 
@@ -16,15 +17,14 @@ from evaluate import evaluate
 def set_vectors(field, vector_path):
     if os.path.isfile(vector_path):
         stoi, vectors, dim = torch.load(vector_path)
-        field.vocab.vectors = torch.Tensor(len(field.vocab), dim)
+        set_vectors(stoi, vectors, dim, torch.FloatTensor(dim).uniform_(-0.25, 0.25))
 
-        for i, token in enumerate(field.vocab.itos):
-            wv_index = stoi.get(token, None)
-            if wv_index is not None:
-                field.vocab.vectors[i] = vectors[wv_index]
-            else:
-                # np.random.uniform(-0.25, 0.25, vec_dim)
-                field.vocab.vectors[i] = torch.FloatTensor(dim).uniform_(-0.25, 0.25)
+        # for i, token in enumerate(field.vocab.itos):
+        #     wv_index = stoi.get(token, None)
+        #     if wv_index is not None:
+        #         field.vocab.vectors[i] = vectors[wv_index]
+        #     else:
+        #         field.vocab.vectors[i] = torch.FloatTensor(dim).uniform_(-0.25, 0.25)
     else:
         print("Error: Need word embedding pt file")
         exit(1)
@@ -33,7 +33,7 @@ def set_vectors(field, vector_path):
 
 def regularize_loss(model, loss):
     flattened_params = []
-    reg = 1e-5
+    reg = args.weight_decay
 
     for p in model.parameters():
         f = p.data.clone()
@@ -63,20 +63,20 @@ random.seed(args.seed)
 QID = data.Field(sequential=False)
 QUESTION = data.Field(batch_first=True)
 ANSWER = data.Field(batch_first=True)
-EXTERNAL = data.Field(sequential=False)
 LABEL = data.Field(sequential=False)
+EXTERNAL = data.Field(sequential=False, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
+                      preprocessing=data.Pipeline(lambda x: x.split()),
+                      postprocessing=data.Pipeline(lambda x, train: [float(y) for y in x]))
 train, dev, test = TrecDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
 
 QID.build_vocab(train, dev, test)
 QUESTION.build_vocab(train, dev, test)
 ANSWER.build_vocab(train, dev, test)
-EXTERNAL.build_vocab(train, dev, test)
 LABEL.build_vocab(train, dev, test)
 
 
 QUESTION = set_vectors(QUESTION, args.vector_cache)
 ANSWER = set_vectors(ANSWER, args.vector_cache)
-EXTERNAL = set_vectors(EXTERNAL, args.external_cache)
 
 
 train_iter = data.Iterator(train, batch_size=args.batch_size, device=args.gpu, train=True, repeat=False,
@@ -89,7 +89,6 @@ test_iter = data.Iterator(test, batch_size=args.batch_size, device=args.gpu, tra
 config.target_class = len(LABEL.vocab)
 config.questions_num = len(QUESTION.vocab)
 config.answers_num = len(ANSWER.vocab)
-config.external_num = len(EXTERNAL.vocab)
 
 print("Dataset {}    Mode {}".format(args.dataset, args.mode))
 print("VOCAB num",len(QUESTION.vocab))
@@ -110,8 +109,6 @@ else:
     model.nonstatic_question_embed.weight.data.copy_(QUESTION.vocab.vectors)
     model.static_answer_embed.weight.data.copy_(ANSWER.vocab.vectors)
     model.nonstatic_answer_embed.weight.data.copy_(ANSWER.vocab.vectors)
-    model.static_external_embed.weight.data.copy_(EXTERNAL.vocab.vectors)
-    model.nonstatic_external_embed.weight.data.copy_(EXTERNAL.vocab.vectors)
 
     if args.cuda:
         model.cuda()
@@ -119,7 +116,10 @@ else:
 
 
 parameter = filter(lambda p: p.requires_grad, model.parameters())
+# optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
 optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
+# optimizer = torch.optim.SGD(parameter, lr=args.lr, momentum=0.0, \
+#             weight_decay=1e-5)
 criterion = nn.CrossEntropyLoss()
 early_stop = False
 best_dev_map = 0
@@ -136,7 +136,9 @@ print(header)
 
 index2label = np.array(LABEL.vocab.itos)
 index2qid = np.array(QID.vocab.itos)
-
+index2question = np.array(ANSWER.vocab.itos)
+index = np.where(index2question == "pineapple")
+print("index of pineapple:{}, {}".format(index, index2question[index]))
 while True:
     if early_stop:
         print("Early Stopping. Epoch: {}, Best Dev Acc: {}".format(epoch, best_dev_map))
@@ -170,14 +172,13 @@ while True:
                 true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
 
                 scores = model(dev_batch)
-                # scores = torch.exp(scores)
                 n_dev_correct += (torch.max(scores, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data).sum()
                 dev_loss = criterion(scores, dev_batch.label)
                 dev_losses.append(dev_loss.data[0])
 
                 index_label = np.transpose(torch.max(scores, 1)[1].view(dev_batch.label.size()).cpu().data.numpy())
                 label_array = index2label[index_label]
-                score_array = torch.max(scores, 1)[0].view(dev_batch.label.size()).cpu().data.numpy()
+                score_array = scores[:, 2].cpu().data.numpy()
                 # print and write the result
                 for i in range(dev_batch.batch_size):
                     this_qid, predicted_label, score, gold_label = qid_array[i], label_array[i], score_array[i], true_label_array[i]
