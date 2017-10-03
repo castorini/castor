@@ -68,7 +68,7 @@ else:
 index2label = np.array(LABEL.vocab.itos)
 index2qid = np.array(QID.vocab.itos)
 
-def predict(dataset_iter):
+def predict(test_mode, dataset_iter):
     model.eval()
     dataset_iter.init_epoch()
 
@@ -77,7 +77,7 @@ def predict(dataset_iter):
         qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
         true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
 
-        scores = model(dev_batch, 'dev', config.mode)
+        scores = model(dev_batch)
 
         index_label = np.transpose(torch.max(scores, 1)[1].view(dev_batch.label.size()).cpu().data.numpy())
         label_array = index2label[index_label]
@@ -88,11 +88,11 @@ def predict(dataset_iter):
                                                            true_label_array[i]
             instance.append((this_qid, predicted_label, score, gold_label))
 
-    dev_map, dev_mrr = evaluate(instance, 'test', config.mode)
+    dev_map, dev_mrr = evaluate(instance, test_mode, config.mode)
     print(dev_map, dev_mrr)
 
 # Run the model on the dev set
-predict(dataset_iter=dev_iter)
+predict('dev', dataset_iter=dev_iter)
 
 # Run the model on the test set
-predict(dataset_iter=test_iter)
+predict('test', dataset_iter=test_iter)
