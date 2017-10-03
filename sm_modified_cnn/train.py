@@ -13,15 +13,6 @@ from model import SmPlusPlus
 from trec_dataset import TrecDataset
 from evaluate import evaluate
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
 args = get_args()
 config = args
 
@@ -41,7 +32,7 @@ def set_vectors(field, vector_path):
                 field.vocab.vectors[i] = torch.FloatTensor(dim).uniform_(-0.25, 0.25)
     else:
         print("Error: Need word embedding pt file")
-        logger.error("Error: Need word embedding pt file")
+        print("Error: Need word embedding pt file")
         exit(1)
     return field
 
@@ -67,11 +58,11 @@ torch.manual_seed(args.seed)
 if not args.cuda:
     args.gpu = -1
 if torch.cuda.is_available() and args.cuda:
-    logger.info("Note: You are using GPU for training")
+    print("Note: You are using GPU for training")
     torch.cuda.set_device(args.gpu)
     torch.cuda.manual_seed(args.seed)
 if torch.cuda.is_available() and not args.cuda:
-    logger.warning("You have Cuda but you're using CPU for training.")
+    print("You have Cuda but you're using CPU for training.")
 np.random.seed(args.seed)
 random.seed(args.seed)
 
@@ -93,7 +84,6 @@ LABEL.build_vocab(train, dev, test)
 QUESTION = set_vectors(QUESTION, args.vector_cache)
 ANSWER = set_vectors(ANSWER, args.vector_cache)
 
-
 train_iter = data.Iterator(train, batch_size=args.batch_size, device=args.gpu, train=True, repeat=False,
                                    sort=False, shuffle=True)
 dev_iter = data.Iterator(dev, batch_size=args.batch_size, device=args.gpu, train=False, repeat=False,
@@ -105,13 +95,13 @@ config.target_class = len(LABEL.vocab)
 config.questions_num = len(QUESTION.vocab)
 config.answers_num = len(ANSWER.vocab)
 
-logger.info("Dataset {}    Mode {}".format(args.dataset, args.mode))
-logger.info("VOCAB num",len(QUESTION.vocab))
-logger.info("LABEL.target_class:", len(LABEL.vocab))
-logger.info("LABELS:", LABEL.vocab.itos)
-logger.info("Train instance", len(train))
-logger.info("Dev instance", len(dev))
-logger.info("Test instance", len(test))
+print("Dataset {}    Mode {}".format(args.dataset, args.mode))
+print("VOCAB num", len(QUESTION.vocab))
+print("LABEL.target_class:", len(LABEL.vocab))
+print("LABELS:", LABEL.vocab.itos)
+print("Train instance", len(train))
+print("Dev instance", len(dev))
+print("Test instance", len(test))
 
 if args.resume_snapshot:
     if args.cuda:
@@ -127,7 +117,7 @@ else:
 
     if args.cuda:
         model.cuda()
-        logger.info("Shift model to GPU")
+        print("Shift model to GPU")
 
 
 parameter = filter(lambda p: p.requires_grad, model.parameters())
@@ -146,7 +136,7 @@ dev_log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>5.0f}/{:<5.0f} {:>7.0
 log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>5.0f}/{:<5.0f} {:>7.0f}%,{:>8.6f},{},{:12.4f},{}'.split(','))
 os.makedirs(args.save_path, exist_ok=True)
 os.makedirs(os.path.join(args.save_path, args.dataset), exist_ok=True)
-logger.info(header)
+print(header)
 
 index2label = np.array(LABEL.vocab.itos)
 index2qid = np.array(QID.vocab.itos)
@@ -154,7 +144,7 @@ index2question = np.array(ANSWER.vocab.itos)
 
 while True:
     if early_stop:
-        logger.info("Early Stopping. Epoch: {}, Best Dev Acc: {}".format(epoch, best_dev_map))
+        print("Early Stopping. Epoch: {}, Best Dev Acc: {}".format(epoch, best_dev_map))
         break
     epoch += 1
     train_iter.init_epoch()
@@ -198,8 +188,8 @@ while True:
                     instance.append((this_qid, predicted_label, score, gold_label))
 
 
-            dev_map, dev_mrr = evaluate(instance)
-            logger.info(dev_log_template.format(time.time() - start,
+            dev_map, dev_mrr = evaluate(instance, 'valid', config.mode)
+            print(dev_log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
                                           100. * (1 + batch_idx) / len(train_iter), loss.data[0],
                                           sum(dev_losses) / len(dev_losses), train_acc, dev_map))
@@ -218,7 +208,7 @@ while True:
 
         if iterations % args.log_every == 1:
             # print progress message
-            logger.info(log_template.format(time.time() - start,
+            print(log_template.format(time.time() - start,
                                       epoch, iterations, 1 + batch_idx, len(train_iter),
                                       100. * (1 + batch_idx) / len(train_iter), loss.data[0], ' ' * 8,
                                       n_correct / n_total * 100, ' ' * 12))

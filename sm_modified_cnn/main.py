@@ -77,7 +77,7 @@ def predict(dataset_iter):
         qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
         true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
 
-        scores = model(dev_batch)
+        scores = model(dev_batch, 'dev', config.mode)
 
         index_label = np.transpose(torch.max(scores, 1)[1].view(dev_batch.label.size()).cpu().data.numpy())
         label_array = index2label[index_label]
@@ -88,7 +88,7 @@ def predict(dataset_iter):
                                                            true_label_array[i]
             instance.append((this_qid, predicted_label, score, gold_label))
 
-    dev_map, dev_mrr = evaluate(instance)
+    dev_map, dev_mrr = evaluate(instance, 'test', config.mode)
     print(dev_map, dev_mrr)
 
 # Run the model on the dev set
