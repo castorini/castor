@@ -194,7 +194,7 @@ while True:
                     instance.append((this_qid, predicted_label, score, gold_label))
 
 
-            dev_map, dev_mrr = evaluate(instance, 'valid', config.mode)
+            dev_map, dev_mrr = evaluate(instance, config.dataset, 'valid', config.mode)
             print(dev_log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
                                           100. * (1 + batch_idx) / len(train_iter), loss.data[0],

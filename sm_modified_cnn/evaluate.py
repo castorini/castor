@@ -14,7 +14,7 @@ def evaluate(instances, dataset, valid, config):
             qrel.write('{} 0 {} {}\n'.format(qid, i, gold))
             i += 1
 
-    pargs = shlex.split("./eval/trec_eval.9.0/trec_eval -m map -m recip_rank {}.{}.qrel.txt {}.{}.{}.run.txt"
+    pargs = shlex.split("./eval/trec_eval.9.0/trec_eval -m map -m recip_rank {}.{}.{}.qrel.txt {}.{}.{}.run.txt"
                         .format(dataset, valid, config, dataset, valid, config))
     p = subprocess.Popen(pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     pout, perr = p.communicate()
