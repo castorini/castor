@@ -63,16 +63,32 @@ python main.py --trained_model saves/TREC/multichannel_best_model.pt
 
 The performance on TrecQA dataset:
   
-### Best dev 
+### TrecQA:
 
+#### Best dev 
 Metric |rand  |static|non-static|multichannel
 -------|------|------|----------|------------
 MAP    |0.8096|0.8162|0.8387    | 0.8274     
 MRR    |0.8560|0.8918|0.9058    | 0.8818
  
-### Test
-
+#### Test
 Metric |rand   |static|non-static|multichannel
 -------|-------|------|----------|------------
 MAP    |0.7441 |0.7524|0.7688    |0.7641
 MRR    |0.8172 |0.8012|0.8144    |0.8174
+
+### WikiQA:
+
+#### Best dev 
+Metric |rand  |static|non-static|multichannel
+-------|------|------|----------|------------
+MAP    |0.7109|0.7204|0.7049    | 0.7245     
+MRR    |0.7169|0.7234|0.7075    | 0.7259
+ 
+#### Test
+Metric |rand   |static|non-static|multichannel
+-------|-------|------|----------|------------
+MAP    |0.6313 |0.6378|0.6455    |0.6476
+MRR    |0.6522 |0.6542|0.6689    |0.6646
+
+NB: The results on WikiQA are based on the SM model hyperparameters.  
