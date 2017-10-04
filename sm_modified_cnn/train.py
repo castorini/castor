@@ -3,7 +3,6 @@ import os
 import numpy as np
 import random
 
-import logging
 import torch
 import torch.nn as nn
 from torchtext import data
@@ -11,6 +10,7 @@ from torchtext import data
 from args import get_args
 from model import SmPlusPlus
 from trec_dataset import TrecDataset
+from wiki_dataset import WikiDataset
 from evaluate import evaluate
 
 args = get_args()
@@ -73,7 +73,13 @@ LABEL = data.Field(sequential=False)
 EXTERNAL = data.Field(sequential=False, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
                       preprocessing=data.Pipeline(lambda x: x.split()),
                       postprocessing=data.Pipeline(lambda x, train: [float(y) for y in x]))
-train, dev, test = TrecDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
+if config.dataset == 'trec':
+    train, dev, test = TrecDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
+elif config.dataset == 'wiki':
+    train, dev, test = WikiDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
+else:
+    print("Unsupported dataset")
+    exit()
 
 QID.build_vocab(train, dev, test)
 QUESTION.build_vocab(train, dev, test)
