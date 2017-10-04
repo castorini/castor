@@ -1,4 +1,5 @@
-mkdir data
+#!/bin/sh
+mkdir -p data
 python overlap_features.py --dir ../../data/TrecQA/
 
 CURRENT_DIR=$(pwd)

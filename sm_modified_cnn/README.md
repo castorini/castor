@@ -67,7 +67,8 @@ You should you see the following tree:
 To create the dataset:
 ```bash
 cd Castor/sm_modified_cnn/
-bash create_dataset.sh 
+chmod +x create_dataset.sh
+sh create_dataset.sh 
 ```
 
 ### Training

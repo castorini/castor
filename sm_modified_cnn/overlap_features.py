@@ -46,7 +46,6 @@ def compute_overlap_features(questions, answers, word2df=None, stoplist=None):
         else:
             overlap = float(len(word_overlap)) / (len(q_set) + len(a_set))
 
-
         word_overlap = q_set.intersection(a_set)
         df_overlap = 0.0
         for w in word_overlap:
@@ -102,7 +101,7 @@ def compute_dfs(docs):
     return word2df
 
 if __name__ == '__main__':
-    parser = ArgumentParser(description='')
+    parser = ArgumentParser(description='create TrecQA/WikiQA dataset')
     parser.add_argument('--dir', help='path to the TrecQA|WikiQA data directory', default="../../data/TrecQA")
     args = parser.parse_args()
 
