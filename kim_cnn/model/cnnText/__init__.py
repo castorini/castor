@@ -1,0 +1,1 @@
+from model.cnnText.cnntext import CNNText
