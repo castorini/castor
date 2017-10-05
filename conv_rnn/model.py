@@ -40,6 +40,7 @@ class ConvRNNModel(nn.Module):
         self.fc2 = nn.Linear(fc_size, config["n_labels"])
 
     def convert_dataset(self, dataset):
+        dataset = np.stack(dataset)
         model_in = dataset[:, 1].reshape(-1)
         model_out = dataset[:, 0].flatten().astype(np.int)
         model_out = torch.autograd.Variable(torch.from_numpy(model_out))

@@ -5,7 +5,7 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch import utils
 
 import data
 import model
@@ -62,13 +62,13 @@ def train(**kwargs):
     seed = kwargs["seed"]
 
     if not kwargs["no_cuda"]:
-        torch.cuda.set_device(1)
+        torch.cuda.set_device(kwargs["gpu_number"])
     model.set_seed(seed)
-    data_loader = data.SSTDataLoader("data")
+    embed_loader = data.SSTEmbeddingLoader("data")
     if restore:
         conv_rnn = torch.load(kwargs["input_file"])
     else:
-        id_dict, weights, unk_vocab_list = data_loader.load_embed_data()
+        id_dict, weights, unk_vocab_list = embed_loader.load_embed_data()
         word_model = model.SSTWordEmbeddingModel(id_dict, weights, unk_vocab_list)
         if not kwargs["no_cuda"]:
             word_model.cuda()
@@ -76,25 +76,42 @@ def train(**kwargs):
         if not kwargs["no_cuda"]:
             conv_rnn.cuda()
 
+    conv_rnn.train()
     criterion = nn.CrossEntropyLoss()
     parameters = list(filter(lambda p: p.requires_grad, conv_rnn.parameters()))
     optimizer = torch.optim.Adadelta(parameters, lr=lr, weight_decay=weight_decay)
-    train_set, dev_set, test_set = data_loader.load_sst_sets()
-    best_dev = 0
+    train_set, dev_set, test_set = data.SSTDataset.load_sst_sets("data")
+
+    collate_fn = conv_rnn.convert_dataset
+    train_loader = utils.data.DataLoader(train_set, shuffle=True, batch_size=mbatch_size, drop_last=True, 
+        collate_fn=collate_fn)
+    dev_loader = utils.data.DataLoader(dev_set, batch_size=len(dev_set), collate_fn=collate_fn)
+    test_loader = utils.data.DataLoader(test_set, batch_size=len(test_set), collate_fn=collate_fn)
+
+    def evaluate(loader, dev=True):
+        conv_rnn.eval()
+        for m_in, m_out in loader:
+            scores = conv_rnn(m_in)
+            loss = criterion(scores, m_out)
+            n_correct = (torch.max(scores, 1)[1].view(m_in.size(0)).data == m_out.data).sum()
+            accuracy = n_correct / m_in.size(0)
+            if dev and accuracy > evaluate.best_dev:
+                evaluate.best_dev = accuracy
+                torch.save(conv_rnn, kwargs["output_file"])
+            if verbose:
+                print("{} set accuracy: {}, loss: {}".format("dev" if dev else "test", accuracy, loss.cpu().data[0]))
+        conv_rnn.train()
+    evaluate.best_dev = 0
 
     for epoch in range(n_epochs):
-        conv_rnn.train()
         optimizer.zero_grad()
-        np.random.shuffle(train_set)
         print("Epoch number: {}".format(epoch), end="\r")
         if verbose:
             print()
         i = 0
-        while i + mbatch_size < len(train_set):
+        for j, (train_in, train_out) in enumerate(train_loader):
             if verbose and i % (mbatch_size * 10) == 0:
-                print("{} / {}".format(i, len(train_set)), end="\r")
-            mbatch = train_set[i:i + mbatch_size]
-            train_in, train_out = conv_rnn.convert_dataset(mbatch)
+                print("{} / {}".format(j * mbatch_size, len(train_set)), end="\r")
 
             if not kwargs["no_cuda"]:
                 train_in.cuda()
@@ -107,18 +124,9 @@ def train(**kwargs):
             optimizer.step()
             i += mbatch_size
             if i % (mbatch_size * 256) == 0:
-                conv_rnn.eval()
-                dev_in, dev_out = conv_rnn.convert_dataset(dev_set)
-                scores = conv_rnn(dev_in)
-                n_correct = (torch.max(scores, 1)[1].view(len(dev_set)).data == dev_out.data).sum()
-                accuracy = n_correct / len(dev_set)
-                if accuracy > best_dev:
-                    best_dev = accuracy
-                    torch.save(conv_rnn, kwargs["output_file"])
-                if verbose:
-                    print("Dev set accuracy: {}".format(accuracy))
-                conv_rnn.train()
-    return best_dev
+                evaluate(dev_loader)
+    evaluate(test_loader, dev=False)
+    return evaluate.best_dev
 
 def do_random_search(given_params):
     test_grid = [[0.15, 0.2], [4, 5, 6], [150, 200], [3, 4, 5], [200, 300], [200, 250]]
