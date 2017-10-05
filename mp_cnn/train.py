@@ -52,7 +52,7 @@ class Trainer(object):
         self.use_tensorboard = trainer_config['tensorboard']
         if self.use_tensorboard:
             from tensorboardX import SummaryWriter
-            self.writer = SummaryWriter(log_dir=None, comment=trainer_config.get('run_label', ''))
+            self.writer = SummaryWriter(log_dir=None, comment='' if trainer_config['run_label'] is None else trainer_config['run_label'])
 
         self.train_evaluator = train_evaluator
         self.test_evaluator = test_evaluator
