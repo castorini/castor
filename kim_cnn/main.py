@@ -1,14 +1,12 @@
-import os
 import sys
+import random
 import numpy as np
 import torch
-
 from torchtext import data
 from args import get_args
-
 from SST1 import SST1Dataset
 from utils import clean_str_sst
-import random
+
 
 args = get_args()
 torch.manual_seed(args.seed)

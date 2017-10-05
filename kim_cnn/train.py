@@ -1,15 +1,12 @@
-import torch
-import torch.nn as nn
 import time
 import os
+import random
+import torch
+import torch.nn as nn
 import numpy as np
-
 from torchtext import data
 from args import get_args
 from model import KimCNN
-
-import random
-
 from SST1 import SST1Dataset
 from utils import clean_str_sst
 
@@ -37,9 +34,6 @@ if args.dataset == 'SST-1':
     LABEL = data.Field(sequential=False)
     train, dev, test = SST1Dataset.splits(TEXT, LABEL)
 
-
-
-
 TEXT.build_vocab(train, min_freq=2)
 LABEL.build_vocab(train)
 
@@ -65,11 +59,6 @@ dev_iter = data.Iterator(dev, batch_size=args.batch_size, device=args.gpu, train
                                    sort=False, shuffle=False)
 test_iter = data.Iterator(test, batch_size=args.batch_size, device=args.gpu, train=False, repeat=False,
                                    sort=False, shuffle=False)
-
-#batch = next(iter(train_iter))
-#print(batch.text)
-#print(batch.label)
-
 
 config = args
 config.target_class = len(LABEL.vocab)
@@ -180,11 +169,6 @@ while True:
                                       epoch, iterations, 1 + batch_idx, len(train_iter),
                                       100. * (1 + batch_idx) / len(train_iter), loss.data[0], ' ' * 8,
                                       n_correct / n_total * 100, ' ' * 12))
-
-    #if (epoch % args.epoch_decay == 0):
-    #    lr = args.lr * (0.75 ** (epoch // args.epoch_decay))
-    #    for param_group in optimizer.param_groups:
-    #        param_group['lr'] = lr
 
 
 
