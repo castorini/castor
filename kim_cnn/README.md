@@ -35,24 +35,48 @@ python main.py --trained_model saves/best_model.pt --mode multichannel
 
 
 ## Dataset and Embeddings 
+- Dataset is in data repo. You can set your own path in *SST1.py* and *args.py* for data and embeddings.
 
 We experiment the model on the following three datasets.
 
 - SST-1: Keep the original splits and train with phrase level dataset and test on sentence level dataset.
 
+## Setting
+
+Adadelta is used for training. 
+
+## Training Time
+
+For training time, when
+
+```
+torch.backends.cudnn.deterministic = True
+```
+
+is specified, the training will be ~3h because deterministic cnn algorithm is used (accuracy v.s. speed).
+
+Other option is that
+
+```
+torch.backends.cudnn.enabled = False
+```
+but this will take ~6-7x training time.
 
 ## Results
 
-### best dev 
-|dataset|rand|static|non-static|multichannel|
-|---|---|---|---|---|
-|SST-1|43.142598|48.773842|49.137148|49.318801|
+Deterministic Algorithm for CNN.  
 
+| Dev Accuracy on SST-1 |     rand      |    static    |   non-static  |  multichannel | 
+|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:| 
+| My-Implementation      | 42.597639| 48.773842| 48.864668   | 49.046322  |  
 
-### test
-|dataset|rand|static|non-static|multichannel|
-|---|---|---|---|---|
-|SST-1|39.909502|46.380090|45.294118|48.416290|
+| Test Accuracy on SST-1|      rand      |    static    |    non-static |  multichannel | 
+|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:| 
+| Kim-Implementation    | 45.0            | 45.5        | 48.0             | 47.4                 | 
+| My- Implementation    | 39.683258  | 45.972851| 48.914027|  47.330317       |
 
-We do not tune the parameters for each dataset. And the implementation is simplified from the original version on regularization.
+## TODO
+
+- More experiments on SST-2 and subjectivity
+- Parameters tuning
 
