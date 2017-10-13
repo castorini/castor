@@ -31,7 +31,7 @@ cd eval
 tar -xvf trec_eval.9.0.tar.gz
 cd trec_eval.9.0 
 make
-cd ..
+cd ../..
 ```
 
 
