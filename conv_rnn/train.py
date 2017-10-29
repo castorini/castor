@@ -59,7 +59,6 @@ def train(**kwargs):
     verbose = not kwargs["quiet"]
     lr = kwargs["lr"]
     weight_decay = kwargs["weight_decay"]
-    gradient_clip = kwargs["gradient_clip"]
     seed = kwargs["seed"]
 
     if not kwargs["no_cuda"]:
@@ -81,7 +80,7 @@ def train(**kwargs):
     criterion = nn.CrossEntropyLoss()
     parameters = list(filter(lambda p: p.requires_grad, conv_rnn.parameters()))
     optimizer = torch.optim.SGD(parameters, lr=lr, weight_decay=weight_decay, momentum=0.9)
-    scheduler = ReduceLROnPlateau(optimizer, patience=config["dev_per_epoch"] * 4)
+    scheduler = ReduceLROnPlateau(optimizer, patience=kwargs["dev_per_epoch"] * 4)
     train_set, dev_set, test_set = data.SSTDataset.load_sst_sets("data")
 
     collate_fn = conv_rnn.convert_dataset
