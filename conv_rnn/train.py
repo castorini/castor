@@ -113,8 +113,6 @@ def train(**kwargs):
         i = 0
         for j, (train_in, train_out) in enumerate(train_loader):
             optimizer.zero_grad()
-            if verbose and i % (mbatch_size * 10) == 0:
-                print("{} / {}".format(j * mbatch_size, len(train_set)), end="\r")
 
             if not kwargs["no_cuda"]:
                 train_in.cuda()
@@ -124,6 +122,9 @@ def train(**kwargs):
             loss = criterion(scores, train_out)
             loss.backward()
             optimizer.step()
+            accuracy = (torch.max(scores, 1)[1].view(-1).data == train_out.data).sum() / mbatch_size
+            if verbose and i % (mbatch_size * 10) == 0:
+                print("accuracy: {}, {} / {}".format(accuracy, j * mbatch_size, len(train_set)))
             i += mbatch_size
             if i % (len(train_set) // kwargs["dev_per_epoch"]) < mbatch_size:
                 evaluate(dev_loader)
@@ -156,7 +157,7 @@ def main():
     parser.add_argument("--hidden_size", default=200, type=int)
     parser.add_argument("--input_file", default="saves/model.pt", type=str)
     parser.add_argument("--lr", default=1E-1, type=float)
-    parser.add_argument("--mbatch_size", default=128, type=int)
+    parser.add_argument("--mbatch_size", default=64, type=int)
     parser.add_argument("--n_epochs", default=30, type=int)
     parser.add_argument("--n_feature_maps", default=200, type=float)
     parser.add_argument("--n_labels", default=5, type=int)
