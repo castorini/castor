@@ -34,8 +34,6 @@ class ConvRNNModel(nn.Module):
         else:
             raise ValueError("RNN type must be one of LSTM or GRU")
         self.conv = nn.Conv2d(1, n_fmaps, (1, self.hidden_size * 2))
-        if dropout:
-            self.dropout = nn.Dropout(dropout)
         self.fc1 = nn.Linear(n_fmaps + 2 * self.hidden_size, fc_size)
         self.fc2 = nn.Linear(fc_size, config["n_labels"])
 
@@ -77,8 +75,6 @@ class ConvRNNModel(nn.Module):
         out = [t.squeeze(1) for t in rnn_out.chunk(2, 1)]
         out.append(x)
         x = torch.cat(out, 1).squeeze(2)
-        if hasattr(self, "dropout"):
-            x = self.dropout(x)
         x = nn_func.relu(self.fc1(x))
         return self.fc2(x)
 
