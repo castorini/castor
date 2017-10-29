@@ -15,7 +15,6 @@ class ConvRNNModel(nn.Module):
         self.hidden_size = config["hidden_size"]
         fc_size = config["fc_size"]
         self.batch_size = config["mbatch_size"]
-        dropout = config["dropout_prob"]
         n_fmaps = config["n_feature_maps"]
         self.rnn_type = config["rnn_type"]
 

@@ -151,7 +151,6 @@ def do_random_search(given_params):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dev_per_epoch", default=9, type=int)
-    parser.add_argument("--dropout_prob", default=0.2, type=float)
     parser.add_argument("--fc_size", default=200, type=int)
     parser.add_argument("--gpu_number", default=0, type=int)
     parser.add_argument("--hidden_size", default=200, type=int)

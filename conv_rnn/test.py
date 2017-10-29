@@ -18,7 +18,6 @@ def main():
     parser.add_argument("--gpu_number", default=0, type=int)
     args = parser.parse_args()
 
-    model.set_seed(3, no_cuda=args.no_cuda)
     conv_rnn = torch.load(args.input_file)
     if not args.no_cuda:
         torch.cuda.set_device(args.gpu_number)
