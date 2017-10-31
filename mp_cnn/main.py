@@ -73,9 +73,9 @@ if __name__ == '__main__':
     else:
         raise ValueError('optimizer not recognized: it should be either adam or sgd')
 
-    train_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, train_loader, args.batch_size, args.device)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.device)
-    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, dev_loader, args.batch_size, args.device)
+    train_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, model, train_loader, args.batch_size, args.device)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, model, test_loader, args.batch_size, args.device)
+    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, model, dev_loader, args.batch_size, args.device)
 
     trainer_config = {
         'optimizer': optimizer,
@@ -98,7 +98,7 @@ if __name__ == '__main__':
         trainer.train(args.epochs)
 
     model = torch.load(args.model_outfile)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(args.dataset, model, test_loader, args.batch_size, args.device)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, model, test_loader, args.batch_size, args.device)
     scores, metric_names = test_evaluator.get_scores()
     logger.info('Evaluation metrics for test')
     logger.info('\t'.join([' '] + metric_names))

@@ -88,8 +88,8 @@ class SICKTrainer(Trainer):
             self.optimizer.step()
             if batch_idx % self.log_interval == 0:
                 logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, min(batch_idx * self.batch_size, len(self.train_loader.dataset)),
-                    len(self.train_loader.dataset),
+                    epoch, min(batch_idx * batch.batch_size, len(batch.dataset.examples)),
+                    len(batch.dataset.examples),
                     100. * batch_idx / (len(self.train_loader)), loss.data[0])
                 )
 
