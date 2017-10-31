@@ -62,7 +62,8 @@ if __name__ == '__main__':
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     model = MPCNN(embedding, args.holistic_filters, args.per_dim_filters, filter_widths,
                     args.hidden_units, dataset_cls.NUM_CLASSES, args.dropout, args.sparse_features)
-    if args.device != -1:
+
+    with torch.cuda.device(args.device):
         model.cuda()
 
     optimizer = None
