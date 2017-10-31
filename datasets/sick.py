@@ -1,17 +1,35 @@
+import math
 import os
 
+import numpy as np
 import torch
 from torchtext.data.dataset import Dataset
 from torchtext.data.example import Example
 from torchtext.data.field import Field
 from torchtext.data.iterator import BucketIterator
+from torchtext.data.pipeline import Pipeline
 from torchtext.vocab import Vectors
 
 
-class SICK(Dataset):
+def get_class_probs(sim, *args):
+    """
+    Convert a single label into class probabilities.
+    """
+    class_probs = np.zeros(SICK.NUM_CLASSES)
+    ceil, floor = math.ceil(sim), math.floor(sim)
+    if ceil == floor:
+        class_probs[floor - 1] = 1
+    else:
+        class_probs[floor - 1] = ceil - sim
+        class_probs[ceil - 1] = sim - floor
 
+    return class_probs
+
+
+class SICK(Dataset):
+    NUM_CLASSES = 5
     TEXT_FIELD = Field(batch_first=True)
-    LABEL_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True)
+    LABEL_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, postprocessing=Pipeline(get_class_probs))
 
     @staticmethod
     def sort_key(ex):
