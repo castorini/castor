@@ -57,7 +57,7 @@ class SICKEvaluator(Evaluator):
             true_labels = []
             for batch in self.data_loader:
                 # TODO set volatile to True?
-                output = self.model(batch.a, batch.b)
+                output = self.model(batch.a, batch.b, batch.ext_feats)
                 test_kl_div_loss += F.kl_div(output, batch.label, size_average=False).data[0]
                 # handle last batch which might have smaller size
                 if len(predict_classes) != len(batch.a):

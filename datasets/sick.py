@@ -10,6 +10,8 @@ from torchtext.data.iterator import BucketIterator
 from torchtext.data.pipeline import Pipeline
 from torchtext.vocab import Vectors
 
+from datasets.idf_utils import get_pairwise_word_to_doc_freq, get_pairwise_overlap_features
+
 
 def get_class_probs(sim, *args):
     """
@@ -29,7 +31,8 @@ def get_class_probs(sim, *args):
 class SICK(Dataset):
     NAME = 'sick'
     NUM_CLASSES = 5
-    TEXT_FIELD = Field(batch_first=True)
+    TEXT_FIELD = Field(batch_first=True, tokenize=lambda x: x)  # tokenizer is identity since we already tokenized it to compute external features
+    EXT_FEATS_FIELD = Field(tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, tokenize=lambda x: x)
     LABEL_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, postprocessing=Pipeline(get_class_probs))
 
     @staticmethod
@@ -40,18 +43,28 @@ class SICK(Dataset):
         """
         Create a SICK dataset instance
         """
-        fields = [('a', self.TEXT_FIELD), ('b', self.TEXT_FIELD), ('label', self.LABEL_FIELD)]
+        fields = [('a', self.TEXT_FIELD), ('b', self.TEXT_FIELD), ('ext_feats', self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD)]
 
         examples = []
         f1 = open(os.path.join(path, 'a.txt'), 'r')
         f2 = open(os.path.join(path, 'b.txt'), 'r')
         label_file = open(os.path.join(path, 'sim.txt'), 'r')
 
-        for l1 in f1:
-            l2 = f2.readline()
-            label = label_file.readline()
-            example = Example.fromlist(map(lambda s: s.rstrip('.\n'), [l1, l2, label]), fields)
+        sent_list_1 = [l.rstrip('.\n').split(' ') for l in f1]
+        sent_list_2 = [l.rstrip('.\n').split(' ') for l in f2]
+
+        word_to_doc_cnt = get_pairwise_word_to_doc_freq(sent_list_1, sent_list_2)
+        overlap_feats = get_pairwise_overlap_features(sent_list_1, sent_list_2, word_to_doc_cnt)
+
+        sent_list_2_iter, overlap_feats_iter = iter(sent_list_2), iter(overlap_feats)
+        for l1 in sent_list_1:
+            l2 = next(sent_list_2_iter)
+            label = label_file.readline().rstrip('.\n')
+            ext_feats = next(overlap_feats_iter)
+            example = Example.fromlist([l1, l2, ext_feats, label], fields)
             examples.append(example)
+
+        map(lambda f: f.close(), [f1, f2, label_file])
 
         super(SICK, self).__init__(examples, fields)
 
