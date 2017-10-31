@@ -1,5 +1,6 @@
 import argparse
 import os
+import random
 
 import numpy as np
 import torch
@@ -51,6 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--run-label', type=str, help='label to describe run')
     args = parser.parse_args()
 
+    random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if args.device != -1:
