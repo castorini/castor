@@ -31,6 +31,7 @@ def get_class_probs(sim, *args):
 class MSRVID(Dataset):
     NAME = 'msrvid'
     NUM_CLASSES = 6
+    ID_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True)
     TEXT_FIELD = Field(batch_first=True, tokenize=lambda x: x)  # tokenizer is identity since we already tokenized it to compute external features
     EXT_FEATS_FIELD = Field(tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, tokenize=lambda x: x)
     LABEL_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, postprocessing=Pipeline(get_class_probs))
@@ -43,11 +44,12 @@ class MSRVID(Dataset):
         """
         Create a MSRVID dataset instance
         """
-        fields = [('a', self.TEXT_FIELD), ('b', self.TEXT_FIELD), ('ext_feats', self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD)]
+        fields = [('id', self.ID_FIELD), ('a', self.TEXT_FIELD), ('b', self.TEXT_FIELD), ('ext_feats', self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD)]
 
         examples = []
         f1 = open(os.path.join(path, 'a.txt'), 'r')
         f2 = open(os.path.join(path, 'b.txt'), 'r')
+        id_file = open(os.path.join(path, 'id.txt'), 'r')
         label_file = open(os.path.join(path, 'sim.txt'), 'r')
 
         sent_list_1 = [l.rstrip('.\n').split(' ') for l in f1]
@@ -60,8 +62,9 @@ class MSRVID(Dataset):
         for l1 in sent_list_1:
             l2 = next(sent_list_2_iter)
             label = label_file.readline().rstrip('.\n')
+            pair_id = id_file.readline().rstrip('.\n')
             ext_feats = next(overlap_feats_iter)
-            example = Example.fromlist([l1, l2, ext_feats, label], fields)
+            example = Example.fromlist([pair_id, l1, l2, ext_feats, label], fields)
             examples.append(example)
 
         map(lambda f: f.close(), [f1, f2, label_file])
@@ -89,6 +92,6 @@ class MSRVID(Dataset):
 
         train, test = cls.splits(path)
 
-        cls.TEXT_FIELD.build_vocab(train, vectors=vectors)
+        cls.TEXT_FIELD.build_vocab(train, test, vectors=vectors)
 
         return BucketIterator.splits((train, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
