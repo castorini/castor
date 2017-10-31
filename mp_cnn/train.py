@@ -44,7 +44,6 @@ class Trainer(object):
         self.optimizer = trainer_config['optimizer']
         self.train_loader = train_loader
         self.batch_size = trainer_config['batch_size']
-        self.sample = trainer_config['sample']
         self.log_interval = trainer_config['log_interval']
         self.model_outfile = trainer_config['model_outfile']
         self.lr_reduce_factor = trainer_config['lr_reduce_factor']
@@ -80,21 +79,18 @@ class SICKTrainer(Trainer):
     def train_epoch(self, epoch):
         self.model.train()
         total_loss = 0
-        for batch_idx, (sentences, labels) in enumerate(self.train_loader):
-            sent_a, sent_b = Variable(sentences['a']), Variable(sentences['b'])
-            ext_feats = Variable(sentences['ext_feats'])
-            labels = Variable(labels)
+        for batch_idx, batch in enumerate(self.train_loader):
             self.optimizer.zero_grad()
-            output = self.model(sent_a, sent_b, ext_feats)
-            loss = F.kl_div(output, labels)
+            output = self.model(batch.a, batch.b)
+            loss = F.kl_div(output, batch.label)
             total_loss += loss.data[0]
             loss.backward()
             self.optimizer.step()
             if batch_idx % self.log_interval == 0:
                 logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, min(batch_idx * self.batch_size, len(self.train_loader.dataset)),
-                    len(self.train_loader.dataset) if not self.sample else self.sample,
-                    100. * batch_idx / (len(self.train_loader) if not self.sample else math.ceil(self.sample / self.batch_size)), loss.data[0])
+                    len(self.train_loader.dataset),
+                    100. * batch_idx / (len(self.train_loader)), loss.data[0])
                 )
 
         if self.use_tensorboard:

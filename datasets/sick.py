@@ -27,6 +27,7 @@ def get_class_probs(sim, *args):
 
 
 class SICK(Dataset):
+    NAME = 'sick'
     NUM_CLASSES = 5
     TEXT_FIELD = Field(batch_first=True)
     LABEL_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, postprocessing=Pipeline(get_class_probs))
@@ -59,7 +60,7 @@ class SICK(Dataset):
         return super(SICK, cls).splits(path, train=train, validation=validation, test=test, **kwargs)
 
     @classmethod
-    def iters(cls, path, vectors_name, vectors_cache, batch_size=64, shuffle=True, device=0, vectors=None):
+    def iters(cls, path, vectors_name, vectors_cache, batch_size=64, shuffle=True, device=0, vectors=None, unk_init=torch.Tensor.zero_):
         """
         :param path: directory containing train, test, dev files
         :param vectors_name: name of word vectors file
@@ -67,10 +68,11 @@ class SICK(Dataset):
         :param batch_size: batch size
         :param device: GPU device
         :param vectors: custom vectors - either predefined torchtext vectors or your own custom Vector classes
+        :param unk_init: function used to generate vector for OOV words
         :return:
         """
         if vectors is None:
-            vectors = Vectors(name=vectors_name, cache=vectors_cache, unk_init=torch.Tensor.zero_)
+            vectors = Vectors(name=vectors_name, cache=vectors_cache, unk_init=unk_init)
 
         train, val, test = cls.splits(path)
 

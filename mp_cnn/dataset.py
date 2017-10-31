@@ -7,9 +7,10 @@ import nltk
 import numpy as np
 import torch
 from torch.autograd import Variable
+import torch.nn as nn
 import torch.utils.data as data
 
-import preprocessing
+from datasets.sick import SICK
 
 nltk.download('stopwords', quiet=True)
 from nltk.corpus import stopwords
@@ -32,37 +33,36 @@ class DatasetType(Enum):
     DEV = 3
 
 
+unknown_vec = None
+
+
+def unk(tensor):
+    global unknown_vec
+    if unknown_vec is None:
+        unknown_vec = torch.Tensor(tensor.size())
+        unknown_vec.normal_(0, 0.01)
+    return unknown_vec
+
+
 class MPCNNDatasetFactory(object):
     """
     Get the corresponding Dataset class for a particular dataset.
     """
     @staticmethod
-    def get_dataset(dataset_name, word_vectors_file, batch_size, cuda, sample):
-        extra_args = {'shuffle': True}
-        dev_loader = None
-        if sample:
-            sample_indices = list(range(sample))
-            subset_random_sampler = data.sampler.SubsetRandomSampler(sample_indices)
-            extra_args['sampler'] = subset_random_sampler
-            extra_args['shuffle'] = False
+    def get_dataset(dataset_name, word_vectors_dir, word_vectors_file, batch_size, device):
         if dataset_name == 'sick':
-            train_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TRAIN, cuda), batch_size=batch_size, **extra_args)
-            test_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.TEST, cuda), batch_size=batch_size, **extra_args)
-            dev_loader = torch.utils.data.DataLoader(SICKDataset(DatasetType.DEV, cuda), batch_size=batch_size, **extra_args)
+            dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'sick')
+            train_loader, dev_loader, test_loader = SICK.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=unk)
+            embedding_dim = SICK.TEXT_FIELD.vocab.vectors.size()
+            embedding = nn.Embedding(embedding_dim[0], embedding_dim[1])
+            embedding.weight = nn.Parameter(SICK.TEXT_FIELD.vocab.vectors)
+            return SICK, embedding, train_loader, dev_loader, test_loader
         elif dataset_name == 'msrvid':
-            train_loader = torch.utils.data.DataLoader(MSRVIDDataset(DatasetType.TRAIN, cuda), batch_size=batch_size, **extra_args)
-            test_loader = torch.utils.data.DataLoader(MSRVIDDataset(DatasetType.TEST, cuda), batch_size=batch_size, **extra_args)
+            raise NotImplementedError('torchtext support for msrvid not yet implemented')
         else:
             raise ValueError('{} is not a valid dataset.'.format(dataset_name))
 
-        word_index, embedding = preprocessing.get_glove_embedding(word_vectors_file, train_loader.dataset.dataset_root)
-        logger.info('Finished loading GloVe embedding for vocab in data...')
-
-        train_loader.dataset.initialize(word_index, embedding)
-        test_loader.dataset.initialize(word_index, embedding)
-        if dev_loader is not None:
-            dev_loader.dataset.initialize(word_index, embedding)
-        return train_loader, test_loader, dev_loader
+        # TODO support sparse feature computation
 
 
 class MPCNNDataset(data.Dataset):
@@ -172,28 +172,6 @@ class MPCNNDataset(data.Dataset):
 
     def __len__(self):
         return len(self.labels)
-
-
-class SICKDataset(MPCNNDataset):
-
-    dataset_root = os.path.join(os.pardir, os.pardir, 'data', 'sick')
-    num_classes = 5
-
-    def __init__(self, dataset_type, cuda):
-        super(SICKDataset, self).__init__(dataset_type, cuda)
-
-    def initialize(self, word_index, embedding):
-        super(SICKDataset, self).initialize(word_index, embedding)
-        new_labels = torch.zeros(self.__len__(), self.num_classes)
-        for i, sim in enumerate(self.labels):
-            ceil, floor = math.ceil(sim), math.floor(sim)
-            if ceil == floor:
-                new_labels[i][floor - 1] = 1
-            else:
-                new_labels[i][floor - 1] = ceil - sim
-                new_labels[i][ceil - 1] = sim - floor
-
-        self.labels = new_labels.cuda() if self.cuda else new_labels
 
 
 class MSRVIDDataset(MPCNNDataset):
