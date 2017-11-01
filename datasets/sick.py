@@ -31,7 +31,7 @@ def get_class_probs(sim, *args):
 class SICK(Dataset):
     NAME = 'sick'
     NUM_CLASSES = 5
-    ID_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True)
+    ID_FIELD = Field(sequential=False, use_vocab=False, batch_first=True)
     TEXT_FIELD = Field(batch_first=True, tokenize=lambda x: x)  # tokenizer is identity since we already tokenized it to compute external features
     EXT_FEATS_FIELD = Field(tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, tokenize=lambda x: x)
     LABEL_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, postprocessing=Pipeline(get_class_probs))
@@ -58,12 +58,9 @@ class SICK(Dataset):
         word_to_doc_cnt = get_pairwise_word_to_doc_freq(sent_list_1, sent_list_2)
         overlap_feats = get_pairwise_overlap_features(sent_list_1, sent_list_2, word_to_doc_cnt)
 
-        sent_list_2_iter, overlap_feats_iter = iter(sent_list_2), iter(overlap_feats)
-        for l1 in sent_list_1:
-            l2 = next(sent_list_2_iter)
-            label = label_file.readline().rstrip('.\n')
-            pair_id = id_file.readline().rstrip('.\n')
-            ext_feats = next(overlap_feats_iter)
+        for pair_id, l1, l2, ext_feats, label in zip(id_file, sent_list_1, sent_list_2, overlap_feats, label_file):
+            pair_id = pair_id.rstrip('.\n')
+            label = label.rstrip('.\n')
             example = Example.fromlist([pair_id, l1, l2, ext_feats, label], fields)
             examples.append(example)
 

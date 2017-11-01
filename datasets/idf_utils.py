@@ -18,9 +18,7 @@ def get_pairwise_word_to_doc_freq(sent_list_1, sent_list_2):
     """
     word_to_doc_cnt = defaultdict(int)
 
-    sent_list_2_iter = iter(sent_list_2)
-    for s1 in sent_list_1:
-        s2 = next(sent_list_2_iter)
+    for s1, s2 in zip(sent_list_1, sent_list_2):
         unique_tokens = set(s1) | set(s2)
         for t in unique_tokens:
             word_to_doc_cnt[t] += 1
@@ -34,11 +32,9 @@ def get_pairwise_overlap_features(sent_list_1, sent_list_2, word_to_doc_cnt):
     """
     stoplist = set(stopwords.words('english'))
     num_docs = len(sent_list_1)
-    sent_list_2_iter = iter(sent_list_2)
     overlap_feats = []
 
-    for s1 in sent_list_1:
-        s2 = next(sent_list_2_iter)
+    for s1, s2 in zip(sent_list_1, sent_list_2):
         tokens_a_set, tokens_b_set = set(s1), set(s2)
         intersect = tokens_a_set & tokens_b_set
         overlap = len(intersect) / (len(tokens_a_set) + len(tokens_b_set))

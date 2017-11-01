@@ -188,23 +188,26 @@ class MSRVIDTrainer(Trainer):
             logger.info('Epoch {} started...'.format(epoch))
             left_out_a, left_out_b, left_out_ext_feats, left_out_label = self.train_epoch(epoch)
 
-            with torch.cuda.device(self.train_loader.device):
-                # manually evaluating the validating set
-                all_predictions, all_true_labels = [], []
-                val_kl_div_loss = 0
-                for i in range(len(left_out_a)):
-                    output = self.model(left_out_a[i], left_out_b[i], left_out_ext_feats[i])
-                    val_kl_div_loss += F.kl_div(output, left_out_label[i], size_average=False).data[0]
-                    predict_classes = torch.arange(0, self.train_loader.dataset.NUM_CLASSES).expand(len(left_out_a[i]), self.train_loader.dataset.NUM_CLASSES).cuda()
-                    predictions = (predict_classes * output.data.exp()).sum(dim=1)
-                    true_labels = (predict_classes * left_out_label[i].data).sum(dim=1)
-                    all_predictions.append(predictions)
-                    all_true_labels.append(true_labels)
+            # manually evaluating the validating set
+            all_predictions, all_true_labels = [], []
+            val_kl_div_loss = 0
+            for i in range(len(left_out_a)):
+                output = self.model(left_out_a[i], left_out_b[i], left_out_ext_feats[i])
+                val_kl_div_loss += F.kl_div(output, left_out_label[i], size_average=False).data[0]
+                predict_classes = torch.arange(0, self.train_loader.dataset.NUM_CLASSES).expand(len(left_out_a[i]), self.train_loader.dataset.NUM_CLASSES)
+                if self.train_loader.device != -1:
+                    with torch.cuda.device(self.train_loader.device):
+                        predict_classes = predict_classes.cuda()
 
-                predictions = torch.cat(all_predictions).cpu().numpy()
-                true_labels = torch.cat(all_true_labels).cpu().numpy()
-                pearson_r = pearsonr(predictions, true_labels)[0]
-                val_kl_div_loss /= len(predictions)
+                predictions = (predict_classes * output.data.exp()).sum(dim=1)
+                true_labels = (predict_classes * left_out_label[i].data).sum(dim=1)
+                all_predictions.append(predictions)
+                all_true_labels.append(true_labels)
+
+            predictions = torch.cat(all_predictions).cpu().numpy()
+            true_labels = torch.cat(all_true_labels).cpu().numpy()
+            pearson_r = pearsonr(predictions, true_labels)[0]
+            val_kl_div_loss /= len(predictions)
 
             if self.use_tensorboard:
                 self.writer.add_scalar('msrvid/dev/pearson_r', pearson_r, epoch)

@@ -65,8 +65,9 @@ if __name__ == '__main__':
     model = MPCNN(embedding, args.holistic_filters, args.per_dim_filters, filter_widths,
                     args.hidden_units, dataset_cls.NUM_CLASSES, args.dropout, args.sparse_features)
 
-    with torch.cuda.device(args.device):
-        model.cuda()
+    if args.device != -1:
+        with torch.cuda.device(args.device):
+            model.cuda()
 
     optimizer = None
     if args.optimizer == 'adam':
@@ -101,8 +102,8 @@ if __name__ == '__main__':
         trainer.train(args.epochs)
 
     model = torch.load(args.model_outfile)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, model, test_loader, args.batch_size, args.device)
-    scores, metric_names = test_evaluator.get_scores()
+    saved_model_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, model, test_loader, args.batch_size, args.device)
+    scores, metric_names = saved_model_evaluator.get_scores()
     logger.info('Evaluation metrics for test')
     logger.info('\t'.join([' '] + metric_names))
     logger.info('\t'.join(['test'] + list(map(str, scores))))
