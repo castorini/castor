@@ -54,10 +54,10 @@ Then, you can run:
 python main.py mpcnn.trecqa.model --dataset trecqa --epochs 5 --regularization 0.0005 --dropout 0.5 --eps 0.1
 ```
 
-| Implementation and config        | map    | map    |
+| Implementation and config        | map    | mrr    |
 | -------------------------------- |:------:|:------:|
-| Paper                            | 0.762  | 0.7904 |
-| PyTorch using above config       | 0.830  | 0.8223 |
+| Paper                            | 0.762  | 0.830  |
+| PyTorch using above config       | 0.7904 | 0.8223 |
 
 The paper results are reported in [Noise-Contrastive Estimation for Answer Selection with Deep Neural Networks](https://dl.acm.org/citation.cfm?id=2983872).
 
