@@ -47,7 +47,7 @@ python main.py mpcnn.msrvid.model.castor --dataset msrvid --batch-size 16 --epsi
 
 ## TrecQA Dataset
 
-To run MP-CNN on (Raw) TrecQA, you first need to the `get_trec_eval.sh` script in `utils` under the repo root.
+To run MP-CNN on (Raw) TrecQA, you first need to run `./get_trec_eval.sh` in `utils` under the repo root while inside the `utils` directory. This will download and compile the official `trec_eval` tool used for evaluation.
 
 Then, you can run:
 ```

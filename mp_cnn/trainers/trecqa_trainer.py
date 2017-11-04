@@ -17,7 +17,7 @@ class TRECQATrainer(Trainer):
         total_loss = 0
         for batch_idx, batch in enumerate(self.train_loader):
             self.optimizer.zero_grad()
-            output = self.model(batch.a, batch.b, batch.ext_feats)
+            output = self.model(batch.sentence_1, batch.sentence_2, batch.ext_feats)
             loss = F.cross_entropy(output, batch.label, size_average=False)
             total_loss += loss.data[0]
             loss.backward()

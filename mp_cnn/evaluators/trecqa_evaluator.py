@@ -43,7 +43,7 @@ class TRECQAEvaluator(Evaluator):
 
         for batch in self.data_loader:
             qids.extend(batch.id.data.cpu().numpy())
-            output = self.model(batch.a, batch.b, batch.ext_feats)
+            output = self.model(batch.sentence_1, batch.sentence_2, batch.ext_feats)
             test_cross_entropy_loss += F.cross_entropy(output, batch.label, size_average=False).data[0]
 
             true_labels.extend(batch.label.data.cpu().numpy())

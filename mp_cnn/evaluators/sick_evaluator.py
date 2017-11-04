@@ -19,11 +19,11 @@ class SICKEvaluator(Evaluator):
         true_labels = []
 
         for batch in self.data_loader:
-            output = self.model(batch.a, batch.b, batch.ext_feats)
+            output = self.model(batch.sentence_1, batch.sentence_2, batch.ext_feats)
             test_kl_div_loss += F.kl_div(output, batch.label, size_average=False).data[0]
             # handle last batch which might have smaller size
-            if len(predict_classes) != len(batch.a):
-                predict_classes = torch.arange(1, num_classes + 1).expand(len(batch.a), num_classes)
+            if len(predict_classes) != len(batch.sentence_1):
+                predict_classes = torch.arange(1, num_classes + 1).expand(len(batch.sentence_1), num_classes)
 
             if self.data_loader.device != -1:
                 with torch.cuda.device(self.device):

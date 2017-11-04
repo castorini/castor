@@ -26,14 +26,15 @@ class MSRVIDTrainer(Trainer):
         left_out_val_labels = []
 
         for batch_idx, batch in enumerate(self.train_loader):
+            # msrvid does not contain a validation set, we leave out some training data for validation to do model selection
             if batch_idx >= start_val_batch:
-                left_out_val_a.append(batch.a)
-                left_out_val_b.append(batch.b)
+                left_out_val_a.append(batch.sentence_1)
+                left_out_val_b.append(batch.sentence_2)
                 left_out_val_ext_feats.append(batch.ext_feats)
                 left_out_val_labels.append(batch.label)
                 continue
             self.optimizer.zero_grad()
-            output = self.model(batch.a, batch.b, batch.ext_feats)
+            output = self.model(batch.sentence_1, batch.sentence_2, batch.ext_feats)
             loss = F.kl_div(output, batch.label)
             total_loss += loss.data[0]
             loss.backward()

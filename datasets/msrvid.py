@@ -38,13 +38,13 @@ class MSRVID(Dataset):
 
     @staticmethod
     def sort_key(ex):
-        return len(ex.a)
+        return len(ex.sentence_1)
 
     def __init__(self, path):
         """
         Create a MSRVID dataset instance
         """
-        fields = [('id', self.ID_FIELD), ('a', self.TEXT_FIELD), ('b', self.TEXT_FIELD), ('ext_feats', self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD)]
+        fields = [('id', self.ID_FIELD), ('sentence_1', self.TEXT_FIELD), ('sentence_2', self.TEXT_FIELD), ('ext_feats', self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD)]
 
         examples = []
         f1 = open(os.path.join(path, 'a.txt'), 'r')
