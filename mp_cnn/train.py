@@ -12,6 +12,7 @@ class MPCNNTrainerFactory(object):
         'msrvid': MSRVIDTrainer,
         'trecqa': TRECQATrainer
     }
+
     @staticmethod
     def get_trainer(dataset_name, model, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator=None):
         if dataset_name not in MPCNNTrainerFactory.trainer_map:
