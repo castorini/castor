@@ -1,20 +1,14 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
-from torch.autograd import Function
-import math
-import copy
 
 
 class PairwiseConv(nn.Module):
     """docstring for PairwiseConv"""
     def __init__(self, model):
         super(PairwiseConv, self).__init__()
-        # self.linearLayer = self:LinearLayer() ??
-        # self.convModel = SmPlusPlus(config)
         self.convModel = model
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(self.convModel.dropout)
         self.linearLayer = nn.Linear(model.n_hidden, 1)
         self.posModel = self.convModel
         # share or copy ??
@@ -41,9 +35,10 @@ class SmPlusPlus(nn.Module):
         words_dim = config.words_dim
         filter_width = config.filter_width
         self.mode = config.mode
+        self.dropout = config.dropout
 
         n_classes = config.target_class
-        ext_feats_size = 4
+        ext_feats_size = config.ext_feats_size
 
         if self.mode == 'multichannel':
             input_channel = 2
@@ -62,7 +57,6 @@ class SmPlusPlus(nn.Module):
         self.conv_q = nn.Conv2d(input_channel, output_channel, (filter_width, words_dim), padding=(filter_width - 1, 0))
         self.conv_a = nn.Conv2d(input_channel, output_channel, (filter_width, words_dim), padding=(filter_width - 1, 0))
 
-        self.dropout = nn.Dropout(config.dropout)
         self.n_hidden = 2 * output_channel + ext_feats_size
 
         self.combined_feature_vector = nn.Linear(self.n_hidden, self.n_hidden)
@@ -102,14 +96,8 @@ class SmPlusPlus(nn.Module):
             print("Unsupported Mode")
             exit()
 
-        # append external features and feed to fc
         x.append(x_ext)
         x = torch.cat(x, 1)
         x = F.tanh(self.combined_feature_vector(x))
 
-        '''
-        add dropout and hidden layer here? No, it should be in PairwiseConv
-        '''
-        # x = self.dropout(x)
-        # x = self.hidden(x)
         return x

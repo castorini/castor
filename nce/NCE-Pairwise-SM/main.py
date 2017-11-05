@@ -39,9 +39,8 @@ AID = data.Field(sequential=False)
 QUESTION = data.Field(batch_first=True)
 ANSWER = data.Field(batch_first=True)
 LABEL = data.Field(sequential=False)
-EXTERNAL = data.Field(sequential=False, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
-                      preprocessing=data.Pipeline(lambda x: x.split()),
-                      postprocessing=data.Pipeline(lambda x, train: [float(y) for y in x]))
+EXTERNAL = data.Field(sequential=True, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
+            postprocessing=data.Pipeline(lambda arr, _, train: [float(y) for y in arr]))
 if config.dataset == 'TREC':
     train, dev, test = TrecDataset.splits(QID, QUESTION, AID, ANSWER, EXTERNAL, LABEL)
 else:
@@ -82,15 +81,9 @@ def predict(test_mode, dataset_iter):
         qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
         true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
 
-        # scores = model(dev_batch)
         output = model.convModel(dev_batch)
 
         scores = model.linearLayer(output)
-        # print(output)
-        # print(scores)
-        # exit(1)
-        # index_label = np.transpose(torch.max(scores, 1)[1].view(dev_batch.label.size()).cpu().data.numpy())
-        # label_array = index2label[index_label]
         score_array = scores.cpu().data.numpy().reshape(-1)
 
         # print and write the result

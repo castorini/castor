@@ -18,9 +18,8 @@ from evaluate import evaluate
 
 args = get_args()
 config = args
-
 torch.manual_seed(args.seed)
-
+torch.backends.cudnn.deterministic = True
 
 def set_vectors(field, vector_path):
     if os.path.isfile(vector_path):
@@ -41,9 +40,6 @@ def set_vectors(field, vector_path):
     return field
 
 
-args = get_args()
-config = args
-
 # Set random seed for reproducibility
 torch.manual_seed(args.seed)
 if not args.cuda:
@@ -62,9 +58,8 @@ AID = data.Field(sequential=False)
 QUESTION = data.Field(batch_first=True)
 ANSWER = data.Field(batch_first=True)
 LABEL = data.Field(sequential=False)
-EXTERNAL = data.Field(sequential=False, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
-                      preprocessing=data.Pipeline(lambda x: x.split()),
-                      postprocessing=data.Pipeline(lambda x, train: [float(y) for y in x]))
+EXTERNAL = data.Field(sequential=True, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
+            postprocessing=data.Pipeline(lambda arr, _, train: [float(y) for y in arr]))
 
 train, dev, test = TrecDataset.splits(QID, QUESTION, AID, ANSWER, EXTERNAL, LABEL)
 
@@ -80,7 +75,7 @@ ANSWER = set_vectors(ANSWER, args.vector_cache)
 train_iter = data.Iterator(train, batch_size=args.batch_size, device=args.gpu, train=True, repeat=False,
                            sort=False, shuffle=True)
 dev_iter = data.Iterator(dev, batch_size=args.batch_size, device=args.gpu, train=False, repeat=False,
-                         sort=False, shuffle=False)
+                         sort=False,    shuffle=False)
 test_iter = data.Iterator(test, batch_size=args.batch_size, device=args.gpu, train=False, repeat=False,
                           sort=False, shuffle=False)
 
@@ -98,9 +93,9 @@ print("Test instance", len(test))
 
 if args.resume_snapshot:
     if args.cuda:
-        model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage.cuda(args.gpu))
+        pw_model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage.cuda(args.gpu))
     else:
-        model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage)
+        pw_model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage)
 else:
     model = SmPlusPlus(config)
     model.static_question_embed.weight.data.copy_(QUESTION.vocab.vectors)
@@ -113,7 +108,7 @@ else:
         print("Shift model to GPU")
 
 
-pw_model = PairwiseConv(model)
+    pw_model = PairwiseConv(model)
 
 parameter = filter(lambda p: p.requires_grad, pw_model.parameters())
 
@@ -123,8 +118,7 @@ optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight
 # optimizer = torch.optim.Adam(parameter, lr=args.lr, weight_decay=args.weight_decay, eps=1e-8)
 
 
-# criterion = nn.CrossEntropyLoss()
-marginRankingLoss = nn.MarginRankingLoss(margin = 1, size_average = False)
+marginRankingLoss = nn.MarginRankingLoss(margin = 1, size_average = True)
 
 early_stop = False
 iterations = 0
@@ -145,11 +139,11 @@ os.makedirs(args.save_path, exist_ok=True)
 os.makedirs(os.path.join(args.save_path, args.dataset), exist_ok=True)
 print(header)
 
-index2label = np.array(LABEL.vocab.itos)
-index2qid = np.array(QID.vocab.itos)
-index2aid = np.array(AID.vocab.itos)
-index2question = np.array(QUESTION.vocab.itos)
-index2answer = np.array(ANSWER.vocab.itos)
+index2label = np.array(LABEL.vocab.itos) # ['<unk>', '0', '1']
+index2qid = np.array(QID.vocab.itos) # torchtext index to qid in the TrecQA dataset
+index2aid = np.array(AID.vocab.itos) # torchtext index to aid in the TrecQA dataset
+index2question = np.array(QUESTION.vocab.itos)  # torchtext index to words appearing in questions in the TrecQA dataset
+index2answer = np.array(ANSWER.vocab.itos) # torchtext index to words appearing in answers in the TrecQA dataset
 
 
 # get the nearest negative samples to the positive sample by computing the feature difference
@@ -162,12 +156,12 @@ def get_nearest_neg_id(pos_feature, neg_dict, distance="cosine", k=1):
         if distance == "l2":
             dis = np.sqrt(np.sum((np.array(pos_feature) - neg_dict[key]["feature"]) ** 2))
         elif distance == "cosine":
-            # feat_norm = normalize(np.array(neg_dict[key]["feature"].reshape(-1,1)), norm='l2')
             neg_feature = np.array(neg_dict[key]["feature"])
             feat_norm = neg_feature / np.sqrt(sum(neg_feature ** 2))
             dis = 1 - feat_norm.dot(pos_feature_norm)
         dis_list.append(dis)
         neg_list.append(key)
+        # index2dis[key] = dis
 
     k = min(k, len(neg_dict))
     min_list = heapq.nsmallest(k, enumerate(dis_list), key=operator.itemgetter(1))
@@ -193,8 +187,6 @@ def get_batch(question, answer, ext_feat, size):
     setattr(new_batch, "ext_feat", torch.stack(ext_feat))
     return new_batch
 
-
-
 while True:
     if early_stop:
         print("Early Stopping. Epoch: {}, Best Dev Loss: {}".format(epoch, best_dev_loss))
@@ -207,12 +199,11 @@ while True:
     '''
     acc = 0
     tot = 0
-    for batch_idx, batch in enumerate(train_iter):
+    for batch_idx, batch in enumerate(iter(train_iter)):
         if epoch != 1:
             iterations += 1
         loss_num = 0
         pw_model.train()
-        total_sample_per_batch = 0
 
         new_train = {"ext_feat": [], "question": [], "answer": [], "label": []}
         features = pw_model.convModel(batch)
@@ -252,18 +243,18 @@ while True:
                 if epoch == 1:
                     continue
                 # random generate sample in the first training epoch
-                elif epoch != 1:
+                elif epoch == 2:
                     near_list = get_random_neg_id(q2neg, qid_i, k=args.neg_num)
                 else:
                     debug_qid = qid_i
-                    near_list = get_nearest_neg_id(features[i], question2answer[qid_i]["neg"], distance="cosine", k=args.neg_num)
+                    near_list = get_nearest_neg_id(features[i], question2answer[qid_i]["neg"], distance="l2", k=args.neg_num)
 
                 batch_near_list.extend(near_list)
 
                 neg_size = len(near_list)
                 if neg_size != 0:
-                    answer_i = answer_i[answer_i != 1]
-                    question_i = question_i[question_i != 1]
+                    answer_i = answer_i[answer_i != 1] # remove padding 1 <pad>
+                    question_i = question_i[question_i != 1] # remove padding 1 <pad>
                     for near_id in near_list:
                         batch_qid.append(qid_i)
                         batch_aid.append(aid_i)
@@ -340,18 +331,16 @@ while True:
                 cmp = output[:, 0] > output[:, 1]
                 acc += sum(cmp.data.cpu().numpy())
                 tot += true_batch_size
-                total_sample_per_batch += true_batch_size
 
 
                 loss = marginRankingLoss(output[:, 0], output[:, 1], torch.autograd.Variable(torch.ones(1)))
-                loss_num += loss.data.numpy()[0]
+                loss_num = loss.data.numpy()[0]
                 loss.backward()
                 optimizer.step()
 
         # Evaluate performance on validation set
         if iterations % args.dev_every == 1 and epoch != 1:
             # switch model into evaluation mode
-            # model.eval()
             pw_model.eval()
             dev_iter.init_epoch()
             n_dev_correct = 0
@@ -394,10 +383,7 @@ while True:
             print(dev_log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
                                           100. * (1 + batch_idx) / len(train_iter),
-                                          loss_num / total_sample_per_batch, acc / tot, dev_map, dev_mrr))
-            # Update validation results
-
-
+                                          loss_num, acc / tot, dev_map, dev_mrr))
             if best_dev_mrr < dev_mrr:
                 snapshot_path = os.path.join(args.save_path, args.dataset, args.mode + '_best_model.pt')
                 torch.save(pw_model, snapshot_path)
@@ -410,11 +396,10 @@ while True:
                     break
 
         if iterations % args.log_every == 1 and epoch != 1:
-
             # print progress message
             print(log_template.format(time.time() - start,
                                       epoch, iterations, 1 + batch_idx, len(train_iter),
                                       100. * (1 + batch_idx) / len(train_iter),
-                                     loss_num/total_sample_per_batch,  acc / tot))
+                                     loss_num,  acc / tot))
             acc = 0
             tot = 0
