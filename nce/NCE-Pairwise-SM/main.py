@@ -7,7 +7,8 @@ from torchtext import data
 
 from args import get_args
 from trec_dataset import TrecDataset
-from evaluate import evaluate
+from utils.relevancy_metrics import get_map_mrr
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -76,7 +77,9 @@ index2qid = np.array(QID.vocab.itos)
 def predict(test_mode, dataset_iter):
     model.eval()
     dataset_iter.init_epoch()
-    instance = []
+    qids = []
+    predictions = []
+    labels = []
     for dev_batch_idx, dev_batch in enumerate(dataset_iter):
         qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
         true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
@@ -86,12 +89,12 @@ def predict(test_mode, dataset_iter):
         scores = model.linearLayer(output)
         score_array = scores.cpu().data.numpy().reshape(-1)
 
-        # print and write the result
-        for i in range(dev_batch.batch_size):
-            this_qid, score, gold_label = qid_array[i], score_array[i], true_label_array[i]
-            instance.append((this_qid, score, gold_label))
+        qids.extend(qid_array.tolist())
+        predictions.extend(score_array.tolist())
+        labels.extend(true_label_array.tolist())
 
-    dev_map, dev_mrr = evaluate(instance, test_mode, config.mode)
+    dev_map, dev_mrr = get_map_mrr(qids, predictions, labels)
+
     print(dev_map, dev_mrr)
 
 # Run the model on the dev set

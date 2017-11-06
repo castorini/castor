@@ -14,7 +14,10 @@ import operator
 import heapq
 from torch.nn import functional as F
 
-from evaluate import evaluate
+from utils.relevancy_metrics import get_map_mrr
+
+from datasets.trecqa import TRECQA
+
 
 args = get_args()
 config = args
@@ -346,7 +349,9 @@ while True:
             n_dev_correct = 0
             n_dev_total = 0
             dev_losses = []
-            instance = []
+            qids = []
+            predictions = []
+            labels = []
 
             '''
             debug code
@@ -373,13 +378,12 @@ while True:
                 qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
                 score_array = scores.cpu().data.numpy().reshape(-1)
                 true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
-                for i in range(dev_batch.batch_size):
-                    this_qid, score, gold_label = qid_array[i], score_array[i], true_label_array[i]
-                    instance.append((this_qid, score, gold_label))
 
-            test_mode = "dev"
-            dev_map, dev_mrr = evaluate(instance, test_mode, config.mode)
+                qids.extend(qid_array.tolist())
+                predictions.extend(score_array.tolist())
+                labels.extend(true_label_array.tolist())
 
+            dev_map, dev_mrr = get_map_mrr(qids, predictions, labels)
             print(dev_log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
                                           100. * (1 + batch_idx) / len(train_iter),
