@@ -63,9 +63,9 @@ class SmPlusPlus(nn.Module):
         self.hidden = nn.Linear(self.n_hidden, n_classes)
 
     def forward(self, x):
-        x_question = x.question
-        x_answer = x.answer
-        x_ext = x.ext_feat
+        x_question = x.sentence_1
+        x_answer = x.sentence_2
+        x_ext = x.ext_feats
 
         if self.mode == 'rand':
             question = self.question_embed(x_question).unsqueeze(1)

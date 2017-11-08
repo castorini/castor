@@ -15,7 +15,7 @@ def load_data(dname):
             question = line.strip().split()
             question = [stemmer.stem(word) for word in question]
             questions.append(question)
-    with open(dname+'b.toks', encoding='utf-8') as f:
+    with open(dname + 'b.toks', encoding='utf-8') as f:
         for line in f:
             answer = line.strip().split()
             answer_list = []
@@ -25,10 +25,10 @@ def load_data(dname):
                 except Exception as e:
                     print("couldn't stem the word:" + word)
             answers.append(answer_list)
-    with open(dname+'id.txt', encoding='utf-8') as f:
+    with open(dname + 'id.txt', encoding='utf-8') as f:
         for line in f:
             qids.append(line.strip())
-    with open(dname+'sim.txt', encoding='utf-8') as f:
+    with open(dname + 'sim.txt', encoding='utf-8') as f:
         for line in f:
             labels.append(int(line.strip()))
     return qids, questions, answers, labels

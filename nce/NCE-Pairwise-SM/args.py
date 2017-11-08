@@ -20,11 +20,14 @@ def get_args():
     parser.add_argument('--words_dim', type=int, default=50)
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--epoch_decay', type=int, default=15)
-    parser.add_argument('--vector_cache', type=str, default='data/word2vec.trecqa.pt')
+    parser.add_argument('--wordvec_dir', type=str, default='../../data/word2vec/')
+    parser.add_argument('--vector_cache', type=str, default='word2vec.trecqa.pt')
     parser.add_argument('--trained_model', type=str, default="")
     parser.add_argument('--weight_decay',type=float, default=1e-5)
     parser.add_argument('--ext_feats_size', type=int, default=4)
     parser.add_argument('--neg_num', type=int, default=5)
+    parser.add_argument('--neg_sample', type=str, default="random")
+    parser.add_argument('--eps', type=float, default=1e-6)
 
     args = parser.parse_args()
     return args
