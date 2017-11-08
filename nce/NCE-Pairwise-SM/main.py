@@ -64,12 +64,9 @@ def predict(test_mode, dataset_iter):
     for dev_batch_idx, dev_batch in enumerate(dataset_iter):
         qid_array = np.transpose(dev_batch.id.cpu().data.numpy())
         true_label_array = np.transpose(dev_batch.label.cpu().data.numpy())
-
         output = model.convModel(dev_batch)
-
         scores = model.linearLayer(output)
         score_array = scores.cpu().data.numpy().reshape(-1)
-
         qids.extend(qid_array.tolist())
         predictions.extend(score_array.tolist())
         labels.extend(true_label_array.tolist())
