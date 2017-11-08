@@ -23,6 +23,8 @@ class TRECQA(CastorPairDataset):
 
     VOCAB_NUM = 0
 
+    @staticmethod
+    def sort_key(ex):
         return len(ex.sentence_1)
 
     def __init__(self, path):
