@@ -23,15 +23,12 @@ class TRECQA(CastorPairDataset):
 
     VOCAB_NUM = 0
 
-    @staticmethod
-    def sort_key(ex):
         return len(ex.sentence_1)
 
     def __init__(self, path):
         """
         Create a TRECQA dataset instance
         """
-
         aid_list = []
         fields = [("aid", self.AID_FIELD)]
         with open(os.path.join(path, 'ans_id.txt'), 'r') as aid_file:
