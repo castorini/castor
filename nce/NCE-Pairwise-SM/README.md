@@ -7,27 +7,12 @@ Retrieval (SIGIR '15). ACM, New York, NY, USA, 373-382. DOI: http://dx.doi.org/1
 
 + Jinfeng Rao, Hua He, and Jimmy Lin. [Noise-Contrastive Estimation for Answer Selection with Deep Neural Networks.](http://dl.acm.org/citation.cfm?id=2983872) *Proceedings of the 25th ACM International on Conference on Information and Knowledge Management (CIKM 2016)*, pages 1913-1916.
 
-### Requirements
-```
-nltk==3.2.2
-numpy==1.11.3
-pytorch==0.1.12
-```
 
 The code uses torchtext for text processing. Set torchtext:
 ```bash
 git clone https://github.com/pytorch/text.git
 cd text
 python setup.py install
-```
-
-We use `trec_eval` for evaluation:
-
-```bash
-cd eval
-tar -xvf trec_eval.9.0.tar.gz
-make
-cd ..
 ```
 
 Download the word2vec model from [here] (https://drive.google.com/file/d/0B2u_nClt6NbzUmhOZU55eEo4QWM/view?usp=sharing) 
