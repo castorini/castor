@@ -15,7 +15,7 @@ def load_data(dname):
             question = line.strip().split()
             question = [stemmer.stem(word) for word in question]
             questions.append(question)
-    with open(dname + 'b.toks', encoding='utf-8') as f:
+    with open(dname+'b.toks', encoding='utf-8') as f:
         for line in f:
             answer = line.strip().split()
             answer_list = []
