@@ -10,7 +10,7 @@ from datasets.castor_dataset import CastorPairDataset
 from datasets.idf_utils import get_pairwise_word_to_doc_freq, get_pairwise_overlap_features
 
 
-class WikiQA(CastorPairDataset):
+class WIKIQA(CastorPairDataset):
     NAME = 'wikiqa'
     NUM_CLASSES = 2
     ID_FIELD = Field(sequential=False, tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True)
@@ -26,11 +26,11 @@ class WikiQA(CastorPairDataset):
         """
         Create a WIKIQA dataset instance
         """
-        super(WikiQA, self).__init__(path)
+        super(WIKIQA, self).__init__(path)
 
     @classmethod
     def splits(cls, path, train='train', validation='dev', test='test', **kwargs):
-        return super(WikiQA, cls).splits(path, train=train, validation=validation, test=test, **kwargs)
+        return super(WIKIQA, cls).splits(path, train=train, validation=validation, test=test, **kwargs)
 
     @classmethod
     def iters(cls, path, vectors_name, vectors_cache, batch_size=64, shuffle=True, device=0, vectors=None, unk_init=torch.Tensor.zero_):

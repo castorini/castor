@@ -18,13 +18,15 @@ class CastorPairDataset(Dataset, metaclass=ABCMeta):
     TEXT_FIELD = None
     EXT_FEATS_FIELD = None
     LABEL_FIELD = None
+    AID_FIELD = None
 
     @abstractmethod
-    def __init__(self, path, additional_fields=None, examples_extra=None, load_ext_feats = False):
+    def __init__(self, path, load_ext_feats=False):
         """
         Create a Castor dataset involving pairs of texts
         """
-        fields = [('id', self.ID_FIELD), ('sentence_1', self.TEXT_FIELD), ('sentence_2', self.TEXT_FIELD), ('ext_feats', self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD)]
+        fields = [('id', self.ID_FIELD), ('sentence_1', self.TEXT_FIELD), ('sentence_2', self.TEXT_FIELD), ('ext_feats',
+                self.EXT_FEATS_FIELD), ('label', self.LABEL_FIELD), ('aid', self.AID_FIELD)]
 
         examples = []
         with open(os.path.join(path, 'a.toks'), 'r') as f1, open(os.path.join(path, 'b.toks'), 'r') as f2:
@@ -38,16 +40,11 @@ class CastorPairDataset(Dataset, metaclass=ABCMeta):
         else:
             overlap_feats = np.loadtxt(os.path.join(path, 'overlap_feats.txt'))
 
-        if additional_fields is not None:
-            fields.extend(additional_fields)
-
         with open(os.path.join(path, 'id.txt'), 'r') as id_file, open(os.path.join(path, 'sim.txt'), 'r') as label_file:
             for i, (pair_id, l1, l2, ext_feats, label) in enumerate(zip(id_file, sent_list_1, sent_list_2, overlap_feats, label_file)):
                 pair_id = pair_id.rstrip('.\n')
                 label = label.rstrip('.\n')
-                example_list = [pair_id, l1, l2, ext_feats, label]
-                if examples_extra is not None:
-                    example_list.append(examples_extra[i])
+                example_list = [pair_id, l1, l2, ext_feats, label, i + 1]
                 example = Example.fromlist(example_list, fields)
                 examples.append(example)
 

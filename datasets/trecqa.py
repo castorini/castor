@@ -20,8 +20,7 @@ class TRECQA(CastorPairDataset):
     EXT_FEATS_FIELD = Field(tensor_type=torch.FloatTensor, use_vocab=False, batch_first=True, tokenize=lambda x: x,
                             postprocessing=Pipeline(lambda arr, _, train: [float(y) for y in arr]))
     LABEL_FIELD = Field(sequential=False, use_vocab=False, batch_first=True)
-
-    VOCAB_NUM = 0
+    VOCAB_SIZE = 0
 
     @staticmethod
     def sort_key(ex):
@@ -31,14 +30,7 @@ class TRECQA(CastorPairDataset):
         """
         Create a TRECQA dataset instance
         """
-        aid_list = []
-        fields = [("aid", self.AID_FIELD)]
-        with open(os.path.join(path, 'ans_id.txt'), 'r') as aid_file:
-            for aid in aid_file:
-                aid = aid.rstrip('.\n')
-                aid_list.append(aid)
-
-        super(TRECQA, self).__init__(path, additional_fields=fields, examples_extra=aid_list, load_ext_feats=True)
+        super(TRECQA, self).__init__(path, load_ext_feats=True)
 
     @classmethod
     def splits(cls, path, train='train-all', validation='raw-dev', test='raw-test', **kwargs):
@@ -55,10 +47,9 @@ class TRECQA(CastorPairDataset):
                 if wv_index is not None:
                     field.vocab.vectors[i] = vectors[wv_index]
                 else:
-                    # initialize <unk> with U(-0.25, 0.25) vectors
+                    # initialize <unk> with uniform_(-0.05, 0.05) vectors
                     field.vocab.vectors[i] = torch.FloatTensor(dim).uniform_(-0.05, 0.05)
         else:
-            print("Error: Need word embedding pt file")
             print("Error: Need word embedding pt file")
             exit(1)
         return field
@@ -87,7 +78,7 @@ class TRECQA(CastorPairDataset):
 
         cls.LABEL_FIELD.build_vocab(train, validation, test)
 
-        cls.VOCAB_NUM = len(cls.TEXT_FIELD.vocab)
+        cls.VOCAB_SIZE = len(cls.TEXT_FIELD.vocab)
 
         # BucketIterator
         return Iterator.splits((train, validation, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
