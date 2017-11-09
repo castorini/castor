@@ -2,18 +2,19 @@ import time
 import os
 import numpy as np
 import random
+import heapq
+import operator
+import logging
 
 import torch
 import torch.nn as nn
 from torchtext import data
+from torch.nn import functional as F
 
+from datasets.trecqa import TRECQA
 from args import get_args
 from model import SmPlusPlus, PairwiseConv
-import operator
-import heapq
-from torch.nn import functional as F
 from utils.relevancy_metrics import get_map_mrr
-from datasets.trecqa import TRECQA
 
 
 class UnknownWordVecCache(object):
@@ -27,14 +28,22 @@ class UnknownWordVecCache(object):
         size_tup = tuple(tensor.size())
         if size_tup not in cls.cache:
             cls.cache[size_tup] = torch.Tensor(tensor.size())
-            cls.cache[size_tup].normal_(0, 0.01)
+            cls.cache[size_tup].uniform_(-0.05, 0.05)
         return cls.cache[size_tup]
 
 
 def train_sm():
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+
     args = get_args()
     config = args
-    torch.manual_seed(args.seed)
     torch.backends.cudnn.deterministic = True
 
     # Set random seed for reproducibility
@@ -42,11 +51,11 @@ def train_sm():
     if not args.cuda:
         args.gpu = -1
     if torch.cuda.is_available() and args.cuda:
-        print("Note: You are using GPU for training")
+        logger.info("Note: You are using GPU for training")
         torch.cuda.set_device(args.gpu)
         torch.cuda.manual_seed(args.seed)
     if torch.cuda.is_available() and not args.cuda:
-        print("You have Cuda but you're using CPU for training.")
+        logger.info("You have Cuda but you're using CPU for training.")
     np.random.seed(args.seed)
     random.seed(args.seed)
 
@@ -56,15 +65,13 @@ def train_sm():
 
     index2text = np.array(TRECQA.TEXT_FIELD.vocab.itos)
 
-
     config.target_class = 2
-    config.questions_num = TRECQA.VOCAB_NUM
-    config.answers_num = TRECQA.VOCAB_NUM
+    config.questions_num = TRECQA.VOCAB_SIZE
+    config.answers_num = TRECQA.VOCAB_SIZE
 
-    print("index2text:", index2text)
-    print("Dataset {}    Mode {}".format(args.dataset, args.mode))
-    print("VOCAB num", TRECQA.VOCAB_NUM)
-    print("LABEL.target_class:", config.target_class)
+    logger.info("index2text: {}".format(index2text))
+    logger.info("Dataset: {}, Mode: {}".format(args.dataset, args.mode))
+    logger.info("VOCAB num: {}".format(TRECQA.VOCAB_SIZE))
 
     if args.resume_snapshot:
         if args.cuda:
@@ -80,20 +87,24 @@ def train_sm():
 
         if args.cuda:
             model.cuda()
-            print("Shift model to GPU")
+            logger.info("Shift model to GPU")
 
         pw_model = PairwiseConv(model)
 
     parameter = filter(lambda p: p.requires_grad, pw_model.parameters())
 
-    # the SM model originally follows SGD but Adadelta is used here
-    optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay, eps=args.eps)
+    if args.optimizer == "adadelta":
+        # the SM model originally follows SGD but Adadelta is used here
+        optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay, eps=args.eps)
     # A good lr is required to use in the following optimizer
-    # optimizer = torch.optim.Adam(parameter, lr=args.lr, weight_decay=args.weight_decay, eps=1e-8)
-    # optimizer = torch.optim.SGD(parameter, lr=0.001, momentum=0.9, weight_decay=args.weight_decay)
-    # optimizer = torch.optim.RMSprop(parameter, lr=0.0001, weight_decay=args.weight_decay)
+    elif args.optimizer == "adam":
+        optimizer = torch.optim.Adam(parameter, lr=args.lr, weight_decay=args.weight_decay, eps=1e-8)
+    elif args.optimizer == "sgd":
+        optimizer = torch.optim.SGD(parameter, lr=0.001, momentum=0.9, weight_decay=args.weight_decay)
+    elif args.optimizer == "rmsprop":
+        optimizer = torch.optim.RMSprop(parameter, lr=0.0001, weight_decay=args.weight_decay)
 
-    marginRankingLoss = nn.MarginRankingLoss(margin = 1, size_average = True)
+    marginRankingLoss = nn.MarginRankingLoss(margin=1, size_average=True)
 
     early_stop = False
     iterations = 0
@@ -113,8 +124,6 @@ def train_sm():
     os.makedirs(args.save_path, exist_ok=True)
     os.makedirs(os.path.join(args.save_path, args.dataset), exist_ok=True)
     print(header)
-
-
 
     # get the nearest negative samples to the positive sample by computing the feature difference
     def get_nearest_neg_id(pos_feature, neg_dict, distance="cosine", k=1):
@@ -158,7 +167,7 @@ def train_sm():
 
     while True:
         if early_stop:
-            print("Early Stopping. Epoch: {}, Best Dev Loss: {}".format(epoch, best_dev_loss))
+            logger.log("Early Stopping. Epoch: {}, Best Dev Loss: {}".format(epoch, best_dev_loss))
             break
         epoch += 1
         train_iter.init_epoch()
@@ -279,28 +288,9 @@ def train_sm():
                     optimizer.zero_grad()
                     output = pw_model([pos_batch, neg_batch])
 
-                    '''
-                    debug code
-                    '''
-                    cmp = output[:, 0] <= output[:, 1]
-                    cmp = np.array(cmp.data.cpu().numpy(), dtype=bool)
-                    batch_near_list = np.array(batch_near_list)
-                    batch_aid = np.array(batch_aid)
-                    batch_qid = np.array(batch_qid)
-                    qlist = batch_qid[cmp]
-                    alist = batch_aid[cmp]
-                    nlist = batch_near_list[cmp]
-                    for k in range(len(batch_qid[cmp])):
-                        pair = (qlist[k], alist[k], nlist[k])
-                        if pair in false_samples:
-                            false_samples[pair] += 1
-                        else:
-                            false_samples[pair] = 1
-
                     cmp = output[:, 0] > output[:, 1]
                     acc += sum(cmp.data.cpu().numpy())
                     tot += true_batch_size
-
 
                     loss = marginRankingLoss(output[:, 0], output[:, 1], torch.autograd.Variable(torch.ones(1)))
                     loss_num = loss.data.numpy()[0]
@@ -312,24 +302,10 @@ def train_sm():
                 # switch model into evaluation mode
                 pw_model.eval()
                 dev_iter.init_epoch()
-                n_dev_correct = 0
-                n_dev_total = 0
-                dev_losses = []
                 qids = []
                 predictions = []
                 labels = []
 
-                '''
-                debug code
-                '''
-                if 'false_samples' in locals():
-                    print("false_samples:", len(false_samples), end=' ')
-                    false_samples_sorted = sorted(false_samples.items(), key=lambda t: t[1], reverse=True)
-                    for k in range(min(4,len(false_samples))):
-                        print(false_samples_sorted[k][0], false_samples_sorted[k][1], end=" ")
-                    print()
-
-                # print("============output:============")
                 for dev_batch_idx, dev_batch in enumerate(dev_iter):
                     '''
                     # dev singlely or in a batch? -> in a batch
@@ -362,7 +338,7 @@ def train_sm():
                         break
 
             if iterations % args.log_every == 1 and epoch != 1:
-                # print progress message
+                # logger.info progress message
                 print(log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
                                           100. * (1 + batch_idx) / len(train_iter),

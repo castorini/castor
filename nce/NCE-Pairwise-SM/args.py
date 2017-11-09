@@ -28,6 +28,7 @@ def get_args():
     parser.add_argument('--neg_num', type=int, default=5)
     parser.add_argument('--neg_sample', type=str, default="random")
     parser.add_argument('--eps', type=float, default=1e-6)
+    parser.add_argument('--optimizer', type=str, default="adadelta")
 
     args = parser.parse_args()
     return args
