@@ -8,17 +8,17 @@ import numpy as np
 import torch
 import torch.optim as optim
 
-from nce.NCE_MP_Pytorch.dataset import MPCNNDatasetFactory
-from nce.NCE_MP_Pytorch.evaluation import MPCNNEvaluatorFactory
+from mp_cnn.dataset import MPCNNDatasetFactory
+from mp_cnn.evaluation import MPCNNEvaluatorFactory
 from nce.NCE_MP_Pytorch.model import MPCNN, PairwiseConv
-from nce.NCE_MP_Pytorch.train import MPCNNTrainerFactory
+from mp_cnn.train import MPCNNTrainerFactory
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch implementation of Multi-Perspective CNN')
     parser.add_argument('model_outfile', help='file to save final model')
     parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid, trecqa, wikiqa]', default='sick')
-    parser.add_argument('--word-vectors-dir', help='word vectors directory', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe'))
+    parser.add_argument('--word-vectors-dir', help='word vectors directory', default=os.path.join(os.pardir, os.pardir, os.pardir, 'data', 'GloVe'))
     parser.add_argument('--word-vectors-file', help='word vectors filename', default='glove.840B.300d.txt')
     parser.add_argument('--skip-training', help='will load pre-trained model', action='store_true')
     parser.add_argument('--device', type=int, default=0, help='GPU device, -1 for CPU (default: 0)')
@@ -44,6 +44,9 @@ if __name__ == '__main__':
     parser.add_argument('--dev_log_interval', type=int, default=100, help='how many batches to wait before logging validation status (default: 100)')
     parser.add_argument('--neg_num', type=int, default=8, help='number of negative samples for each question')
     parser.add_argument('--neg_sample', type=str, default="random", help='strategy of negative sampling, random or max')
+    parser.add_argument('--castor_dir', help='castor directory', default=os.path.join(os.pardir, os.pardir))
+    parser.add_argument('--utils_trecqa', help='trecqa util file', default="utils/trec_eval-9.0.5/trec_eval")
+
 
     args = parser.parse_args()
 
@@ -65,8 +68,13 @@ if __name__ == '__main__':
 
     logger.info(pprint.pformat(vars(args)))
 
-    dataset_cls, embedding, train_loader, test_loader, dev_loader \
-        = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, args.device)
+    dataset_cls, embedding, train_loader, test_loader, dev_loader = MPCNNDatasetFactory.get_dataset(args.dataset,
+                                                                                                    args.word_vectors_dir,
+                                                                                                    args.word_vectors_file,
+                                                                                                    args.batch_size,
+                                                                                                    args.device,
+                                                                                                    castor_dir=args.castor_dir,
+                                                                                                    utils_trecqa=args.utils_trecqa)
 
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     model = MPCNN(embedding, args.holistic_filters, args.per_dim_filters, filter_widths,
@@ -86,9 +94,9 @@ if __name__ == '__main__':
     else:
         raise ValueError('optimizer not recognized: it should be either adam or sgd')
 
-    train_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, train_loader, args.batch_size, args.device)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, test_loader, args.batch_size, args.device)
-    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, dev_loader, args.batch_size, args.device)
+    train_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, train_loader, args.batch_size, args.device, nce=True)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, test_loader, args.batch_size, args.device, nce=True)
+    dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, dev_loader, args.batch_size, args.device, nce=True)
 
     trainer_config = {
         'optimizer': optimizer,
@@ -105,7 +113,7 @@ if __name__ == '__main__':
         'neg_sample': args.neg_sample,
         'device_id': args.device
     }
-    trainer = MPCNNTrainerFactory.get_trainer(args.dataset, pw_model, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
+    trainer = MPCNNTrainerFactory.get_trainer(args.dataset, pw_model, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator, nce=True)
 
     if not args.skip_training:
         total_params = 0

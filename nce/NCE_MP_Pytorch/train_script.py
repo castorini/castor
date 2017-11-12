@@ -4,9 +4,9 @@ from subprocess import call
 
 
 def get_param():
-    learning_rate = round(10 ** uniform(-4, -3), 5)
-    eps = round(10 ** uniform(-10, -3), 12)
-    reg = round(10 ** uniform(-5, -3), 7)
+    learning_rate = round(10 ** uniform(-5, -3), 6)
+    eps = round(10 ** uniform(-7, -3), 8)
+    reg = round(10 ** uniform(-4, 0), 7)
     return learning_rate, eps, reg
 
 def run(device, count, epochs):

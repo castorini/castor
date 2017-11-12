@@ -1,6 +1,6 @@
 import numpy as np
 
-from NCE_MP_Pytorch.evaluators.evaluator import Evaluator
+from mp_cnn.evaluators.evaluator import Evaluator
 from utils.relevancy_metrics import get_map_mrr
 
 
