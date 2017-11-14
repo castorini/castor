@@ -5,7 +5,7 @@ jnius_config.set_classpath("../Anserini/target/anserini-0.0.1-SNAPSHOT.jar")
 from jnius import autoclass
 
 
-class CallRetrieveSentences:
+class RetrieveSentences:
     """Python class built to call RetrieveSentences
     Attributes
     ----------
@@ -48,7 +48,19 @@ class CallRetrieveSentences:
         """
         Call RetrieveSentneces.getRankedPassages
         """
-        self.rs.getRankedPassages(self.args)
+        scorer = self.rs.getRankedPassages(self.args)
+        candidate_passages_scores = []
+        for i in range(0, scorer.size()):
+            candidate_passages_scores.append(scorer.get(i))
+
+        return candidate_passages_scores
+
+    def getTermIdfJSON(self):
+        """
+
+        :return:
+        """
+        return self.rs.getTermIdfJSON()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Retrieve Sentences')
@@ -60,9 +72,21 @@ if __name__ == "__main__":
     parser.add_argument("-scorer", help="passage scores", default="Idf")
     parser.add_argument("-k", help="top-k passages to be retrieved", default=1)
 
-    args_raw = parser.parse_args()
-    rs = CallRetrieveSentences(args_raw)
-    rs.getRankedPassages()
+    #args_raw = parser.parse_args()
+    args_raw = parser.parse_args(["-query", "What is Photosynthesis?", "-hits", "10", "-scorer",
+                                "Idf", "-k", "5", "-index", "../lucene-index.wiki.pos+docvectors"])
+    rs = RetrieveSentences(args_raw)
+    sc = rs.getRankedPassages()
+    print(sc)
+    # List = autoclass("java.util.List")
+    # testList = []
+    # for i in range(0, sc.size()):
+    #     testList.append(sc.get(i))
+    # for items in sc:
+    #     print("abc")
+
+    #print(testList)
+    #print(rs.getTermIdfJSON())
 
 
 
