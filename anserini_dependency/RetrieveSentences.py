@@ -44,16 +44,16 @@ class RetrieveSentences:
         self.args.k = int(args.k)
         self.rs = RetrieveSentences(self.args)
 
-    def getRankedPassages(self):
+    def getRankedPassages(self, query, index):
         """
         Call RetrieveSentneces.getRankedPassages
         """
-        scorer = self.rs.getRankedPassages(self.args)
+        scorer = self.rs.getRankedPassagesList(query, index)
         candidate_passages_scores = []
-        for i in range(0, scorer.size()):
-            candidate_passages_scores.append(scorer.get(i))
+       # for i in range(0, scorer.size()):
+        #    candidate_passages_scores.append(scorer.get(i))
 
-        return candidate_passages_scores
+        #return candidate_passages_scores
 
     def getTermIdfJSON(self):
         """
@@ -74,20 +74,15 @@ if __name__ == "__main__":
 
     #args_raw = parser.parse_args()
     args_raw = parser.parse_args(["-query", "What is Photosynthesis?", "-hits", "10", "-scorer",
-                                "Idf", "-k", "5", "-index", "../lucene-index.wiki.pos+docvectors"])
+                                "Idf", "-k", "5", "-index", "../lucene-index.TrecQA.pos+docvectors+rawdocs"])
+    parsed_args = parser.parse_args()
+
     rs = RetrieveSentences(args_raw)
-    sc = rs.getRankedPassages()
-    print(sc)
-    # List = autoclass("java.util.List")
-    # testList = []
-    # for i in range(0, sc.size()):
-    #     testList.append(sc.get(i))
-    # for items in sc:
-    #     print("abc")
-
-    #print(testList)
-    #print(rs.getTermIdfJSON())
-
-
-
+    sc = rs.getRankedPassages("who is newton", parsed_args.index)
+    print('*'*30)
+    sc = rs.getRankedPassages("who is einstein", parsed_args.index)
+    print('*'*30)
+    sc = rs.getRankedPassages("how long is the amazon river", parsed_args.index)
+    print('*'*30)
+    rs.getRankedPassages("where is taj mahal", parsed_args.index)    
 
