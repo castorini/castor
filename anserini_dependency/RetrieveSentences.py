@@ -27,33 +27,34 @@ class RetrieveSentences:
         """
         RetrieveSentences = autoclass("io.anserini.qa.RetrieveSentences")
         Args = autoclass("io.anserini.qa.RetrieveSentences$Args")
-        String = autoclass("java.lang.String")
+        self.String = autoclass("java.lang.String")
 
         self.args = Args()
-        index = String(args.index)
+        index = self.String(args.index)
         self.args.index = index
-        embeddings = String(args.embeddings)
+        embeddings = self.String(args.embeddings)
         self.args.embeddings = embeddings
-        topics = String(args.topics)
+        topics = self.String(args.topics)
         self.args.topics = topics
-        query = String(args.query)
+        query = self.String(args.query)
         self.args.query = query
         self.args.hits = int(args.hits)
-        scorer = String(args.scorer)
+        scorer = self.String(args.scorer)
         self.args.scorer = scorer
         self.args.k = int(args.k)
         self.rs = RetrieveSentences(self.args)
 
-    def getRankedPassages(self, query, index):
+    def getRankedPassages(self, query, index, hits, k):
         """
         Call RetrieveSentneces.getRankedPassages
         """
-        scorer = self.rs.getRankedPassagesList(query, index)
-        candidate_passages_scores = []
-       # for i in range(0, scorer.size()):
-        #    candidate_passages_scores.append(scorer.get(i))
 
-        #return candidate_passages_scores
+        scorer = self.rs.getRankedPassagesList(query, index, int(hits), int(k))
+        candidate_passages_scores = []
+        for i in range(0, scorer.size()):
+            candidate_passages_scores.append(scorer.get(i))
+
+        return candidate_passages_scores
 
     def getTermIdfJSON(self):
         """
@@ -74,15 +75,16 @@ if __name__ == "__main__":
 
     #args_raw = parser.parse_args()
     args_raw = parser.parse_args(["-query", "What is Photosynthesis?", "-hits", "10", "-scorer",
-                                "Idf", "-k", "5", "-index", "../lucene-index.TrecQA.pos+docvectors+rawdocs"])
-    parsed_args = parser.parse_args()
+                                "Idf", "-k", "5", "-index", "../../lucene-index.TrecQA.pos+docvectors+rawdocs"])
+    parsed_args = parser.parse_args(["-query", "How long is the Amazon River", "-hits", "10", "-scorer",
+                                "Idf", "-k", "5", "-index", "../../lucene-index.TrecQA.pos+docvectors+rawdocs"])
 
     rs = RetrieveSentences(args_raw)
-    sc = rs.getRankedPassages("who is newton", parsed_args.index)
+    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)
     print('*'*30)
-    sc = rs.getRankedPassages("who is einstein", parsed_args.index)
+    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)
     print('*'*30)
-    sc = rs.getRankedPassages("how long is the amazon river", parsed_args.index)
+    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)
     print('*'*30)
-    rs.getRankedPassages("where is taj mahal", parsed_args.index)    
+    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)   
 

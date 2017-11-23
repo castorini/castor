@@ -10,7 +10,7 @@ from RetrieveSentences import RetrieveSentences
 from sm_cnn.bridge import SMModelBridge
 
 app = Flask(__name__)
-
+rs = None 
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -52,9 +52,10 @@ def get_answers(question, num_hits, k):
                                     "Idf", "-k", str(k), "-index", app.config['Flask']['index']])
     # args_raw = parser.parse_args(["-query", "What is Photosynthesis?", "-hits", "10", "-scorer",
     #                               "Idf", "-k", "5", "-index", "../lucene-index.wiki.pos+docvectors"])
-
-    rs = RetrieveSentences(args_raw)
-    candidate_passages_scores = rs.getRankedPassages()
+    global rs
+    if rs == None:
+        rs = RetrieveSentences(args_raw)
+    candidate_passages_scores = rs.getRankedPassages(question, app.config['Flask']['index'], num_hits, k)
 
     #candidate_passages_scores = pyserini.ranked_passages(question, num_hits, k)
 
