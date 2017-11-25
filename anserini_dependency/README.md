@@ -28,7 +28,10 @@ This creates `anserini-0.0.1-SNAPSHOT.jar` at `Anserini/target`
 
 We highly recommend the use of [virtualenv](https://virtualenv.pypa.io/en/stable/) as the dependencies
 are subjected to frequent changes.
+
 Install the dependency packages:
+
+`cd` into `Castor`
 
 ```
 pip3 install -r requirements.txt
@@ -76,7 +79,7 @@ __NB:__  The speech UI cannot be run in Ubuntu. To test the pipeline in Ubuntu, 
 
 #### 1. Installing libraries for demo
 
-`cd` into `src/main/js`.
+`cd` into `Castor/src/main/js`.
 
 ```sh
 npm install
@@ -89,6 +92,7 @@ npm install
 
 
 #### 3. Run the Demo
+`cd` into  `Castor`
 
 ```sh
 ./run_ui.sh
