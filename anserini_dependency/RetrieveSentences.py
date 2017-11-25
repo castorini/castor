@@ -46,7 +46,18 @@ class RetrieveSentences:
 
     def getRankedPassages(self, query, index, hits, k):
         """
-        Call RetrieveSentneces.getRankedPassages
+        Calls RetrieveSentences.getRankedPassages
+
+        Parameters
+        ----------
+        query : str
+            The query to be searched in the index
+        index:  str
+            The index
+        hits:   str
+            The number of document IDs to be returned
+        k: str
+            The number of passages to be returned 
         """
 
         scorer = self.rs.getRankedPassagesList(query, index, int(hits), int(k))
@@ -58,8 +69,7 @@ class RetrieveSentences:
 
     def getTermIdfJSON(self):
         """
-
-        :return:
+        Calls RetrieveSentences.getTermIdfJSON
         """
         return self.rs.getTermIdfJSON()
 
@@ -73,18 +83,8 @@ if __name__ == "__main__":
     parser.add_argument("-scorer", help="passage scores", default="Idf")
     parser.add_argument("-k", help="top-k passages to be retrieved", default=1)
 
-    #args_raw = parser.parse_args()
-    args_raw = parser.parse_args(["-query", "What is Photosynthesis?", "-hits", "10", "-scorer",
-                                "Idf", "-k", "5", "-index", "../../lucene-index.TrecQA.pos+docvectors+rawdocs"])
-    parsed_args = parser.parse_args(["-query", "How long is the Amazon River", "-hits", "10", "-scorer",
-                                "Idf", "-k", "5", "-index", "../../lucene-index.TrecQA.pos+docvectors+rawdocs"])
+    args_raw = parser.parse_args()
 
     rs = RetrieveSentences(args_raw)
-    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)
-    print('*'*30)
-    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)
-    print('*'*30)
-    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)
-    print('*'*30)
-    sc = rs.getRankedPassages(parsed_args.query, parsed_args.index, parsed_args.hits, parsed_args.k)   
+    sc = rs.getRankedPassages(args_raw.query, args_raw.index, args_raw.hits, args_raw.k)
 

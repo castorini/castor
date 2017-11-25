@@ -50,14 +50,11 @@ def get_answers(question, num_hits, k):
     parser.add_argument("-k", help="top-k passages to be retrieved", default=1)
     args_raw = parser.parse_args(["-query", question, "-hits", str(num_hits), "-scorer",
                                     "Idf", "-k", str(k), "-index", app.config['Flask']['index']])
-    # args_raw = parser.parse_args(["-query", "What is Photosynthesis?", "-hits", "10", "-scorer",
-    #                               "Idf", "-k", "5", "-index", "../lucene-index.wiki.pos+docvectors"])
+
     global rs
     if rs == None:
         rs = RetrieveSentences(args_raw)
     candidate_passages_scores = rs.getRankedPassages(question, app.config['Flask']['index'], num_hits, k)
-
-    #candidate_passages_scores = pyserini.ranked_passages(question, num_hits, k)
 
     candidate_sent_scores = []
     candidate_passages_sm = []
@@ -72,7 +69,7 @@ def get_answers(question, num_hits, k):
         model = SMModelBridge(path_to_castorini + '/models/sm_model/sm_model.fixed_ext_feats_paper.puncts_stay',
                               path_to_castorini + '/data/word2vec/aquaint+wiki.txt.gz.ndim=50.cache',
                               app.config['Flask']['index'])
-        #idf_json = pyserini.get_term_idf_json()
+        
         idf_json = rs.getTermIdfJSON()
         flags = {
             "punctuation": "", # ignoring for now  you can {keep|remove} punctuation

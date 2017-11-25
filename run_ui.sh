@@ -7,7 +7,7 @@
 echo "Start the Flask server..."
 #python3 src/main/python/api.py &
 #PID_2=$!
-python3 anserini_dependency/api.py --model sm &
+python3 anserini_dependency/api.py --model idf &
 PID_2=$!
 
 
