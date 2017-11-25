@@ -92,7 +92,7 @@ npm install
 ./run_ui.sh
 ```
 
-### 4. Additional Notes
+### Additional Notes
 - This is the documentation for the API call to send a question to the model and get back the predicted answer.
 - The request body fields are: question(required )num_hits(optional) and k(optional).
 ```
