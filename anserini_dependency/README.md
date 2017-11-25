@@ -22,6 +22,7 @@ Your directory structure should look like
 ```bash
 cd Anserini
 mvn package
+cd ..
 ``` 
 
 This creates `anserini-0.0.1-SNAPSHOT.jar` at `Anserini/target`
@@ -31,9 +32,8 @@ are subjected to frequent changes.
 
 Install the dependency packages:
 
-`cd` into `Castor`
-
 ```
+cd Castor
 pip3 install -r requirements.txt
 ```
 Make sure that you have PyTorch installed. For more help, follow [these](https://github.com/castorini/Castor) steps.
@@ -51,7 +51,7 @@ in the appropriate locations:
 - copy `word2dfs.p` to `data/TrecQA/`
 
 ### To run RetrieveSentences:
-`cd` into `Castor`
+
 ```bash
 python ./anserini_dependency/RetrieveSentences.py
 ```
@@ -79,10 +79,10 @@ __NB:__  The speech UI cannot be run in Ubuntu. To test the pipeline in Ubuntu, 
 
 #### 1. Installing libraries for demo
 
-`cd` into `Castor/src/main/js`.
-
 ```sh
+cd anserini_dependency/js
 npm install
+cd ../..
 ```
 
 #### 2. Flask
@@ -92,7 +92,6 @@ npm install
 
 
 #### 3. Run the Demo
-`cd` into  `Castor`
 
 ```sh
 ./run_ui.sh
