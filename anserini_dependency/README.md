@@ -4,6 +4,8 @@
 ```bash
 git clone https://github.com/castorini/Anserini.git
 git clone https://github.com/castorini/Castor.git
+git clone https://github.com/castorini/data.git
+git clone https://github.com/castorini/models.git
 ```
 
 Your directory structure should look like
