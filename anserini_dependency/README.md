@@ -46,7 +46,7 @@ in the appropriate locations:
 - copy `word2dfs.p` to `data/TrecQA/`
 
 ### To run RetrieveSentences:
-
+`cd` into `Castor`
 ```bash
 python ./anserini_dependency/RetrieveSentences.py
 ```
