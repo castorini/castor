@@ -87,4 +87,3 @@ if __name__ == "__main__":
 
     rs = RetrieveSentences(args_raw)
     sc = rs.getRankedPassages(args_raw.query, args_raw.index, args_raw.hits, args_raw.k)
-    print(rs.getTermIdfJSON())
