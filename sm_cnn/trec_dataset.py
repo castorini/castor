@@ -1,5 +1,4 @@
 from torchtext import data
-import os
 
 class TrecDataset(data.TabularDataset):
     dirname = 'data'
