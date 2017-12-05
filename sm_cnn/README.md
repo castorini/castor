@@ -6,35 +6,6 @@ Networks. In Proceedings of the 38th International ACM SIGIR Conference on Resea
 Retrieval (SIGIR '15). ACM, New York, NY, USA, 373-382. DOI: http://dx.doi.org/10.1145/2766462.2767738
 
 
-### Requirements
-```
-nltk==3.2.2
-numpy==1.11.3
-pytorch==0.1.12
-gensim==1.0.1 
-```
-
-The code uses torchtext for text processing. Set torchtext:
-```bash
-git clone https://github.com/pytorch/text.git
-cd text
-
-#use this commit number
-git reset --hard 2980f1bc39ba6af332c5c2783da8bee109796d4c
-python setup.py install
-```
-
-We use `trec_eval` for evaluation:
-
-```bash
-cd eval
-tar -xvf trec_eval.9.0.tar.gz
-cd trec_eval.9.0 
-make
-cd ../..
-```
-
-
 ### Setup
 Clone and create the dataset:
 ```bash
@@ -53,7 +24,6 @@ You should you see the following tree:
 │   ├── mp_cnn
 │   ├── setup.py
 │   ├── sm_cnn
-│   └── sm_modified_cnn
 └── data
     ├── GloVe
     ├── ParagramEmbeddings
@@ -71,8 +41,16 @@ You should you see the following tree:
 
 To create the dataset:
 ```bash
-cd Castor/sm_modified_cnn/
+cd Castor/sm_cnn/
 ./create_dataset.sh
+```
+
+
+We use `trec_eval` for evaluation:
+
+```bash
+cd ../utils/
+./get_trec_eval.sh
 ```
 
 ### Training

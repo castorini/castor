@@ -4,12 +4,11 @@ import logging
 
 import torch
 from torchtext import data
-from torchtext.
 
 from args import get_args
+from utils.relevancy_metrics import get_map_mrr
 from trec_dataset import TrecDataset
 from wiki_dataset import WikiDataset
-from evaluate import evaluate
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -40,10 +39,10 @@ QID = data.Field(sequential=False)
 QUESTION = data.Field(batch_first=True)
 ANSWER = data.Field(batch_first=True)
 LABEL = data.Field(sequential=False)
-EXTERNAL = data.Field(sequential=False, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
-                      preprocessing=data.Pipeline(lambda x: x.split()),
-                      postprocessing=data.Pipeline(lambda x, train: [float(y) for y in x]))
-if config.dataset == 'trec':
+EXTERNAL = data.Field(sequential=True, tensor_type=torch.FloatTensor, batch_first=True, use_vocab=False,
+            postprocessing=data.Pipeline(lambda arr, _, train: [float(y) for y in arr]))
+
+if config.dataset == 'TREC':
     train, dev, test = TrecDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
 elif config.dataset == 'wiki':
     train, dev, test = WikiDataset.splits(QID, QUESTION, ANSWER, EXTERNAL, LABEL)
@@ -81,24 +80,22 @@ def predict(dataset, test_mode, dataset_iter):
     model.eval()
     dataset_iter.init_epoch()
 
-    instance = []
+    qids = []
+    predictions = []
+    labels = []
     for dev_batch_idx, dev_batch in enumerate(dataset_iter):
         qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
         true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
 
         scores = model(dev_batch.question, dev_batch.answer, dev_batch.ext_feat)
-
-        index_label = np.transpose(torch.max(scores, 1)[1].view(dev_batch.label.size()).cpu().data.numpy())
-        label_array = index2label[index_label]
         score_array = scores[:, 2].cpu().data.numpy()
-        # print and write the result
-        for i in range(dev_batch.batch_size):
-            this_qid, predicted_label, score, gold_label = qid_array[i], label_array[i], score_array[i], \
-                                                           true_label_array[i]
-            instance.append((this_qid, predicted_label, score, gold_label))
 
-    dev_map, dev_mrr = evaluate(instance, dataset, test_mode, config.mode)
-    print(dev_map, dev_mrr)
+        qids.extend(qid_array.tolist())
+        predictions.extend(score_array.tolist())
+        labels.extend(true_label_array.tolist())
+
+    dev_map, dev_mrr = get_map_mrr(qids, predictions, labels)
+    logger.info("{} {}".format(dev_map, dev_mrr))
 
 # Run the model on the dev set
 predict(config.dataset, 'dev', dataset_iter=dev_iter)

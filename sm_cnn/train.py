@@ -9,6 +9,7 @@ from torchtext import data
 
 from args import get_args
 from model import SmPlusPlus
+from utils.relevancy_metrics import get_map_mrr
 from trec_dataset import TrecDataset
 from wiki_dataset import WikiDataset
 from evaluate import evaluate
@@ -41,6 +42,7 @@ config = args
 
 # Set random seed for reproducibility
 torch.manual_seed(args.seed)
+torch.backends.cudnn.deterministic = True
 if not args.cuda:
     args.gpu = -1
 if torch.cuda.is_available() and args.cuda:
@@ -161,7 +163,10 @@ while True:
             dev_iter.init_epoch()
             n_dev_correct = 0
             dev_losses = []
-            instance = []
+
+            qids = []
+            predictions = []
+            labels = []
             for dev_batch_idx, dev_batch in enumerate(dev_iter):
                 qid_array = index2qid[np.transpose(dev_batch.qid.cpu().data.numpy())]
                 true_label_array = index2label[np.transpose(dev_batch.label.cpu().data.numpy())]
@@ -174,12 +179,12 @@ while True:
                 label_array = index2label[index_label]
                 # get the relevance scores
                 score_array = scores[:, 2].cpu().data.numpy()
-                for i in range(dev_batch.batch_size):
-                    this_qid, predicted_label, score, gold_label = qid_array[i], label_array[i], score_array[i], true_label_array[i]
-                    instance.append((this_qid, predicted_label, score, gold_label))
 
+                qids.extend(qid_array.tolist())
+                predictions.extend(score_array.tolist())
+                labels.extend(true_label_array.tolist())
 
-            dev_map, dev_mrr = evaluate(instance, config.dataset, 'valid', config.mode)
+            dev_map, dev_mrr = get_map_mrr(qids, predictions, labels)
             print(dev_log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
                                           100. * (1 + batch_idx) / len(train_iter), loss.data[0],
