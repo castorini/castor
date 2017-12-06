@@ -75,7 +75,7 @@ cd ../sm_cnn
 ```
 
 ### Training
-Download the word2vec model from [here] (https://drive.google.com/file/d/0B2u_nClt6NbzUmhOZU55eEo4QWM/view?usp=sharing) 
+Download the word2vec model from [here](https://drive.google.com/file/d/0B2u_nClt6NbzUmhOZU55eEo4QWM/view?usp=sharing) 
 and copy it to the `data/` folder.
 
 You can train the SM model for the 4 following configurations:
