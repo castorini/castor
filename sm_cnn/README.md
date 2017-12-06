@@ -39,6 +39,16 @@ You should you see the following tree:
     └── word2vec
 ```
 
+Parse the datset:
+```bash
+python parse.py
+```
+
+Your repository root should be in your `PYTHONPATH` environment variable:
+```bash
+export PYTHONPATH=$(pwd)
+```
+
 To create the dataset:
 ```bash
 cd Castor/sm_cnn/
@@ -51,6 +61,7 @@ We use `trec_eval` for evaluation:
 ```bash
 cd ../utils/
 ./get_trec_eval.sh
+cd ../sm_cnn
 ```
 
 ### Training
