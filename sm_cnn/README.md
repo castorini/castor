@@ -39,9 +39,19 @@ You should you see the following tree:
     └── word2vec
 ```
 
-Parse the datset:
+Parse the TrecQA datset:
 ```bash
+cd ../../data/TrecQA/
 python parse.py
+cd -
+```
+
+Parse the WikiQA datset:
+```bash
+cd ../../data/WikiQA/
+unzip WikiQACorpus.zip
+python create-train-dev-test-data.py 
+cd -
 ```
 
 Your repository root should be in your `PYTHONPATH` environment variable:
