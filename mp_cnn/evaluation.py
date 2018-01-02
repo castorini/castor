@@ -2,8 +2,8 @@ from mp_cnn.evaluators.sick_evaluator import SICKEvaluator
 from mp_cnn.evaluators.msrvid_evaluator import MSRVIDEvaluator
 from mp_cnn.evaluators.trecqa_evaluator import TRECQAEvaluator
 from mp_cnn.evaluators.wikiqa_evaluator import WikiQAEvaluator
-from nce.NCE_MP_Pytorch.evaluators.trecqa_evaluator import TRECQAEvaluator_NCE
-from nce.NCE_MP_Pytorch.evaluators.wikiqa_evaluator import WikiQAEvaluator_NCE
+from nce.nce_pairwise_mp.evaluators.trecqa_evaluator import TRECQAEvaluatorNCE
+from nce.nce_pairwise_mp.evaluators.wikiqa_evaluator import WikiQAEvaluatorNCE
 
 class MPCNNEvaluatorFactory(object):
     """
@@ -17,8 +17,8 @@ class MPCNNEvaluatorFactory(object):
     }
 
     evaluator_map_nce = {
-        'trecqa': TRECQAEvaluator_NCE,
-        'wikiqa': WikiQAEvaluator_NCE
+        'trecqa': TRECQAEvaluatorNCE,
+        'wikiqa': WikiQAEvaluatorNCE
     }
 
     @staticmethod

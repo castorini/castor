@@ -1,4 +1,5 @@
 import time
+import numpy as np
 
 import torch
 import torch.nn.functional as F
@@ -9,7 +10,7 @@ from utils.nce_neighbors import get_nearest_neg_id, get_random_neg_id, get_batch
 
 class QATrainer(Trainer):
 
-    def __init__(self, model, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator=None):
+    def __init__(self, model, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator=None, weighting=False):
         super(QATrainer, self).__init__(model, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
         self.loss = torch.nn.MarginRankingLoss(margin=1, size_average=True)
         self.question2answer = {}
@@ -21,10 +22,13 @@ class QATrainer(Trainer):
         self.q2neg = {}
         self.iteration = 0
         self.name = self.train_loader.dataset.NAME
-        self.dev_log_template = ' '.join(
-            '{:>6.0f},{:>5.0f},{:>11.6f},{:>11.6f}'.split(','))
-        self.log_template = ' '.join(
-            '{:>6.0f},{:>5.0f},{:>11.6f},{:>11.6f}'.split(','))
+        self.dev_log_interval = trainer_config['dev_log_interval']
+        self.neg_num = trainer_config['neg_num'] if 'neg_num' in trainer_config else 0
+        self.neg_sample = trainer_config['neg_sample'] if 'neg_sample' in trainer_config else ''
+        self.log_template = 'Train Epoch:{} [{}/{}]\tLoss:{}  Acc:{}'
+        self.margin_label = trainer_config['margin_label']
+        self.dev_index = 1
+        self.weighting = weighting
 
     def train_epoch(self, epoch):
         self.model.train()
@@ -43,6 +47,7 @@ class QATrainer(Trainer):
             batch_near_list = []
             batch_qid = []
             batch_aid = []
+            new_near_score = []
 
             for i in range(batch.batch_size):
                 label_i = batch.label[i].cpu().data.numpy()[0]
@@ -71,8 +76,9 @@ class QATrainer(Trainer):
                     elif epoch == 2 or self.neg_sample == "random":
                         near_list = get_random_neg_id(self.q2neg, qid_i, k=self.neg_num)
                     else:
-                        # debug_qid = qid_i
-                        near_list = get_nearest_neg_id(features[i], self.question2answer[qid_i]["neg"], distance="cosine", k=self.neg_num)
+                        near_list, near_score = get_nearest_neg_id(features[i], self.question2answer[qid_i]["neg"],
+                                                                   distance="cosine", k=self.neg_num, weight=True)
+                        new_near_score.extend(near_score)
 
                     batch_near_list.extend(near_list)
 
@@ -107,8 +113,11 @@ class QATrainer(Trainer):
                         answer_i = answer_i[answer_i != 1]
                         self.question2answer[qid_i]["neg"][aid_i] = {"answer": answer_i}
 
+                    if "ext_feat" in self.question2answer[qid_i]["neg"][aid_i]:
+                        del self.question2answer[qid_i]["neg"][aid_i]["ext_feat"]
                     self.question2answer[qid_i]["neg"][aid_i]["feature"] = features[i].data.cpu().numpy()
                     self.question2answer[qid_i]["neg"][aid_i]["ext_feat"] = ext_feat_i
+
 
                     if epoch == 1:
                         if qid_i not in self.q2neg:
@@ -116,6 +125,7 @@ class QATrainer(Trainer):
 
                         self.q2neg[qid_i].append(aid_i)
 
+            del features
             # pack the selected pos and neg samples into the torchtext batch and train
             if epoch != 1:
                 true_batch_size = len(new_train_neg["answer"])
@@ -134,11 +144,13 @@ class QATrainer(Trainer):
                                                              (0, max_len_q - new_train_neg["question"][j].size()[0]),
                                                              value=1)
 
+
                     pos_batch = get_batch(new_train_pos["question"], new_train_pos["answer"], new_train_pos["ext_feat"],
                                           true_batch_size)
                     neg_batch = get_batch(new_train_neg["question"], new_train_neg["answer"], new_train_neg["ext_feat"],
                                           true_batch_size)
 
+                    self.model.train()
                     self.optimizer.zero_grad()
                     output = self.model([pos_batch, neg_batch])
 
@@ -146,35 +158,37 @@ class QATrainer(Trainer):
                     acc += sum(cmp.data.cpu().numpy())
                     tot += true_batch_size
 
-                    loss = self.loss(output[:, 0], output[:, 1], torch.autograd.Variable(torch.ones(1).cuda(device=self.device_id)))
+                    loss = self.loss(output[:, 0], output[:, 1], self.margin_label)
+                    if len(new_near_score) != 0 and self.weighting:
+                        # Element wise weighting hasn't been implemented for MarginRankingLoss by pytorch
+                        # Apply the mean score and set branch size to 1 as weighting implementation temporarily here
+                        # Reference: https://github.com/pytorch/pytorch/issues/264
+                        # loss *= torch.autograd.variable.Variable(torch.from_numpy(np.array(new_near_score)).cuda())
+                        loss *= np.mean(new_near_score)
+
                     loss_num = loss.data.cpu().numpy()[0]
                     total_loss += loss_num
                     loss.backward()
                     self.optimizer.step()
-                    # Evaluate performance on train and validation set
-                    if self.iteration % self.dev_log_interval == 0 and epoch != 1:
-                        train_map, train_mrr = self.evaluate(self.train_evaluator, 'train')
-                        dev_map, dev_mrr = self.evaluate(self.dev_evaluator, 'dev')
-                        test_map, test_mrr = self.evaluate(self.test_evaluator, 'test')
 
-                        self.logger.info(self.dev_log_template.format(epoch, batch_idx, loss_num, acc / tot))
+                    del output
+                    del loss
+                    del new_train_neg
+                    del new_train_pos
+                    del pos_batch
+                    del neg_batch
+
+                    if self.iteration % self.dev_log_interval == 1 and epoch != 1:
+                        dev_map, dev_mrr = self.evaluate(self.dev_evaluator, 'dev')
 
                         if self.use_tensorboard:
-                            self.writer.add_scalar('{}/train/map'.format(self.name), train_map,
-                                                   epoch)
-                            self.writer.add_scalar('{}/train/mrr'.format(self.name), train_mrr,
-                                                   epoch)
-                            self.writer.add_scalar('{}/train/loss'.format(self.name), loss_num,
-                                                   epoch)
-                            self.writer.add_scalar('{}/dev/map'.format(self.name), dev_map,
-                                                   epoch)
-                            self.writer.add_scalar('{}/dev/mrr'.format(self.name), dev_mrr,
-                                                   epoch)
-                            self.writer.add_scalar('{}/test/map'.format(self.name), test_map,
-                                                   epoch)
-                            self.writer.add_scalar('{}/test/mrr'.format(self.name), test_mrr,
-                                                   epoch)
+                            self.writer.add_scalar('{}/dev/map'.format(self.name), dev_map, self.dev_index)
+                            self.writer.add_scalar('{}/dev/mrr'.format(self.name), dev_mrr, self.dev_index)
+                            self.writer.add_scalar('{}/train/loss'.format(self.name), loss_num, self.dev_index)
+                            self.writer.add_scalar('{}/lr'.format(self.train_loader.dataset.NAME),
+                                                   self.optimizer.param_groups[0]['lr'], self.dev_index)
 
+                        self.dev_index += 1
                         if self.best_dev_mrr < dev_mrr:
                             torch.save(self.model, self.model_outfile)
                             self.best_dev_mrr = dev_mrr
@@ -182,14 +196,12 @@ class QATrainer(Trainer):
 
                     if self.iteration % self.log_interval == 1 and epoch != 1:
                         # logger.info progress message
-                        self.logger.info(self.dev_log_template.format(epoch, batch_idx, loss_num, acc / tot))
+                        self.logger.info(self.log_template.format(epoch, min(batch_idx * self.batch_size, len(batch.dataset.examples)),
+                                                                  len(batch.dataset.examples), loss_num, acc / tot))
 
         return total_loss
 
     def train(self, epochs):
-
-        header = ' Epoch  Batch  Average_Loss Train_Accuracy'  # Train/MAP Train/MRR Dev/MAP  Dev/MRR Test/MAP Test/MRR
-        self.logger.info(header)
 
         scheduler = ReduceLROnPlateau(self.optimizer, mode='max', factor=self.lr_reduce_factor, patience=self.patience)
         epoch_times = []

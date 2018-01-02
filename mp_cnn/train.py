@@ -2,8 +2,8 @@ from mp_cnn.trainers.sick_trainer import SICKTrainer
 from mp_cnn.trainers.msrvid_trainer import MSRVIDTrainer
 from mp_cnn.trainers.trecqa_trainer import TRECQATrainer
 from mp_cnn.trainers.wikiqa_trainer import WikiQATrainer
-from nce.NCE_MP_Pytorch.trainers.trecqa_trainer import TRECQATrainer_NCE
-from nce.NCE_MP_Pytorch.trainers.wikiqa_trainer import WikiQATrainer_NCE
+from nce.nce_pairwise_mp.trainers.trecqa_trainer import TRECQATrainerNCE
+from nce.nce_pairwise_mp.trainers.wikiqa_trainer import WikiQATrainerNCE
 
 
 class MPCNNTrainerFactory(object):
@@ -18,8 +18,8 @@ class MPCNNTrainerFactory(object):
     }
 
     trainer_map_nce = {
-        'trecqa': TRECQATrainer_NCE,
-        'wikiqa': WikiQATrainer_NCE
+        'trecqa': TRECQATrainerNCE,
+        'wikiqa': WikiQATrainerNCE
     }
 
     @staticmethod

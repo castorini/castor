@@ -26,6 +26,8 @@ class QAEvaluator(Evaluator):
             predictions.extend(score_array.tolist())
             labels.extend(true_label_array.tolist())
 
+            del scores
+
         mean_average_precision, mean_reciprocal_rank = get_map_mrr(qids, predictions, labels, self.data_loader.device)
 
         return [mean_average_precision, mean_reciprocal_rank], ['map', 'mrr']

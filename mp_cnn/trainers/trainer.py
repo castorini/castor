@@ -10,14 +10,10 @@ class Trainer(object):
         self.train_loader = train_loader
         self.batch_size = trainer_config['batch_size']
         self.log_interval = trainer_config['log_interval']
-        self.dev_log_interval = trainer_config['dev_log_interval']
         self.model_outfile = trainer_config['model_outfile']
         self.lr_reduce_factor = trainer_config['lr_reduce_factor']
         self.patience = trainer_config['patience']
         self.use_tensorboard = trainer_config['tensorboard']
-        self.neg_num = trainer_config['neg_num'] if 'neg_num' in trainer_config else 0
-        self.neg_sample = trainer_config['neg_sample'] if 'neg_sample' in trainer_config else ''
-        self.device_id = trainer_config['device_id'] if 'device_id' in trainer_config else 0
 
         if self.use_tensorboard:
             from tensorboardX import SummaryWriter
