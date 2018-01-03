@@ -335,13 +335,9 @@ def train_sm():
                     predictions.extend(score_array.tolist())
                     labels.extend(true_label_array.tolist())
 
-                test_map, test_mrr = get_map_mrr(qids, predictions, labels)
-
                 if args.tensorboard:
                     writer.add_scalar('{}/dev/map'.format(args.dataset), dev_map, dev_index)
                     writer.add_scalar('{}/dev/mrr'.format(args.dataset), dev_mrr, dev_index)
-                    writer.add_scalar('{}/test/map'.format(args.dataset), test_map, dev_index)
-                    writer.add_scalar('{}/test/mrr'.format(args.dataset), test_mrr, dev_index)
                     writer.add_scalar('{}/lr'.format(args.dataset),
                                                optimizer.param_groups[0]['lr'], dev_index)
                     writer.add_scalar('{}/train/loss'.format(args.dataset), loss_num, dev_index)
