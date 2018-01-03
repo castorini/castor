@@ -1,4 +1,4 @@
-## NCE-SM model
+## NCE-SM-CNN model PyTorch Implementation
 
 #### References:
 + Aliaksei _S_everyn and Alessandro _M_oschitti. 2015. Learning to Rank Short Text Pairs with Convolutional Deep Neural
@@ -16,7 +16,7 @@ python setup.py install
 ```
 
 Download the word2vec model from [here] (https://drive.google.com/file/d/0B2u_nClt6NbzUmhOZU55eEo4QWM/view?usp=sharing)
-and copy it to the `Castor/data/word2vec` folder.
+and copy it to the `Castor/data/word2vec` folder. 
 
 ### Training the model
 
