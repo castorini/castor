@@ -7,7 +7,7 @@ import torch
 from torchtext import data
 
 # get the nearest negative samples to the positive sample by computing the feature difference
-def get_nearest_neg_id(pos_feature, neg_dict, distance="cosine", k=1):
+def get_nearest_neg_id(pos_feature, neg_dict, distance="cosine", k=1, weight=False):
     dis_list = []
     pos_feature = pos_feature.data.cpu().numpy()
     pos_feature_norm = pos_feature / np.sqrt(sum(pos_feature ** 2))
@@ -24,12 +24,17 @@ def get_nearest_neg_id(pos_feature, neg_dict, distance="cosine", k=1):
 
     k = min(k, len(neg_dict))
     min_list = heapq.nsmallest(k, enumerate(dis_list), key=operator.itemgetter(1))
+    # find the corresponding neg id
     min_id_list = [neg_list[x[0]] for x in min_list]
-    return min_id_list
+    if weight:
+        min_id_score = [1 - x[1] for x in min_list]
+        return min_id_list, min_id_score
+    else:
+        return min_id_list
 
 # get the negative samples randomly
-def get_random_neg_id(q2neg, qid_i, k=5):
-    # question 1734 has no neg answer
+def get_random_neg_id(q2neg, qid_i, k=8):
+    # question 1734 in TrecQA has only one positive answer and no negative answer
     if qid_i not in q2neg:
         return []
     k = min(k, len(q2neg[qid_i]))

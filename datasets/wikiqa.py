@@ -43,6 +43,7 @@ class WikiQA(CastorPairDataset):
         :param batch_size: batch size
         :param device: GPU device
         :param vectors: custom vectors - either predefined torchtext vectors or your own custom Vector classes
+        :param pt_file: load cached embedding file from disk if it is true
         :param unk_init: function used to generate vector for OOV words
         :return:
         """

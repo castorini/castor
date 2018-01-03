@@ -10,11 +10,6 @@ def get_param():
             for reg in [3e-5, 9e-5, 3e-4, 9e-4]:
                 yield learning_rate, eps, reg
 
-    # for eps in [1e-3, 1e-2, 1e-1, 0]:
-    #     for learning_rate in [1e-4, 1e-3, 1e-2]:
-    #         for reg in [1e-4, 5e-4, 2e-3]:
-    #             yield learning_rate, eps, reg
-
 def run(device, epochs, neg_sample, neg_num, dataset, dev_log_interval, batch_size):
     # for _ in range(count):
     param_gen = get_param()

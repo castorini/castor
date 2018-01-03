@@ -94,9 +94,10 @@ if __name__ == '__main__':
     else:
         raise ValueError('optimizer not recognized: it should be either adam or sgd')
 
+    test_batch_size = 32
     train_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, train_loader, args.batch_size, args.device, nce=True)
-    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, test_loader, args.batch_size, args.device, nce=True)
     dev_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, dev_loader, args.batch_size, args.device, nce=True)
+    test_evaluator = MPCNNEvaluatorFactory.get_evaluator(dataset_cls, pw_model, test_loader, test_batch_size, args.device, nce=True)
 
     if args.device != -1:
         margin_label = torch.autograd.Variable(torch.ones(1).cuda(device=args.device))
