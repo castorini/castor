@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import os
 import numpy as np
+from sys import exit
 
 from torchtext.data.dataset import Dataset
 from torchtext.data.example import Example
