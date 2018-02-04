@@ -5,6 +5,7 @@ import pprint
 import random
 
 import numpy as np
+import sys
 import torch
 import torch.optim as optim
 
@@ -17,9 +18,11 @@ from mp_cnn.train import MPCNNTrainerFactory
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch implementation of Multi-Perspective CNN')
     parser.add_argument('model_outfile', help='file to save final model')
-    parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid, trecqa, wikiqa]', default='sick')
+    parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid, trecqa, wikiqa, twitter]', default='sick')
     parser.add_argument('--word-vectors-dir', help='word vectors directory', default=os.path.join(os.pardir, os.pardir, 'data', 'GloVe'))
     parser.add_argument('--word-vectors-file', help='word vectors filename', default='glove.840B.300d.txt')
+    parser.add_argument('--train_dirs', nargs='+', help='training directory names for twitter dataset')
+    parser.add_argument('--test_dirs', nargs='+', help='testing directory names for twitter dataset')
     parser.add_argument('--skip-training', help='will load pre-trained model', action='store_true')
     parser.add_argument('--device', type=int, default=0, help='GPU device, -1 for CPU (default: 0)')
     parser.add_argument('--sparse-features', action='store_true', default=False, help='use sparse features (default: false)')
@@ -61,8 +64,17 @@ if __name__ == '__main__':
 
     logger.info(pprint.pformat(vars(args)))
 
-    dataset_cls, embedding, train_loader, test_loader, dev_loader \
-        = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, args.device)
+    if args.dataset == 'twitter':
+        if not args.train_dirs or not args.test_dirs:
+            print('For twitter dataset --train_dirs and --test_dirs must be specified')
+            sys.exit(1)
+        dataset_cls, embedding, train_loader, test_loader, dev_loader \
+            = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, args.device, train_dirs=args.train_dirs, test_dirs=args.test_dirs)
+    else:
+        dataset_cls, embedding, train_loader, test_loader, dev_loader \
+            = MPCNNDatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, args.device)
+
+    import ipdb; ipdb.set_trace()
 
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     model = MPCNN(embedding, args.holistic_filters, args.per_dim_filters, filter_widths,

@@ -6,6 +6,7 @@ import torch.nn as nn
 from datasets.sick import SICK
 from datasets.msrvid import MSRVID
 from datasets.trecqa import TRECQA
+from datasets.twitter import TWITTER
 from datasets.wikiqa import WikiQA
 
 
@@ -29,7 +30,7 @@ class MPCNNDatasetFactory(object):
     Get the corresponding Dataset class for a particular dataset.
     """
     @staticmethod
-    def get_dataset(dataset_name, word_vectors_dir, word_vectors_file, batch_size, device, castor_dir="../", utils_trecqa="utils/trec_eval-9.0.5/trec_eval"):
+    def get_dataset(dataset_name, word_vectors_dir, word_vectors_file, batch_size, device, castor_dir="../", utils_trecqa="utils/trec_eval-9.0.5/trec_eval", train_dirs=None, test_dirs=None):
         if dataset_name == 'sick':
             dataset_root = os.path.join(os.pardir, castor_dir, 'data', 'sick/')
             train_loader, dev_loader, test_loader = SICK.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
@@ -63,6 +64,14 @@ class MPCNNDatasetFactory(object):
             embedding = nn.Embedding(embedding_dim[0], embedding_dim[1])
             embedding.weight = nn.Parameter(WikiQA.TEXT_FIELD.vocab.vectors)
             return WikiQA, embedding, train_loader, test_loader, dev_loader
+        elif dataset_name == 'twitter':
+            dataset_root = os.path.join(os.pardir, castor_dir, 'data', 'twitter-microblog/order_by_rel/')
+            dev_loader = None
+            train_loader, test_loader = TWITTER.iters(dataset_root, train_dirs, test_dirs, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
+            embedding_dim = TWITTER.TEXT_FIELD.vocab.vectors.size()
+            embedding = nn.Embedding(embedding_dim[0], embedding_dim[1])
+            embedding.weight = nn.Parameter(TWITTER.TEXT_FIELD.vocab.vectors)
+            return TWITTER, embedding, train_loader, test_loader, dev_loader
         else:
             raise ValueError('{} is not a valid dataset.'.format(dataset_name))
 
