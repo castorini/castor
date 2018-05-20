@@ -154,9 +154,9 @@ python qa-data-only-idf.py ../../Castor-data/WikiQA WikiQA
 ```
 Evaluate these using step 2.
 
-The same script can now also be used to comput idf sum similarity based on corpus idf statistics
+The same script can now also be used to compute idf sum similarity based on corpus idf statistics
 ```
-python qa-data-only-idf.py ../../Castor-data/TrecQA TrecQA --index-for-corpusIDF ../../data/indices/index.qadata.pos.docvectors.keepstopwords/
+python qa-data-only-idf.py ../../Castor-data/TrecQA TrecQA --index-for-corpusIDF ../../Castor-data/indices/index.qadata.pos.docvectors.keepstopwords/
 ```
 
 ### Baseline results
