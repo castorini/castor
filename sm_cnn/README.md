@@ -96,7 +96,7 @@ NB: The results on WikiQA are based on the SM model hyperparameters.
 to the `data/` folder
 
 ```bash
-python $PYTHONPATH/utils/build_w2v.py --input ../../Castor-data/word2vec/embeddings/aquaint+wiki.txt.gz.ndim=50.bin
+python $PYTHONPATH/utils/build_w2v.py --input ../../Castor-data/embeddings/word2vec/aquaint+wiki.txt.gz.ndim=50.bin
 ```
 
 Note that `$PYTHONPATH` holds the location of the repository root.
