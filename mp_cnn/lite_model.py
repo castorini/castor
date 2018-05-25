@@ -9,7 +9,7 @@ from mp_cnn.model import MPCNN
 class MPCNNLite(MPCNN):
 
     def __init__(self, n_word_dim, n_holistic_filters, n_per_dim_filters, filter_widths, hidden_layer_units, num_classes, dropout, ext_feats, attention, wide_conv):
-        super(MPCNN, self).__init__(n_word_dim, n_holistic_filters, n_per_dim_filters, filter_widths, hidden_layer_units, num_classes, dropout, ext_feats, attention, wide_conv)
+        super(MPCNNLite, self).__init__(n_word_dim, n_holistic_filters, n_per_dim_filters, filter_widths, hidden_layer_units, num_classes, dropout, ext_feats, attention, wide_conv)
         self.arch = 'mpcnn_lite'
 
     def _add_layers(self):
@@ -80,6 +80,20 @@ class MPCNNLite(MPCNN):
             dist = F.pairwise_distance(x1, x2).view(1, -1)
             pairwise_distances.append(dist)
         comparison_feats.append(torch.cat(pairwise_distances))
+
+        return torch.cat(comparison_feats, dim=1)
+
+    def _algo_2_vert_comp(self, sent1_block_a, sent2_block_a):
+        comparison_feats = []
+        ws_no_inf = [w for w in self.filter_widths if not np.isinf(w)]
+        for ws1 in self.filter_widths:
+            x1 = sent1_block_a[ws1]['max']
+            for ws2 in self.filter_widths:
+                x2 = sent2_block_a[ws2]['max']
+                if (not np.isinf(ws1) and not np.isinf(ws2)) or (np.isinf(ws1) and np.isinf(ws2)):
+                    comparison_feats.append(F.cosine_similarity(x1, x2).unsqueeze(1))
+                    comparison_feats.append(F.pairwise_distance(x1, x2).unsqueeze(1))
+                    comparison_feats.append(torch.abs(x1 - x2))
 
         return torch.cat(comparison_feats, dim=1)
 

@@ -99,7 +99,7 @@ if __name__ == '__main__':
     ext_feats = dataset_cls.EXT_FEATS if args.sparse_features else 0
 
     model_cls = MPCNN if args.arch == 'mpcnn' else MPCNNLite
-    model = MPCNN(args.word_vectors_dim, args.holistic_filters, args.per_dim_filters, filter_widths,
+    model = model_cls(args.word_vectors_dim, args.holistic_filters, args.per_dim_filters, filter_widths,
                   args.hidden_units, dataset_cls.NUM_CLASSES, args.dropout, ext_feats,
                   args.attention, args.wide_conv)
 
