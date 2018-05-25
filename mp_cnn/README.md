@@ -70,20 +70,6 @@ To see all options available, use
 python -m mp_cnn --help
 ```
 
-## Troubleshooting
-
-### ModuleNotFoundError: datasets
-```
-Traceback (most recent call last):
-  File "__main__.py", line 9, in <module>
-    from common.dataset import DatasetFactory
-  File "/u/z3tu/castorini/Castor/common/dataset.py", line 12, in <module>
-    from datasets.sick import SICK
-ModuleNotFoundError: No module named 'datasets'
-```
-
-You need to make sure the repository root is in your `PYTHONPATH` environment variable. One way to do this is while you are in the repo root (Castor) as your current working directory, run `export PYTHONPATH=$(pwd)`.
-
 ## Optional Dependencies
 
 To optionally visualize the learning curve during training, we make use of https://github.com/lanpa/tensorboard-pytorch to connect to [TensorBoard](https://github.com/tensorflow/tensorboard). These projects require TensorFlow as a dependency, so you need to install TensorFlow before running the commands below. After these are installed, just add `--tensorboard` when running `main.py` and open TensorBoard in the browser.
