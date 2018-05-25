@@ -17,12 +17,12 @@ For paraphrase detection, question answering, etc.
 
 + [SM-CNN](./sm_cnn/): Siamese CNN for ranking texts [(Severyn and Moschitti, SIGIR 2015)](https://dl.acm.org/citation.cfm?id=2767738)
 + [MP-CNN](./mp_cnn/): Multi-Perspective CNN [(He et al., EMNLP 2015)](http://anthology.aclweb.org/D/D15/D15-1181.pdf)
-+ [NCE](./nce/): Noise-Contrastive Estimation for answer selection applied on SM-CNN and MP-CNN
++ [NCE](./nce/): Noise-Contrastive Estimation for answer selection applied on SM-CNN and MP-CNN [(Rao et al., CIKM 2016)](https://dl.acm.org/citation.cfm?id=2983872)
 + [IDF Baseline](./idf_baseline/): IDF overlap between question and candidate answers
 
 ## Setting up PyTorch
 
-Copy and run the command at https://pytorch.org/ for your environment. PyTorch recommends the Anaconda environment, which we use in our lab.
+Copy and run the command at [https://pytorch.org/](https://pytorch.org/) for your environment. PyTorch recommends the Anaconda environment, which we use in our lab.
 
 The typical installation command is
 
@@ -34,14 +34,14 @@ conda install pytorch torchvision -c pytorch
 
 Data associated for use with this repository can be found at: https://git.uwaterloo.ca/jimmylin/Castor-data.git.
 
-Pre-trained models can be found at: https://github.com/castorini/models.git.
+Pre-trained models can be found at: https://git.uwaterloo.ca/jimmylin/Castor-models.
 
 Your directory structure should look like
 ```
 .
 ├── Castor
 ├── Castor-data
-└── models
+└── Castor-models
 ```
 
 For example (if you use HTTPS instead of SSH):
@@ -49,7 +49,7 @@ For example (if you use HTTPS instead of SSH):
 ```bash
 git clone https://github.com/castorini/Castor.git
 git clone https://git.uwaterloo.ca/jimmylin/Castor-data.git
-git clone https://github.com/castorini/models.git
+git clone https://git.uwaterloo.ca/jimmylin/Castor-models.git
 ```
 
 Sourcing and pre-processing of input data for each model is described in the respective ```model/README.md```'s.
