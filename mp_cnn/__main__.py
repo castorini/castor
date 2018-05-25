@@ -41,7 +41,7 @@ if __name__ == '__main__':
     parser.add_argument('model_outfile', help='file to save final model')
     parser.add_argument('--dataset', help='dataset to use, one of [sick, msrvid, trecqa, wikiqa]', default='sick')
     parser.add_argument('--word-vectors-dir', help='word vectors directory',
-                        default=os.path.join(os.pardir, os.pardir, 'Castor-data', 'embeddings', 'GloVe'))
+                        default=os.path.join(os.pardir, 'Castor-data', 'embeddings', 'GloVe'))
     parser.add_argument('--word-vectors-file', help='word vectors filename', default='glove.840B.300d.txt')
     parser.add_argument('--word-vectors-dim', type=int, default=300,
                         help='number of dimensions of word vectors (default: 300)')
@@ -77,8 +77,6 @@ if __name__ == '__main__':
     parser.add_argument('--tensorboard', action='store_true', default=False,
                         help='use TensorBoard to visualize training (default: false)')
     parser.add_argument('--run-label', type=str, help='label to describe run')
-    parser.add_argument('--save-predictions', action='store_true', default=False,
-                        help='save predictions for debugging (default: false)')
     args = parser.parse_args()
 
     device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
