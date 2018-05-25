@@ -30,6 +30,12 @@ The typical installation command is
 conda install pytorch torchvision -c pytorch
 ```
 
+Other Python packages we use can be installed via pip:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Data and Pre-Trained Models
 
 Data associated for use with this repository can be found at: https://git.uwaterloo.ca/jimmylin/Castor-data.git.
