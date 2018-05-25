@@ -20,9 +20,15 @@ For paraphrase detection, question answering, etc.
 + [NCE](./nce/): Noise-Contrastive Estimation for answer selection applied on SM-CNN and MP-CNN [(Rao et al., CIKM 2016)](https://dl.acm.org/citation.cfm?id=2983872)
 + [IDF Baseline](./idf_baseline/): IDF overlap between question and candidate answers
 
+Each model directory has a `README.md` with further details.
+
 ## Setting up PyTorch
 
-Copy and run the command at [https://pytorch.org/](https://pytorch.org/) for your environment. PyTorch recommends the Anaconda environment, which we use in our lab.
+If you are an internal Castor contributor and is planning to use the Data System Group's GPU machines in the lab,
+please follow the instructions [here](./docs/internal-instructions.md) instead.
+
+Copy and run the command at [https://pytorch.org/](https://pytorch.org/) for your environment.
+PyTorch recommends the Anaconda environment, which we use in our lab. We are currently targeting PyTorch 0.4 for our codebase.
 
 The typical installation command is
 
@@ -34,6 +40,12 @@ Other Python packages we use can be installed via pip:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Please also run the following inside the `utils` directory to build the `trec_eval` tool for evaluating certain datasets.
+
+```bash
+./get_trec_eval.sh
 ```
 
 ## Data and Pre-Trained Models
@@ -58,4 +70,10 @@ git clone https://git.uwaterloo.ca/jimmylin/Castor-data.git
 git clone https://git.uwaterloo.ca/jimmylin/Castor-models.git
 ```
 
-Sourcing and pre-processing of input data for each model is described in the respective ```model/README.md```'s.
+After cloning the Castor-data repo, you need to unzip embeddings and run data pre-processing scripts. You can choose
+to follow instructions under each dataset / embedding directory separately, or just run the following script in Castor-data
+to do all of the steps for you:
+
+```bash
+./setup.sh
+```
