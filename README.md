@@ -24,8 +24,8 @@ Each model directory has a `README.md` with further details.
 
 ## Setting up PyTorch
 
-If you are an internal Castor contributor and is planning to use the Data System Group's GPU machines in the lab,
-please follow the instructions [here](./docs/internal-instructions.md) instead.
+**If you are an internal Castor contributor and is planning to use the Data System Group's GPU machines in the lab,
+please follow the instructions [here](./docs/internal-instructions.md) instead.**
 
 Copy and run the command at [https://pytorch.org/](https://pytorch.org/) for your environment.
 PyTorch recommends the Anaconda environment, which we use in our lab. We are currently targeting PyTorch 0.4 for our codebase.
@@ -49,6 +49,9 @@ Please also run the following inside the `utils` directory to build the `trec_ev
 ```
 
 ## Data and Pre-Trained Models
+
+**If you are an internal Castor contributor and is planning to use the Data System Group's GPU machines in the lab,
+please follow the instructions [here](./docs/internal-instructions.md) instead.**
 
 Data associated for use with this repository can be found at: https://git.uwaterloo.ca/jimmylin/Castor-data.git.
 
