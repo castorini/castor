@@ -22,11 +22,15 @@ class SST1(TabularDataset):
     TEXT_FIELD = Field(batch_first=True, tokenize=clean_str_sst)
     LABEL_FIELD = Field(sequential=False, use_vocab=False, batch_first=True)
 
+    @staticmethod
+    def sort_key(ex):
+        return len(ex.text)
+
     @classmethod
     def splits(cls, path, train='stsa.fine.phrases.train', validation='stsa.fine.dev', test='stsa.fine.test', **kwargs):
         return super(SST1, cls).splits(
             path, train=train, validation=validation, test=test,
-            format='TSV', fields=[('label', cls.LABEL_FIELD), ('text', cls.TEXT_FIELD)]
+            format='tsv', fields=[('label', cls.LABEL_FIELD), ('text', cls.TEXT_FIELD)]
         )
 
     @classmethod

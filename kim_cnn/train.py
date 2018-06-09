@@ -28,17 +28,16 @@ random.seed(args.seed)
 
 # Set up the data for training SST-1
 if args.dataset == 'SST-1':
-    train_iter, dev_iter, test_iter = SST1.iters('', args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu)
+    train_iter, dev_iter, test_iter = SST1.iters(args.data_dir, args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu)
 
 config = args
-config.target_class = len(train_iter.dataset.LABEL_FIELD.vocab)
+config.target_class = train_iter.dataset.NUM_CLASSES
 config.words_num = len(train_iter.dataset.TEXT_FIELD.vocab)
 config.embed_num = len(train_iter.dataset.TEXT_FIELD.vocab)
 
 print("Dataset {}    Mode {}".format(args.dataset, args.mode))
 print("VOCAB num",len(train_iter.dataset.TEXT_FIELD.vocab))
-print("LABEL.target_class:", len(train_iter.dataset.LABEL_FIELD.vocab))
-print("LABELS:", train_iter.dataset.LABEL_FIELD.vocab.itos)
+print("LABEL.target_class:", train_iter.dataset.NUM_CLASSES)
 print("Train instance", len(train_iter.dataset))
 print("Dev instance", len(dev_iter.dataset))
 print("Test instance", len(test_iter.dataset))
@@ -101,18 +100,19 @@ while True:
         # Evaluate performance on validation set
         if iterations % args.dev_every == 1:
             # switch model into evalutaion mode
-            model.eval(); dev_iter.init_epoch()
+            model.eval()
+            dev_iter.init_epoch()
             n_dev_correct = 0
             dev_losses = []
             for dev_batch_idx, dev_batch in enumerate(dev_iter):
                 scores = model(dev_batch)
                 n_dev_correct += (torch.max(scores, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data).sum()
                 dev_loss = criterion(scores, dev_batch.label)
-                dev_losses.append(dev_loss.data[0])
+                dev_losses.append(dev_loss.item())
             dev_acc = 100. * n_dev_correct / len(dev_iter.dataset)
             print(dev_log_template.format(time.time() - start,
                                           epoch, iterations, 1 + batch_idx, len(train_iter),
-                                          100. * (1 + batch_idx) / len(train_iter), loss.data[0],
+                                          100. * (1 + batch_idx) / len(train_iter), loss.item(),
                                           sum(dev_losses) / len(dev_losses), train_acc, dev_acc))
 
             # Update validation results
@@ -131,5 +131,5 @@ while True:
             # print progress message
             print(log_template.format(time.time() - start,
                                       epoch, iterations, 1 + batch_idx, len(train_iter),
-                                      100. * (1 + batch_idx) / len(train_iter), loss.data[0], ' ' * 8,
+                                      100. * (1 + batch_idx) / len(train_iter), loss.item(), ' ' * 8,
                                       n_correct / n_total * 100, ' ' * 12))
