@@ -4,8 +4,6 @@ import numpy as np
 import torch
 from torchtext import data
 from args import get_args
-from SST1 import SST1Dataset
-from utils import clean_str_sst
 
 
 args = get_args()
@@ -26,8 +24,6 @@ if not args.trained_model:
     sys.exit(1)
 
 if args.dataset == 'SST-1':
-    TEXT = data.Field(batch_first=True, lower=True, tokenize=clean_str_sst)
-    LABEL = data.Field(sequential=False)
     train, dev, test = SST1Dataset.splits(TEXT, LABEL)
 
 TEXT.build_vocab(train, min_freq=2)
