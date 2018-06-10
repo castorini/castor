@@ -15,7 +15,7 @@ class SSTEvaluator(Evaluator):
         for batch_idx, batch in enumerate(self.data_loader):
             scores = self.model(batch)
             n_dev_correct += (
-                torch.max(scores, 1)[1].view(batch.label.size()).data == batch.label.data).sum()
+                torch.max(scores, 1)[1].view(batch.label.size()).data == batch.label.data).sum().item()
             total_loss += F.cross_entropy(scores, batch.label, size_average=False).item()
 
         accuracy = 100. * n_dev_correct / len(self.data_loader.dataset.examples)

@@ -1,3 +1,4 @@
+from copy import deepcopy
 import logging
 import random
 
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     else:
         raise ValueError('Unrecognized dataset')
 
-    config = args
+    config = deepcopy(args)
     config.dataset = train_iter.dataset
     config.target_class = train_iter.dataset.NUM_CLASSES
     config.words_num = len(train_iter.dataset.TEXT_FIELD.vocab)
@@ -83,9 +84,9 @@ if __name__ == '__main__':
     parameter = filter(lambda p: p.requires_grad, model.parameters())
     optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
 
-    train_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, train_iter, args.batch_size, args.device)
-    test_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, test_iter, args.batch_size, args.device)
-    dev_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, dev_iter, args.batch_size, args.device)
+    train_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, train_iter, args.batch_size, args.gpu)
+    test_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, test_iter, args.batch_size, args.gpu)
+    dev_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, dev_iter, args.batch_size, args.gpu)
 
     trainer_config = {
         'optimizer': optimizer,
@@ -99,12 +100,12 @@ if __name__ == '__main__':
     trainer = TrainerFactory.get_trainer(args.dataset, model, None, train_iter, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
 
     if not args.trained_model:
-        trainer.train()
-
-    if args.cuda:
-        model = torch.load(args.trained_model, map_location=lambda storage, location: storage.cuda(args.gpu))
+        trainer.train(args.epochs)
     else:
-        model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
+        if args.cuda:
+            model = torch.load(args.trained_model, map_location=lambda storage, location: storage.cuda(args.gpu))
+        else:
+            model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
-    evaluate_dataset('dev', SST1, model, None, test_iter, args.batch_size, args.device)
-    evaluate_dataset('test', SST1, model, None, test_iter, args.batch_size, args.device)
+    evaluate_dataset('dev', SST1, model, None, test_iter, args.batch_size, args.gpu)
+    evaluate_dataset('test', SST1, model, None, test_iter, args.batch_size, args.gpu)
