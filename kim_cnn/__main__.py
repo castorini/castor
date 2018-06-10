@@ -107,5 +107,5 @@ if __name__ == '__main__':
         else:
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
-    evaluate_dataset('dev', SST1, model, None, test_iter, args.batch_size, args.gpu)
+    evaluate_dataset('dev', SST1, model, None, dev_iter, args.batch_size, args.gpu)
     evaluate_dataset('test', SST1, model, None, test_iter, args.batch_size, args.gpu)

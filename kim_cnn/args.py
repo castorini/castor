@@ -9,7 +9,7 @@ def get_args():
     parser.add_argument('--gpu', type=int, default=0) # Use -1 for CPU
     parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--batch_size', type=int, default=1024)
-    parser.add_argument('--mode', type=str, default='multichannel')
+    parser.add_argument('--mode', type=str, default='multichannel', choices=['rand', 'static', 'non-static', 'multichannel'])
     parser.add_argument('--lr', type=float, default=1.0)
     parser.add_argument('--seed', type=int, default=3435)
     parser.add_argument('--dataset', type=str, default='SST-1')
