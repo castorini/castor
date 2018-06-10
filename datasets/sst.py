@@ -16,7 +16,7 @@ def clean_str_sst(string):
 
 
 class SST1(TabularDataset):
-    NAME = 'sst-1'
+    NAME = 'SST-1'
     NUM_CLASSES = 5
 
     TEXT_FIELD = Field(batch_first=True, tokenize=clean_str_sst)
