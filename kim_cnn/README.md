@@ -12,22 +12,22 @@ Implementation for Convolutional Neural Networks for Sentence Classification of 
 
 ## Quick Start
 
-To run the model on SST-1 dataset on multichannel, just run the following code.
+To run the model on SST-1 dataset on multichannel, just run the following from the Castor working directory.
 
 ```
-python train.py --mode multichannel
+python -m kim_cnn --mode multichannel
 ```
 
-The file will be saved in 
+The file will be saved in
 
 ```
-saves/best_model.pt
+kim_cnn/saves/best_model.pt
 ```
 
 To test the model, you can use the following command.
 
 ```
-python main.py --trained_model saves/best_model.pt --mode multichannel
+python -m kim_cnn --trained_model kim_cnn/saves/SST-1/multichannel_best_model.pt --mode multichannel
 ```
 
 ## Dataset
@@ -38,7 +38,7 @@ We experiment the model on the following three datasets.
 
 ## Settings
 
-Adadelta is used for training. 
+Adadelta is used for training.
 
 ## Training Time
 
@@ -59,15 +59,15 @@ but this will take ~6-7x training time.
 
 ## Results
 
-Deterministic Algorithm for CNN.  
+Deterministic Algorithm for CNN.
 
-| Dev Accuracy on SST-1 |     rand      |    static    |   non-static  |  multichannel | 
-|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:| 
-| My-Implementation      | 42.597639| 48.773842| 48.864668   | 49.046322  |  
+| Dev Accuracy on SST-1 |     rand      |    static    |   non-static  |  multichannel |
+|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:|
+| My-Implementation      | 42.597639| 48.773842| 48.864668   | 49.046322  |
 
-| Test Accuracy on SST-1|      rand      |    static    |    non-static |  multichannel | 
-|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:| 
-| Kim-Implementation    | 45.0            | 45.5        | 48.0             | 47.4                 | 
+| Test Accuracy on SST-1|      rand      |    static    |    non-static |  multichannel |
+|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:|
+| Kim-Implementation    | 45.0            | 45.5        | 48.0             | 47.4                 |
 | My- Implementation    | 39.683258  | 45.972851| 48.914027|  47.330317       |
 
 ## TODO
