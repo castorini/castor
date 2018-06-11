@@ -8,6 +8,7 @@ import torch
 from common.evaluation import EvaluatorFactory
 from common.train import TrainerFactory
 from datasets.sst import SST1
+from datasets.sst import SST2
 from kim_cnn.args import get_args
 from kim_cnn.model import KimCNN
 
@@ -55,6 +56,9 @@ if __name__ == '__main__':
     # Set up the data for training SST-1
     if args.dataset == 'SST-1':
         train_iter, dev_iter, test_iter = SST1.iters(args.data_dir, args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu)
+    # Set up the data for training SST-2
+    elif args.dataset == 'SST-2':
+        train_iter, dev_iter, test_iter = SST2.iters(args.data_dir, args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu)
     else:
         raise ValueError('Unrecognized dataset')
 
@@ -84,9 +88,16 @@ if __name__ == '__main__':
     parameter = filter(lambda p: p.requires_grad, model.parameters())
     optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
 
-    train_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, train_iter, args.batch_size, args.gpu)
-    test_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, test_iter, args.batch_size, args.gpu)
-    dev_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, dev_iter, args.batch_size, args.gpu)
+    if args.dataset == 'SST-1':
+        train_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, train_iter, args.batch_size, args.gpu)
+        test_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, test_iter, args.batch_size, args.gpu)
+        dev_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, dev_iter, args.batch_size, args.gpu)
+    elif args.dataset == 'SST-2':
+        train_evaluator = EvaluatorFactory.get_evaluator(SST2, model, None, train_iter, args.batch_size, args.gpu)
+        test_evaluator = EvaluatorFactory.get_evaluator(SST2, model, None, test_iter, args.batch_size, args.gpu)
+        dev_evaluator = EvaluatorFactory.get_evaluator(SST2, model, None, dev_iter, args.batch_size, args.gpu)
+    else:
+        raise ValueError('Unrecognized dataset')
 
     trainer_config = {
         'optimizer': optimizer,
@@ -107,5 +118,12 @@ if __name__ == '__main__':
         else:
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
-    evaluate_dataset('dev', SST1, model, None, dev_iter, args.batch_size, args.gpu)
-    evaluate_dataset('test', SST1, model, None, test_iter, args.batch_size, args.gpu)
+    if args.dataset == 'SST-1':
+        evaluate_dataset('dev', SST1, model, None, dev_iter, args.batch_size, args.gpu)
+        evaluate_dataset('test', SST1, model, None, test_iter, args.batch_size, args.gpu)
+    elif args.dataset == 'SST-2':
+        evaluate_dataset('dev', SST2, model, None, dev_iter, args.batch_size, args.gpu)
+        evaluate_dataset('test', SST2, model, None, test_iter, args.batch_size, args.gpu)
+    else:
+        raise ValueError('Unrecognized dataset')
+
