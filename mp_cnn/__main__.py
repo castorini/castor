@@ -119,9 +119,9 @@ if __name__ == '__main__':
         raise ValueError('optimizer not recognized: it should be either adam or sgd')
 
     train_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, train_loader, args.batch_size,
-                                                     args.device, keep_results)
+                                                     args.device)
     test_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, test_loader, args.batch_size,
-                                                    args.device, keep_results)
+                                                    args.device)
     dev_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, dev_loader, args.batch_size,
                                                    args.device)
 

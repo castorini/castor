@@ -31,8 +31,8 @@ def get_map_mrr(qids, predictions, labels, device=0, keep_results=False):
     mean_reciprocal_rank = float(trec_out_lines[1].split('\t')[-1])
 
     if keep_results:
-        print("saving prediction file to {}".format(results_fname))
-        print("saving qrel file to {}".format(qrel_fname))
+        print("Saving prediction file to {}".format(results_fname))
+        print("Saving qrel file to {}".format(qrel_fname))
     else:
         os.remove(results_fname)
         os.remove(qrel_fname)
