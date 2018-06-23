@@ -8,6 +8,7 @@ import torch.nn.utils.rnn as rnn_utils
 
 import data
 
+
 class ConvRNNModel(nn.Module):
     def __init__(self, word_model, **config):
         super().__init__()
@@ -53,8 +54,8 @@ class ConvRNNModel(nn.Module):
         x = self.word_model(x)
         x = rnn_utils.pack_padded_sequence(x, lengths, batch_first=True)
         if self.rnn_type.upper() == "LSTM":
-            rnn_seq, rnn_out = self.bi_rnn(x) # shape: (batch, seq len, 2 * hidden_size), (2, batch, hidden_size)
-            rnn_out = rnn_out[0] # (h_0, c_0)
+            rnn_seq, rnn_out = self.bi_rnn(x)
+            rnn_out = rnn_out[0]
         else:
             rnn_seq, rnn_out = self.bi_rnn(x) # shape: (batch, 2, hidden_size)
         rnn_seq, _ = rnn_utils.pad_packed_sequence(rnn_seq, batch_first=True)
@@ -67,6 +68,7 @@ class ConvRNNModel(nn.Module):
         x = torch.cat(out, 1)
         x = F.relu(self.fc1(x))
         return self.fc2(x)
+
 
 class WordEmbeddingModel(nn.Module):
     def __init__(self, id_dict, weights, unknown_vocab=[], static=True, padding_idx=0):
