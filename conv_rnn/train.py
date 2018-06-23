@@ -154,7 +154,7 @@ def main():
     parser.add_argument("--rnn_type", choices=["lstm", "gru"], default="lstm", type=str)
     parser.add_argument("--seed", default=3, type=int)
     parser.add_argument("--quiet", action="store_true", default=False)
-    parser.add_argument("--weight_decay", default=0, type=float)
+    parser.add_argument("--weight_decay", default=1E-3, type=float)
     args = parser.parse_args()
     if args.random_search:
         do_random_search(vars(args))
