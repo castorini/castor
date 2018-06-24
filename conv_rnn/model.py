@@ -53,16 +53,15 @@ class ConvRNNModel(nn.Module):
     def forward(self, x, lengths):
         x = self.word_model(x)
         x = rnn_utils.pack_padded_sequence(x, lengths, batch_first=True)
+        rnn_seq, rnn_out = self.bi_rnn(x)
         if self.rnn_type.upper() == "LSTM":
-            rnn_seq, rnn_out = self.bi_rnn(x)
             rnn_out = rnn_out[0]
-        else:
-            rnn_seq, rnn_out = self.bi_rnn(x) # shape: (batch, 2, hidden_size)
+        
         rnn_seq, _ = rnn_utils.pad_packed_sequence(rnn_seq, batch_first=True)
         rnn_out.data = rnn_out.data.permute(1, 0, 2)
-        x = self.conv(rnn_seq.unsqueeze(1)).squeeze(3) # shape: (batch, channels, seq len)
-        x = F.relu(x) # shape: (batch, channels, seq len)
-        x = F.max_pool1d(x, x.size(2)) # shape: (batch, channels)
+        x = self.conv(rnn_seq.unsqueeze(1)).squeeze(3)
+        x = F.relu(x)
+        x = F.max_pool1d(x, x.size(2))
         out = [t.squeeze(1) for t in rnn_out.chunk(2, 1)]
         out.append(x.squeeze(-1))
         x = torch.cat(out, 1)
