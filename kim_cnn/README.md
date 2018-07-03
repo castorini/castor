@@ -32,7 +32,7 @@ python -m kim_cnn --trained_model kim_cnn/saves/SST-1/multichannel_best_model.pt
 
 ## Dataset
 
-We experiment the model on the following three datasets.
+We experiment the model on the following datasets.
 
 - SST-1: Keep the original splits and train with phrase level dataset and test on sentence level dataset.
 
@@ -57,21 +57,40 @@ torch.backends.cudnn.enabled = False
 ```
 but this will take ~6-7x training time.
 
-## Results
+## SST-1 Dataset Results
 
-Deterministic Algorithm for CNN.
+**Random**
 
-| Dev Accuracy on SST-1 |     rand      |    static    |   non-static  |  multichannel |
-|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:|
-| My-Implementation      | 42.597639| 48.773842| 48.864668   | 49.046322  |
+```
+python -m kim_cnn --mode rand --lr 0.8337 --weight_decay 0.0008987 --dropout 0.4
+```
 
-| Test Accuracy on SST-1|      rand      |    static    |    non-static |  multichannel |
-|:--------------------------:|:-----------:|:-----------:|:-------------:|:---------------:|
-| Kim-Implementation    | 45.0            | 45.5        | 48.0             | 47.4                 |
-| My- Implementation    | 39.683258  | 45.972851| 48.914027|  47.330317       |
+**Static**
+
+```
+python -m kim_cnn --mode static --lr 0.8641 --weight_decay 1.44e-05 --dropout 0.3
+```
+
+**Non-static**
+
+```
+python -m kim_cnn --mode non-static --lr 0.371 --weight_decay 1.84e-05 --dropout 0.4
+```
+
+**Multichannel**
+
+```
+python -m kim_cnn --mode multichannel --lr 0.2532 --weight_decay 3.95e-05 --dropout 0.1
+```
+
+Using deterministic algorithm for cuDNN.
+
+| Test Accuracy on SST-1         |    rand    |    static    |    non-static  |  multichannel   |
+|:------------------------------:|:----------:|:------------:|:--------------:|:---------------:|
+| Paper                          |    45.0    |     45.5     |      48.0      |      47.4       |
+| PyTorch using above configs    |    41.5    |     44.7     |      47.4      |      47.5       |
 
 ## TODO
 
 - More experiments on SST-2 and subjectivity
 - Parameters tuning
-
