@@ -119,7 +119,7 @@ python -m kim_cnn --dataset SST-2 --mode multichannel --lr 0.7373 --weight_decay
 
 Using deterministic algorithm for cuDNN.
 
-| Test Accuracy on SST-1         |    rand    |    static    |    non-static  |  multichannel   |
+| Test Accuracy on SST-2         |    rand    |    static    |    non-static  |  multichannel   |
 |:------------------------------:|:----------:|:------------:|:--------------:|:---------------:|
 | Paper                          |    82.7    |     86.8     |      87.2      |      88.1       |
 | PyTorch using above configs    |    83.0    |     86.4     |      87.3      |      87.4       |
