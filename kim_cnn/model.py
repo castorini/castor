@@ -39,7 +39,6 @@ class KimCNN(nn.Module):
         self.fc1 = nn.Linear(Ks * output_channel, target_class)
 
     def forward(self, x):
-        x = x.text
         if self.mode == 'rand':
             word_input = self.embed(x) # (batch, sent_len, embed_dim)
             x = word_input.unsqueeze(1) # (batch, channel_input, sent_len, embed_dim)
