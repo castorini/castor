@@ -145,7 +145,8 @@ if __name__ == '__main__':
         raise ValueError('Unrecognized dataset')
 
     if args.onnx:
-        dummy_input = next(iter(dev_iter)).text
+        device = torch.device('cuda') if torch.cuda.is_available() and args.cuda else torch.device('cpu')
+        dummy_input = torch.zeros(args.onnx_batch_size, args.onnx_sent_len, dtype=torch.long, device=device)
         onnx_filename = 'kimcnn_{}.onnx'.format(args.mode)
         torch.onnx.export(model, dummy_input, onnx_filename)
         print('Exported model in ONNX format as {}'.format(onnx_filename))
