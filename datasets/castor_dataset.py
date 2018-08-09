@@ -23,16 +23,6 @@ class CastorPairDataset(Dataset, metaclass=ABCMeta):
     EXT_FEATS = 4
     AID_FIELD = None
 
-    def get_char_ngram(self, s, n=3):
-        res = []
-        for w in s.split():
-            if len(w) <= n:
-                res.append(w)
-            else:
-                for i in range(len(w) - n + 1):
-                    res.append(w[i:i + n])
-        return " ".join(res)
-
     @abstractmethod
     def __init__(self, path, load_ext_feats=False):
         """
@@ -59,8 +49,6 @@ class CastorPairDataset(Dataset, metaclass=ABCMeta):
             for i, (pair_id, l1, l2, ext_feats, label) in enumerate(zip(id_file, sent_list_1, sent_list_2, overlap_feats, label_file)):
                 pair_id = pair_id.rstrip('.\n')
                 label = label.rstrip('.\n')
-                l1 = self.get_char_ngram(l1)
-                l2 = self.get_char_ngram(l2)
                 example_list = [pair_id, l1, l2, ext_feats, label, i + 1, ' '.join(l1), ' '.join(l2)]
                 example = Example.fromlist(example_list, fields)
                 examples.append(example)
