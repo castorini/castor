@@ -97,7 +97,7 @@ if __name__ == '__main__':
     logger.info(pprint.pformat(vars(args)))
 
     dataset_cls, embedding, train_loader, test_loader, dev_loader \
-        = DatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, device)
+        = DatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, args.device)
 
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     ext_feats = dataset_cls.EXT_FEATS if args.sparse_features else 0
