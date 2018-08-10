@@ -8,8 +8,8 @@ from torchtext.vocab import Vectors
 from datasets.castor_dataset import CastorPairDataset
 
 
-class TRECQA(CastorPairDataset):
-    NAME = 'trecqa'
+class PIT2015(CastorPairDataset):
+    NAME = 'pit2015'
     NUM_CLASSES = 2
     ID_FIELD = Field(sequential=False, dtype=torch.float32, use_vocab=False, batch_first=True)
     AID_FIELD = Field(sequential=False, use_vocab=False, batch_first=True)
@@ -25,16 +25,17 @@ class TRECQA(CastorPairDataset):
 
     def __init__(self, path):
         """
-        Create a TRECQA dataset instance
+        Create a PIT2015 dataset instance
         """
-        super(TRECQA, self).__init__(path, load_ext_feats=True)
+        super(PIT2015, self).__init__(path)
 
     @classmethod
-    def splits(cls, path, train='train-all', validation='raw-dev', test='raw-test', **kwargs):
-        return super(TRECQA, cls).splits(path, train=train, validation=validation, test=test, **kwargs)
+    def splits(cls, path, train='train', validation='dev', test='test', **kwargs):
+        return super(PIT2015, cls).splits(path, train=train, validation=validation, test=test, **kwargs)
 
     @classmethod
-    def iters(cls, path, vectors_name, vectors_dir, batch_size=64, shuffle=True, device=0, pt_file=False, vectors=None, unk_init=torch.Tensor.zero_):
+    def iters(cls, path, vectors_name, vectors_dir, batch_size=64, shuffle=True, device=0, pt_file=False, vectors=None,
+              unk_init=torch.Tensor.zero_):
         """
         :param path: directory containing train, test, dev files
         :param vectors_name: name of word vectors file
@@ -42,6 +43,7 @@ class TRECQA(CastorPairDataset):
         :param batch_size: batch size
         :param device: GPU device
         :param vectors: custom vectors - either predefined torchtext vectors or your own custom Vector classes
+        :param pt_file: load cached embedding file from disk if it is true
         :param unk_init: function used to generate vector for OOV words
         :return:
         """
@@ -59,4 +61,5 @@ class TRECQA(CastorPairDataset):
 
         cls.VOCAB_SIZE = len(cls.TEXT_FIELD.vocab)
 
-        return BucketIterator.splits((train, validation, test), batch_size=batch_size, repeat=False, shuffle=shuffle, sort_within_batch=True, device=device)
+        return BucketIterator.splits((train, validation, test), batch_size=batch_size, repeat=False, shuffle=shuffle,
+                                     sort_within_batch=True, device=device)
