@@ -20,7 +20,7 @@ class PIT2015Evaluator(Evaluator):
             gold_label = batch.label.data
             n_dev_correct += (prediction == gold_label).sum().item()
             acc_total += ((prediction == batch.label.data) * (prediction == 1)).sum().item()
-            total_loss += F.cross_entropy(scores, batch.label, size_average=False).item()
+            total_loss += F.nll_loss(scores, batch.label, size_average=False).item()
             rel_total += batch.label.data.sum().item()
             pre_total += torch.max(scores, 1)[1].view(batch.label.size()).data.sum().item()
 

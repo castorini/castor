@@ -80,6 +80,6 @@ class PIT2015Trainer(Trainer):
 
             prev_loss = avg_loss
             if scheduler is not None:
-                scheduler.step(accuracy)
+                scheduler.step(f1)
 
         self.logger.info('Training took {:.2f} minutes overall...'.format(sum(epoch_times) / 60))
