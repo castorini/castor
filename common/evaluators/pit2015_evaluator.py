@@ -22,7 +22,7 @@ class PIT2015Evaluator(Evaluator):
             acc_total += ((prediction == batch.label.data) * (prediction == 1)).sum().item()
             total_loss += F.nll_loss(scores, batch.label, size_average=False).item()
             rel_total += gold_label.sum().item()
-            pre_total += prediction.data.sum().item()
+            pre_total += prediction.sum().item()
 
             del scores
 
