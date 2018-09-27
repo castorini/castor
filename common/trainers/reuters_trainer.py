@@ -31,7 +31,7 @@ class ReutersTrainer(Trainer):
             self.optimizer.zero_grad()
             scores = self.model(batch.text)
             # Using binary accuracy
-            for tensor1, tensor2 in zip(scores.round().long().data, batch.label.data):
+            for tensor1, tensor2 in zip(scores.round().long(), batch.label):
                 if np.array_equal(tensor1, tensor2):
                     n_correct += 1
             n_total += batch.batch_size
@@ -48,7 +48,6 @@ class ReutersTrainer(Trainer):
                       epoch, self.iterations, 1 + batch_idx, len(self.train_loader),
                       100. * (1 + batch_idx) / len(self.train_loader), loss.item(),
                       dev_loss, train_acc, dev_acc))
-
 
                 # Update validation results
                 if dev_acc > self.best_dev_acc:

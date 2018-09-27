@@ -16,8 +16,7 @@ class ReutersEvaluator(Evaluator):
         for batch_idx, batch in enumerate(self.data_loader):
             scores = self.model(batch.text)
             # Using binary accuracy
-            for tensor1, tensor2 in zip(scores.round().long().data, batch.label.data):
-                print(tensor1, tensor2)
+            for tensor1, tensor2 in zip(scores.round().long(), batch.label):
                 if np.array_equal(tensor1, tensor2):
                     n_dev_correct += 1
             total_loss += F.binary_cross_entropy_with_logits(scores, batch.label.float(), size_average=False).item()
