@@ -31,7 +31,7 @@ class ReutersTrainer(Trainer):
             self.optimizer.zero_grad()
             scores = self.model(batch.text)
             # Using binary accuracy
-            for tensor1, tensor2 in zip(scores.round().long(), batch.label):
+            for tensor1, tensor2 in zip(F.sigmoid(scores).round().long(), batch.label):
                 if np.array_equal(tensor1, tensor2):
                     n_correct += 1
             n_total += batch.batch_size
