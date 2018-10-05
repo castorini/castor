@@ -5,6 +5,7 @@ from .evaluators.trecqa_evaluator import TRECQAEvaluator
 from .evaluators.wikiqa_evaluator import WikiQAEvaluator
 from .evaluators.pit2015_evaluator import PIT2015Evaluator
 from .evaluators.reuters_evaluator import ReutersEvaluator
+from .evaluators.snli_evaluator import SNLIEvaluator
 from nce.nce_pairwise_mp.evaluators.trecqa_evaluator import TRECQAEvaluatorNCE
 from nce.nce_pairwise_mp.evaluators.wikiqa_evaluator import WikiQAEvaluatorNCE
 
@@ -22,7 +23,8 @@ class EvaluatorFactory(object):
         'wikiqa': WikiQAEvaluator,
         'pit2015': PIT2015Evaluator,
         'twitterurl': PIT2015Evaluator,
-        'Reuters': ReutersEvaluator
+        'Reuters': ReutersEvaluator,
+        'SNLI': SNLIEvaluator
     }
 
     evaluator_map_nce = {
