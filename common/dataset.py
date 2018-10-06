@@ -67,10 +67,10 @@ class DatasetFactory(object):
             embedding = nn.Embedding.from_pretrained(PIT2015.TEXT_FIELD.vocab.vectors)
             return PIT2015, embedding, train_loader, test_loader, dev_loader
 	elif dataset_name == 'reuters':
-	    dataset_root = os.path.join(castor_dir, os.pardir, 'Castor-data', 'datasets', 'Reuters-21578/')
-	    train_loader, dev_loader, test_loader = Reuters.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
-	    embedding = nn.Embedding.from_pretrained(Reuters.TEXT_FIELD.vocab.vectors)
-	    return Reuters, embedding, train_loader, test_loader, dev_loader
+            dataset_root = os.path.join(castor_dir, os.pardir, 'Castor-data', 'datasets', 'Reuters-21578/')
+            train_loader, dev_loader, test_loader = Reuters.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
+            embedding = nn.Embedding.from_pretrained(Reuters.TEXT_FIELD.vocab.vectors)
+            return Reuters, embedding, train_loader, test_loader, dev_loader
         else:
             raise ValueError('{} is not a valid dataset.'.format(dataset_name))
 
