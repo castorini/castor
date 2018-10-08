@@ -10,7 +10,7 @@ from datasets.wikiqa import WikiQA
 from datasets.pit2015 import PIT2015
 from datasets.snli import SNLI
 from datasets.sts2014 import STS2014
-
+from datasets.quora import Quora
 
 class UnknownWordVecCache(object):
     """
@@ -73,12 +73,16 @@ class DatasetFactory(object):
             train_loader, dev_loader, test_loader = SNLI.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
             embedding = nn.Embedding.from_pretrained(SNLI.TEXT_FIELD.vocab.vectors)
             return SNLI, embedding, train_loader, test_loader, dev_loader
-        elif dataset_name == "sts2014":
+        elif dataset_name == 'sts2014':
             dataset_root = os.path.join(castor_dir, os.pardir, 'Castor-data', 'datasets', 'STS-2014')
             train_loader, dev_loader, test_loader = STS2014.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
             embedding = nn.Embedding.from_pretrained(STS2014.TEXT_FIELD.vocab.vectors)
             return STS2014, embedding, train_loader, test_loader, dev_loader
-
+        elif dataset_name == "quora":
+            dataset_root = os.path.join(castor_dir, os.pardir, 'Castor-data', 'datasets', 'quora/')
+            train_loader, dev_loader, test_loader = Quora.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
+            embedding = nn.Embedding.from_pretrained(Quora.TEXT_FIELD.vocab.vectors)
+            return Quora, embedding, train_loader, test_loader, dev_loader
         else:
             raise ValueError('{} is not a valid dataset.'.format(dataset_name))
 

@@ -7,6 +7,7 @@ from .trainers.sst_trainer import SSTTrainer
 from .trainers.reuters_trainer import ReutersTrainer
 from .trainers.snli_trainer import SNLITrainer
 from .trainers.sts2014_trainer import STS2014Trainer
+from .trainers.quora_trainer import QuoraTrainer
 from nce.nce_pairwise_mp.trainers.trecqa_trainer import TRECQATrainerNCE
 from nce.nce_pairwise_mp.trainers.wikiqa_trainer import WikiQATrainerNCE
 
@@ -26,7 +27,8 @@ class TrainerFactory(object):
         'twitterurl': PIT2015Trainer,
         'Reuters': ReutersTrainer,
         'snli': SNLITrainer,
-        'sts2014': STS2014Trainer
+        'sts2014': STS2014Trainer,
+        'quora': QuoraTrainer
     }
 
     trainer_map_nce = {
