@@ -69,7 +69,6 @@ class DatasetFactory(object):
             train_loader, dev_loader, test_loader = PIT2015.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
             embedding = nn.Embedding.from_pretrained(PIT2015.TEXT_FIELD.vocab.vectors)
             return PIT2015, embedding, train_loader, test_loader, dev_loader
-<<<<<<< HEAD
         elif dataset_name == 'snli':
             dataset_root = os.path.join(castor_dir, os.pardir, 'Castor-data', 'datasets', 'snli_1.0/')
             train_loader, dev_loader, test_loader = SNLI.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
@@ -85,7 +84,7 @@ class DatasetFactory(object):
             train_loader, dev_loader, test_loader = Quora.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
             embedding = nn.Embedding.from_pretrained(Quora.TEXT_FIELD.vocab.vectors)
             return Quora, embedding, train_loader, test_loader, dev_loader
-	elif dataset_name == 'reuters':
+        elif dataset_name == 'reuters':
             dataset_root = os.path.join(castor_dir, os.pardir, 'Castor-data', 'datasets', 'Reuters-21578/')
             train_loader, dev_loader, test_loader = Reuters.iters(dataset_root, word_vectors_file, word_vectors_dir, batch_size, device=device, unk_init=UnknownWordVecCache.unk)
             embedding = nn.Embedding.from_pretrained(Reuters.TEXT_FIELD.vocab.vectors)
