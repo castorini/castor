@@ -4,7 +4,6 @@ import random
 
 import numpy as np
 import torch
-import torch.onnx
 import torch.nn.functional as F
 from sklearn import metrics
 
@@ -176,10 +175,3 @@ if __name__ == '__main__':
         else:
             print("Test metrics:")
         print(accuracy, precision, recall, f1)
-
-    if args.onnx:
-        device = torch.device('cuda') if torch.cuda.is_available() and args.cuda else torch.device('cpu')
-        dummy_input = torch.zeros(args.onnx_batch_size, args.onnx_sent_len, dtype=torch.long, device=device)
-        onnx_filename = 'lstm_baseline_{}.onnx'.format(args.mode)
-        torch.onnx.export(model, dummy_input, onnx_filename)
-        print('Exported model in ONNX format as {}'.format(onnx_filename))

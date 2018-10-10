@@ -27,6 +27,6 @@ We experiment the model on the following datasets.
 Adadelta is used for training.
 
 ## TODO
-
+- Support ONNX export. Currently throws a ONNX export failed (Couldn't export Python operator forward_flattened_wrapper) exception.
 - Add dataset results with different hyperparameters
 - Parameters tuning
