@@ -5,6 +5,8 @@ import random
 import numpy as np
 import torch
 import torch.onnx
+import torch.nn.functional as F
+from sklearn import metrics
 
 from common.evaluation import EvaluatorFactory
 from common.train import TrainerFactory
@@ -107,7 +109,7 @@ if __name__ == '__main__':
             print('Shift model to GPU')
 
     parameter = filter(lambda p: p.requires_grad, model.parameters())
-    optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.Adam(parameter, lr=args.lr, weight_decay=args.weight_decay)
 
     if args.dataset == 'SST-1':
         train_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, train_iter, args.batch_size, args.gpu)
@@ -154,6 +156,26 @@ if __name__ == '__main__':
         evaluate_dataset('test', Reuters, model, None, test_iter, args.batch_size, args.gpu)
     else:
         raise ValueError('Unrecognized dataset')
+
+    # Calculate dev and test metrics
+    for data_loader in [dev_iter, test_iter]:
+        predicted_labels = list()
+        target_labels = list()
+        for batch_idx, batch in enumerate(data_loader):
+            scores_rounded = F.sigmoid(model(batch.text)).round().long()
+            predicted_labels.extend(scores_rounded.cpu().detach().numpy())
+            target_labels.extend(batch.label.cpu().detach().numpy())
+        predicted_labels = np.array(predicted_labels)
+        target_labels = np.array(target_labels)
+        accuracy = metrics.accuracy_score(target_labels, predicted_labels)
+        precision = metrics.precision_score(target_labels, predicted_labels, average='micro')
+        recall = metrics.recall_score(target_labels, predicted_labels, average='micro')
+        f1 = metrics.f1_score(target_labels, predicted_labels, average='micro')
+        if data_loader == dev_iter:
+            print("Dev metrics:")
+        else:
+            print("Test metrics:")
+        print(accuracy, precision, recall, f1)
 
     if args.onnx:
         device = torch.device('cuda') if torch.cuda.is_available() and args.cuda else torch.device('cpu')
