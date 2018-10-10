@@ -25,7 +25,7 @@ class LSTMBaseline(nn.Module):
             exit()
 
         self.lstm = nn.LSTM(config.words_dim, config.hidden_dim, dropout=config.dropout, num_layers=config.num_layers,
-                            bidirectional=self.is_bidirectional)
+                            bidirectional=self.is_bidirectional, batch_first=True)
         self.dropout = nn.Dropout(config.dropout)
         if self.is_bidirectional:
             self.fc1 = nn.Linear(2 * config.hidden_dim, target_class)
@@ -34,7 +34,7 @@ class LSTMBaseline(nn.Module):
 
     def forward(self, x):
         if self.mode == 'rand':
-            x = self.embed(x) # (batch, sent_len, embed_dim)
+            x = self.embed(x)
         elif self.mode == 'static':
             x = self.static_embed(x)
         elif self.mode == 'non-static':
