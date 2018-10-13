@@ -32,7 +32,7 @@ class LSTMBaseline(nn.Module):
         else:
             self.fc1 = nn.Linear(config.hidden_dim, target_class)
 
-    def forward(self, x):
+    def forward(self, x, lengths=None):
         if self.mode == 'rand':
             x = self.embed(x)
         elif self.mode == 'static':
@@ -42,7 +42,11 @@ class LSTMBaseline(nn.Module):
         else:
             print("Unsupported Mode")
             exit()
+        if lengths is not None:
+            x = torch.nn.utils.rnn.pack_padded_sequence(x, lengths, batch_first=True)
         x, _ = self.lstm(x)
+        if lengths is not None:
+            x, _ = torch.nn.utils.rnn.pad_packed_sequence(x, batch_first=True)
         x = F.relu(torch.transpose(x, 1, 2))
         x = F.max_pool1d(x, x.size(2)).squeeze(2)
         x = self.dropout(x)
