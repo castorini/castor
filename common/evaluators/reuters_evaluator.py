@@ -14,7 +14,7 @@ class ReutersEvaluator(Evaluator):
         total_loss = 0
 
         for batch_idx, batch in enumerate(self.data_loader):
-            scores = self.model(batch.text)
+            scores = self.model(batch.text[0], lengths=batch.text[1])
             scores_rounded = F.sigmoid(scores).round().long()
 
             # Using binary accuracy
