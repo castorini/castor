@@ -7,7 +7,7 @@ def get_args():
     parser = ArgumentParser(description="Baseline LSTM for text classification")
     parser.add_argument('--no_cuda', action='store_false', help='do not use cuda', dest='cuda')
     parser.add_argument('--gpu', type=int, default=0) # Use -1 for CPU
-    parser.add_argument('--epochs', type=int, default=30)
+    parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=1024)
     parser.add_argument('--bidirectional', type=bool, default=True),
     parser.add_argument('--num_layers', type=int, default=2)

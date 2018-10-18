@@ -28,9 +28,12 @@ class LSTMBaseline(nn.Module):
                             bidirectional=self.is_bidirectional, batch_first=True)
         self.dropout = nn.Dropout(config.dropout)
         if self.is_bidirectional:
-            self.fc1 = nn.Linear(2 * config.hidden_dim, target_class)
+            self.fc1 = nn.Linear(2 * config.hidden_dim, config.hidden_dim)  # Hidden Bottleneck Layer
+            self.fc2 = nn.Linear(config.hidden_dim, target_class)
         else:
-            self.fc1 = nn.Linear(config.hidden_dim, target_class)
+            self.fc1 = nn.Linear(config.hidden_dim, config.hidden_dim//2)   # Hidden Bottleneck Layer
+            self.fc2 = nn.Linear(config.hidden_dim//2, target_class)
+
 
     def forward(self, x, lengths=None):
         if self.mode == 'rand':
@@ -50,5 +53,5 @@ class LSTMBaseline(nn.Module):
         x = F.relu(torch.transpose(x, 1, 2))
         x = F.max_pool1d(x, x.size(2)).squeeze(2)
         x = self.dropout(x)
-        logit = self.fc1(x) # (batch, target_size)
-        return logit
+        x = F.relu(self.fc1(x))
+        return self.fc2(x)
