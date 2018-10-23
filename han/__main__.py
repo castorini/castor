@@ -10,7 +10,7 @@ from common.evaluation import EvaluatorFactory
 from common.train import TrainerFactory
 from datasets.sst import SST1
 from datasets.sst import SST2
-from datasets.reuters import Reuters
+from datasets.reuters import Reuters_hierarchical as Reuters
 from han.args import get_args
 from han.model import HAN
 import torch.nn.functional as F
