@@ -10,11 +10,11 @@ def get_args():
     parser.add_argument('--epochs', type=int, default=30)
 
 
-    parser.add_argument('--word_num_hidden', type = int, default = 100)
-    parser.add_argument('--sentence_num_hidden', type = int, default = 100)
+    parser.add_argument('--word_num_hidden', type = int, default = 50)
+    parser.add_argument('--sentence_num_hidden', type = int, default = 50)
 
 
-    parser.add_argument('--batch_size', type=int, default=1024)
+    parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--mode', type=str, default='static', choices=['rand', 'static', 'non-static'])
     parser.add_argument('--lr', type=float, default=1.0)
     parser.add_argument('--seed', type=int, default=3435)

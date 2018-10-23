@@ -1,7 +1,7 @@
 from copy import deepcopy
 import logging
 import random
-
+from sklearn import metrics
 import numpy as np
 import torch
 import torch.onnx
@@ -12,8 +12,8 @@ from datasets.sst import SST1
 from datasets.sst import SST2
 from datasets.reuters import Reuters
 from han.args import get_args
-from han.model import AttentionRNN
-
+from han.model import HAN
+import torch.nn.functional as F
 
 class UnknownWordVecCache(object):
     """
@@ -101,14 +101,16 @@ if __name__ == '__main__':
         else:
             model = torch.load(args.resume_snapshot, map_location=lambda storage, location: storage)
     else:
-        model = AttentionRNN(config)
+        model = HAN(config)
         if args.cuda:
             model.cuda()
             print('Shift model to GPU')
 
     parameter = filter(lambda p: p.requires_grad, model.parameters())
-    optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
-
+    print(parameter)
+    #optimizer = torch.optim.Adadelta(parameter, lr=args.lr, weight_decay=args.weight_decay)
+    #optimizer = torch.optim.SGD(parameter, lr = args.lr, momentum = 0.9)
+    optimizer = torch.optim.Adam(parameter, lr = args.lr)
     if args.dataset == 'SST-1':
         train_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, train_iter, args.batch_size, args.gpu)
         test_evaluator = EvaluatorFactory.get_evaluator(SST1, model, None, test_iter, args.batch_size, args.gpu)
@@ -154,6 +156,30 @@ if __name__ == '__main__':
         evaluate_dataset('test', Reuters, model, None, test_iter, args.batch_size, args.gpu)
     else:
         raise ValueError('Unrecognized dataset')
+
+
+
+    # Calculate dev and test metrics
+    for data_loader in [dev_iter, test_iter]:
+        predicted_labels = list()
+        target_labels = list()
+        for batch_idx, batch in enumerate(data_loader):
+            scores_rounded = F.sigmoid(model(batch.text)).round().long()
+            predicted_labels.extend(scores_rounded.cpu().detach().numpy())
+            target_labels.extend(batch.label.cpu().detach().numpy())
+        predicted_labels = np.array(predicted_labels)
+        target_labels = np.array(target_labels)
+        accuracy = metrics.accuracy_score(target_labels, predicted_labels)
+        precision = metrics.precision_score(target_labels, predicted_labels, average='micro')
+        recall = metrics.recall_score(target_labels, predicted_labels, average='micro')
+        f1 = metrics.f1_score(target_labels, predicted_labels, average='micro')
+        if data_loader == dev_iter:
+            print("Dev metrics:")
+        else:
+            print("Test metrics:")
+        print(accuracy, precision, recall, f1)
+
+
 
     if args.onnx:
         device = torch.device('cuda') if torch.cuda.is_available() and args.cuda else torch.device('cpu')
