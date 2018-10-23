@@ -8,7 +8,7 @@ Implementation for Convolutional Neural Networks for Sentence Classification of 
 - static: A model with pre-trained vectors from [word2vec](https://code.google.com/archive/p/word2vec/). All words -- including the unknown ones that are initialized with zero -- are kept static and only the other parameters of the model are learned.
 - non-static: Same as above but the pretrained vectors are fine-tuned for each task.
 
-Implementation for Convolutional Neural Networks for Sentence Classification of [Kim (2014)](https://arxiv.org/abs/1408.5882) with PyTorch.
+
 
 ## Quick Start
 
@@ -50,7 +50,7 @@ torch.backends.cudnn.deterministic = True
 
 is specified, the training will be ~10 min. Reuters-21578 is a relatively small dataset and the implementation is a vectorized one, hence the speed. 
 
-```
-## Todo
 
+
+## TODO
 - a combined hyperparameter tuning on a few of the datasets and report results with the hyperparameters
