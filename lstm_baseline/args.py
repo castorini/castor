@@ -9,7 +9,8 @@ def get_args():
     parser.add_argument('--gpu', type=int, default=0) # Use -1 for CPU
     parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=1024)
-    parser.add_argument('--bidirectional', type=bool, default=True),
+    parser.add_argument('--bidirectional', action='store_true'),
+    parser.add_argument('--bottleneck_layer', action='store_true'),
     parser.add_argument('--num_layers', type=int, default=2)
     parser.add_argument('--hidden_dim', type=int, default=256)
     parser.add_argument('--mode', type=str, default='static', choices=['rand', 'static', 'non-static'])
