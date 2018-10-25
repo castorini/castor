@@ -1,6 +1,6 @@
 # Hierarchical Attention Networks
 
-Implementation for Convolutional Neural Networks for Sentence Classification of [Kim (2014)](https://arxiv.org/abs/1408.5882) with PyTorch and Torchtext.
+Implementation for Hierarchical Attention Networks for Documnet Classification of [HAN (2016)](https://www.cs.cmu.edu/~hovy/papers/16HLT-hierarchical-attention-networks.pdf) with PyTorch and Torchtext.
 
 ## Model Type
 
