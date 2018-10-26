@@ -2,29 +2,10 @@ import re
 import os
 
 import torch
+from datasets.reuters import clean_string, clean_string_fl
 from torchtext.data import Field, TabularDataset
 from torchtext.data.iterator import BucketIterator
 from torchtext.vocab import Vectors
-
-
-def clean_string(string):
-    """
-    Performs tokenization and string cleaning for the Reuters dataset
-    """
-    string = re.sub(r"[^A-Za-z0-9(),!?\'`]", " ", string)
-    string = re.sub(r"\s{2,}", " ", string)
-    return string.lower().strip().split()
-
-
-def clean_string_fl(string):
-    """
-    Returns only the title and first line (excluding the title) for every Reuters article, then calls clean_string
-    """
-    split_string = string.split('.')
-    if len(split_string) > 1:
-            return clean_string(split_string[0] + ". " + split_string[1])
-    else:
-        return clean_string(string)
 
 
 def process_labels(string):
