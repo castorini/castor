@@ -2,7 +2,7 @@ import re
 import os
 
 import torch
-from datasets.reuters import clean_string, clean_string_fl
+from datasets.reuters import clean_string, char_quantize, clean_string_fl
 from torchtext.data import Field, TabularDataset
 from torchtext.data.iterator import BucketIterator
 from torchtext.vocab import Vectors
@@ -57,3 +57,20 @@ class AAPD(TabularDataset):
         cls.TEXT_FIELD.build_vocab(train, val, test, vectors=vectors)
         return BucketIterator.splits((train, val, test), batch_size=batch_size, repeat=False, shuffle=shuffle,
                                      sort_within_batch=True, device=device)
+
+
+class AAPDCharQuantized(AAPD):
+    ALPHABET = dict(map(lambda t: (t[1], t[0]), enumerate(list("""abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}"""))))
+    TEXT_FIELD = Field(sequential=False, use_vocab=False, batch_first=True, preprocessing=char_quantize)
+
+    @classmethod
+    def iters(cls, path, vectors_name, vectors_cache, batch_size=64, shuffle=True, device=0, vectors=None,
+              unk_init=torch.Tensor.zero_):
+        """
+        :param path: directory containing train, test, dev files
+        :param batch_size: batch size
+        :param device: GPU device
+        :return:
+        """
+        train, val, test = cls.splits(path)
+        return BucketIterator.splits((train, val, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
