@@ -36,6 +36,7 @@ class ReutersTrainer(Trainer):
                 scores = self.model(batch.text, lengths=batch.text)
             else:
                 scores = self.model(batch.text[0], lengths=batch.text[1])
+            
             # Using binary accuracy
             for tensor1, tensor2 in zip(F.sigmoid(scores).round().long(), batch.label):
                 if np.array_equal(tensor1, tensor2):
