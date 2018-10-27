@@ -34,7 +34,7 @@ Adam is used for training.
 python -m char_cnn --dataset Reuters --gpu 1 --batch_size 128 --lr 0.001
 ```
   | Accuracy | Avg. Precision | Avg. Recall | Avg. F1
--- | -- | -- | -- | --  
+-- | -- | -- | -- | --
 Char-CNN (Dev) | 0.585 | 0.702 | 0.569 | 0.628
 Char-CNN (Test) | 0.589 | 0.691 | 0.552 | 0.614
 
