@@ -7,12 +7,12 @@ import torch.nn.functional as F
 class CharCNN(nn.Module):
     def __init__(self, config):
         super(CharCNN, self).__init__()
+        self.is_cuda_enabled = config.cuda
         dataset = config.dataset
         num_conv_filters = config.num_conv_filters
         output_channel = config.output_channel
         num_affine_neurons = config.num_affine_neurons
         target_class = config.target_class
-        max_length = 1000
         input_channel = 68
 
         self.conv1 = nn.Conv1d(input_channel, num_conv_filters, kernel_size=7) # Default padding=0
@@ -27,7 +27,10 @@ class CharCNN(nn.Module):
         self.fc3 = nn.Linear(num_affine_neurons, target_class)
 
     def forward(self, x, **kwargs):
-        x = x.transpose(1, 2).type(torch.cuda.FloatTensor)
+        if torch.cuda.is_available() and self.is_cuda_enabled:
+            x = x.transpose(1, 2).type(torch.cuda.FloatTensor)
+        else:
+            x = x.transpose(1, 2).type(torch.FloatTensor)
         x = F.max_pool1d(F.relu(self.conv1(x)), 3)
         x = F.max_pool1d(F.relu(self.conv2(x)), 3)
         x = F.relu(self.conv3(x))
