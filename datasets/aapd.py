@@ -2,8 +2,8 @@ import re
 import os
 
 import torch
-from datasets.reuters import clean_string, char_quantize, clean_string_fl
-from torchtext.data import Field, TabularDataset
+from datasets.reuters import clean_string, char_quantize, clean_string_fl, split_sents
+from torchtext.data import NestedField, Field, TabularDataset
 from torchtext.data.iterator import BucketIterator
 from torchtext.vocab import Vectors
 
@@ -74,3 +74,7 @@ class AAPDCharQuantized(AAPD):
         """
         train, val, test = cls.splits(path)
         return BucketIterator.splits((train, val, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
+
+class AAPDHierarchical(AAPD):
+    In_FIELD = Field(batch_first=True, tokenize=clean_string)
+    TEXT_FIELD = NestedField(In_FIELD, tokenize=split_sents)
