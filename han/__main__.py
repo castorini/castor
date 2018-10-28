@@ -11,6 +11,7 @@ from common.train import TrainerFactory
 from datasets.sst import SST1
 from datasets.sst import SST2
 from datasets.reuters import ReutersHierarchical as Reuters
+from datasets.aapd import AAPDHierarchical as AAPD
 from han.args import get_args
 from han.model import HAN
 import torch.nn.functional as F
@@ -47,6 +48,7 @@ def get_logger():
 
 def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device):
     saved_model_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, loader, batch_size, device)
+    saved_model_evaluator.ignore_lengths = True
     scores, metric_names = saved_model_evaluator.get_scores()
     logger.info('Evaluation metrics for {}'.format(split_name))
     logger.info('\t'.join([' '] + metric_names))
@@ -80,6 +82,8 @@ if __name__ == '__main__':
         train_iter, dev_iter, test_iter = SST2.iters(args.data_dir, args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu, unk_init=UnknownWordVecCache.unk)
     elif args.dataset == 'Reuters':
         train_iter, dev_iter, test_iter = Reuters.iters(args.data_dir, args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu, unk_init=UnknownWordVecCache.unk)
+    elif args.dataset == 'AAPD':
+        train_iter, dev_iter, test_iter = AAPD.iters(args.data_dir, args.word_vectors_file, args.word_vectors_dir, batch_size=args.batch_size, device=args.gpu, unk_init=UnknownWordVecCache.unk)
     else:
         raise ValueError('Unrecognized dataset')
 
@@ -123,9 +127,15 @@ if __name__ == '__main__':
         train_evaluator = EvaluatorFactory.get_evaluator(Reuters, model, None, train_iter, args.batch_size, args.gpu)
         test_evaluator = EvaluatorFactory.get_evaluator(Reuters, model, None, test_iter, args.batch_size, args.gpu)
         dev_evaluator = EvaluatorFactory.get_evaluator(Reuters, model, None, dev_iter, args.batch_size, args.gpu)
+    elif args.dataset == 'AAPD':
+        train_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, train_iter, args.batch_size, args.gpu)
+        test_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, test_iter, args.batch_size, args.gpu)
+        dev_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, dev_iter, args.batch_size, args.gpu)
     else:
         raise ValueError('Unrecognized dataset')
 
+    dev_evaluator.ignore_lengths = True
+    test_evaluator.ignore_lengths = True
     trainer_config = {
         'optimizer': optimizer,
         'batch_size': args.batch_size,
@@ -133,7 +143,8 @@ if __name__ == '__main__':
         'dev_log_interval': args.dev_every,
         'patience': args.patience,
         'model_outfile': args.save_path,   # actually a directory, using model_outfile to conform to Trainer naming convention
-        'logger': logger
+        'logger': logger,
+        'ignore_lengths': True
     }
     trainer = TrainerFactory.get_trainer(args.dataset, model, None, train_iter, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
 
@@ -154,6 +165,10 @@ if __name__ == '__main__':
     elif args.dataset == 'Reuters':
         evaluate_dataset('dev', Reuters, model, None, dev_iter, args.batch_size, args.gpu)
         evaluate_dataset('test', Reuters, model, None, test_iter, args.batch_size, args.gpu)
+    elif args.dataset == 'AAPD':
+        train_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, train_iter, args.batch_size, args.gpu)
+        test_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, test_iter, args.batch_size, args.gpu)
+        dev_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, dev_iter, args.batch_size, args.gpu)
     else:
         raise ValueError('Unrecognized dataset')
 
