@@ -171,7 +171,7 @@ if __name__ == '__main__':
         predicted_labels = list()
         target_labels = list()
         for batch_idx, batch in enumerate(data_loader):
-            scores_rounded = F.sigmoid(model(batch.text)).round().long()
+            scores_rounded = F.sigmoid(model(batch.text[0])).round().long()
             predicted_labels.extend(scores_rounded.cpu().detach().numpy())
             target_labels.extend(batch.label.cpu().detach().numpy())
         predicted_labels = np.array(predicted_labels)
