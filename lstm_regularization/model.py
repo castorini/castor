@@ -1,8 +1,8 @@
+from copy import deepcopy
 import torch
 import torch.nn as nn
 
 import torch.nn.functional as F
-from copy import deepcopy
 
 from lstm_regularization.weight_drop import WeightDrop
 from lstm_regularization.embed_regularize import embedded_dropout
