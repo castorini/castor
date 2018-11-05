@@ -38,7 +38,7 @@ class LSTMBaseline(nn.Module):
         ################
         ## Wdrop
         if self.wdrop:
-            self.lstm = WeightDrop(self.lstm, ['weight_hh_l0'], dropout = self.wdrop)
+            self.lstm = WeightDrop(self.lstm, ['weight_hh_l0'], dropout=self.wdrop)
         ################
         self.dropout = nn.Dropout(config.dropout)
         if self.has_bottleneck_layer:
@@ -77,7 +77,7 @@ class LSTMBaseline(nn.Module):
         #rnn_outs,_ = torch.nn.utils.rnn.pad_packed_sequence(rnn_outs, batch_first = True)
 
         if lengths is not None:
-            rnn_outs,_ = torch.nn.utils.rnn.pad_packed_sequence(rnn_outs, batch_first = True)
+            rnn_outs,_ = torch.nn.utils.rnn.pad_packed_sequence(rnn_outs, batch_first=True)
             rnn_outs_temp, _ = torch.nn.utils.rnn.pad_packed_sequence(rnn_outs_temp, batch_first=True)
 
         x = F.relu(torch.transpose(rnn_outs_temp, 1, 2))
