@@ -1,6 +1,6 @@
 # lstm_baseline with Regularization
 
-Implementation of a standard LSTM using PyTorch and Torchtext for text classification baseline measurements with REgularization.
+Implementation of a standard LSTM using PyTorch and Torchtext for text classification baseline measurements with Regularization.
 
 ## Model Type
 
@@ -24,7 +24,7 @@ We experiment the model on the following datasets.
 
 ## Settings
 
-Adadelta is used for training.
+Adam is used for training with an option of temporal averaging.
 
 ## TODO
 - Support ONNX export. Currently throws a ONNX export failed (Couldn't export Python operator forward_flattened_wrapper) exception.
