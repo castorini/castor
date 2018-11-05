@@ -56,7 +56,7 @@ class ReutersTrainer(Trainer):
             self.optimizer.step()
             #############
             ## Temp Ave
-            if hasattr(self.model, 'beta_ema') and self.model.beta_ema>0:
+            if hasattr(self.model, 'beta_ema') and self.model.beta_ema > 0:
                 self.model.update_ema()
             #############
 

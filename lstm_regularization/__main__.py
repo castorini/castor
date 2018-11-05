@@ -166,7 +166,7 @@ if __name__ == '__main__':
         raise ValueError('Unrecognized dataset')
 
     # Calculate dev and test metrics
-    if model.beta_ema>0:
+    if model.beta_ema > 0:
         old_params = model.get_params()
         model.load_ema_params()
 
@@ -191,5 +191,5 @@ if __name__ == '__main__':
         else:
             print("Test metrics:")
         print(accuracy, precision, recall, f1)
-    if model.beta_ema>0:
+    if model.beta_ema > 0:
         model.load_params(old_params)

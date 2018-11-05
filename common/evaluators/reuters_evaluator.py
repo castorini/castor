@@ -18,7 +18,7 @@ class ReutersEvaluator(Evaluator):
         total_loss = 0
         ############
         ## Temp Ave
-        if hasattr(self.model, 'beta_ema') and self.model.beta_ema>0:
+        if hasattr(self.model, 'beta_ema') and self.model.beta_ema > 0:
             old_params = self.model.get_params()
             self.model.load_ema_params()
         ############
@@ -47,7 +47,7 @@ class ReutersEvaluator(Evaluator):
         avg_loss = total_loss / len(self.data_loader.dataset.examples)
         #############
         ## Temp Ave
-        if hasattr(self.model, 'beta_ema') and self.model.beta_ema>0:
+        if hasattr(self.model, 'beta_ema') and self.model.beta_ema > 0:
             self.model.load_params(old_params)
         #############
 

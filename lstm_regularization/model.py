@@ -94,7 +94,7 @@ class LSTMBaseline(nn.Module):
             return self.fc1(x)
 
     def update_ema(self):
-        self.steps_ema+=1
+        self.steps_ema += 1
         for p, avg_p in zip(self.parameters(), self.avg_param):
             avg_p.mul_(self.beta_ema).add_((1-self.beta_ema)*p.data)
     
