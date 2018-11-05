@@ -55,7 +55,6 @@ class LSTMBaseline(nn.Module):
                 self.fc1 = nn.Linear(config.hidden_dim, target_class)
         
         if self.beta_ema>0:
-            print("Temporal Averaging here ;)")
             self.avg_param = deepcopy(list(p.data for p in self.parameters()))
             if torch.cuda.is_available():
                 self.avg_param = [a.cuda() for a in self.avg_param]
