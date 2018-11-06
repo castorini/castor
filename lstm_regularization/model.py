@@ -35,11 +35,9 @@ class LSTMBaseline(nn.Module):
 
         self.lstm = nn.LSTM(config.words_dim, config.hidden_dim, dropout=config.dropout, num_layers=config.num_layers,
                             bidirectional=self.is_bidirectional, batch_first=True)
-        ################
         ## Wdrop
         if self.wdrop:
             self.lstm = WeightDrop(self.lstm, ['weight_hh_l0'], dropout=self.wdrop)
-        ################
         self.dropout = nn.Dropout(config.dropout)
         if self.has_bottleneck_layer:
             if self.is_bidirectional:
