@@ -21,7 +21,7 @@ class ReutersTrainer(Trainer):
         self.iters_not_improved = 0
         self.start = None
         self.log_template = ' '.join(
-            '{:>6.0f},{:>5.0f},{:>9.0f},{:>5.0f}/{:<5.0f} {:>7.0f}%,{:>8.6f},{},{:12.4f},{}'.split(','))
+            '{:>6.0f},{:>5.0f},{:>9.0f},{:>5.0f}/{:<5.0f} {:>7.0f}%,{:>8.6f},{:12.4f}'.split(','))
         self.dev_log_template = ' '.join('{:>6.0f},{:>5.0f},{:>9.0f},{:>5.0f}/{:<5.0f} {:>7.4f},{:>8.4f},{:8.4f},{:12.4f},{:12.4f}'.split(','))
         self.writer = SummaryWriter(log_dir="tensorboard_logs/" + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
         self.snapshot_path = os.path.join(self.model_outfile, self.train_loader.dataset.NAME, 'best_model.pt')
@@ -66,13 +66,13 @@ class ReutersTrainer(Trainer):
                 self.writer.add_scalar('Train/Accuracy', train_acc, niter)
                 print(self.log_template.format(time.time() - self.start,
                                           epoch, self.iterations, 1 + batch_idx, len(self.train_loader),
-                                          100. * (1 + batch_idx) / len(self.train_loader), loss.item(), ' ' * 8,
-                                          train_acc, ' ' * 12))
+                                          100. * (1 + batch_idx) / len(self.train_loader), loss.item(),
+                                          train_acc))
 
     def train(self, epochs):
         self.start = time.time()
-        header = '  Time Epoch Iteration Progress    (%Epoch)   Loss   Dev/Loss     Accuracy  Dev/Accuracy'
-        dev_header = '  Time Epoch Iteration Progress    Dev/Acc. Dev/Prec. Dev/Recall Dev/F1 Dev/Loss'
+        header = '  Time Epoch Iteration Progress    (%Epoch)   Loss     Accuracy'
+        dev_header = '  Time Epoch Iteration Progress     Dev/Acc. Dev/Pr.  Dev/Recall   Dev/F1       Dev/Loss'
         # model_outfile is actually a directory, using model_outfile to conform to Trainer naming convention
         os.makedirs(self.model_outfile, exist_ok=True)
         os.makedirs(os.path.join(self.model_outfile, self.train_loader.dataset.NAME), exist_ok=True)
@@ -89,8 +89,8 @@ class ReutersTrainer(Trainer):
             self.writer.add_scalar('Dev/Recall', dev_recall, epoch)
             self.writer.add_scalar('Dev/F-measure', dev_f1, epoch)
             print('\n' + dev_header)
-            print(self.dev_log_template.format(time.time() - self.start, epoch, self.iterations, epoch / epochs,
-                                               dev_acc, dev_precision, dev_recall, dev_f1, dev_f1, dev_loss))
+            print(self.dev_log_template.format(time.time() - self.start, epoch, self.iterations, epoch, epochs,
+                                               dev_acc, dev_precision, dev_recall, dev_f1, dev_loss))
             print('\n' + header)
 
             # Update validation results
