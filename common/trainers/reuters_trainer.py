@@ -34,26 +34,35 @@ class ReutersTrainer(Trainer):
             self.model.train()
             self.optimizer.zero_grad()
             if hasattr(self.model, 'TAR') and self.model.TAR:
-                if 'ignore_lengths' in self.config and self.config['ignore_lengths'] == True:
+                if 'ignore_lengths' in self.config and self.config['ignore_lengths']:
                     scores, rnn_outs = self.model(batch.text, lengths=batch.text)
                 else:
                     scores, rnn_outs = self.model(batch.text[0], lengths=batch.text[1])
             else:
-                if 'ignore_lengths' in self.config and self.config['ignore_lengths'] == True:
+                if 'ignore_lengths' in self.config and self.config['ignore_lengths']:
                     scores = self.model(batch.text, lengths=batch.text)
                 else:
                     scores = self.model(batch.text[0], lengths=batch.text[1])
-            # Using binary accuracy
-            for tensor1, tensor2 in zip(F.sigmoid(scores).round().long(), batch.label):
-                if np.array_equal(tensor1, tensor2):
-                    n_correct += 1
-            n_total += batch.batch_size
-            train_acc = 100. * n_correct / n_total
-            loss = F.binary_cross_entropy_with_logits(scores, batch.label.float())
+
+            if 'single_label' in self.config and self.config['single_label']:
+                for tensor1, tensor2 in zip(torch.argmax(scores, dim=1), torch.argmax(batch.label.data, dim=1)):
+                    if np.array_equal(tensor1, tensor2):
+                        n_correct += 1
+                loss = F.cross_entropy(scores, torch.argmax(batch.label.data, dim=1))
+            else:
+                predictions = F.sigmoid(scores).round().long()
+                # Computing binary accuracy
+                for tensor1, tensor2 in zip(predictions, batch.label):
+                    if np.array_equal(tensor1, tensor2):
+                        n_correct += 1
+                loss = F.binary_cross_entropy_with_logits(scores, batch.label.float())
+
             if hasattr(self.model, 'TAR') and self.model.TAR:
                 loss = loss + (rnn_outs[1:] - rnn_outs[:-1]).pow(2).mean()
-            loss.backward()
 
+            n_total += batch.batch_size
+            train_acc = 100. * n_correct / n_total
+            loss.backward()
             self.optimizer.step()
 
             # Temp Ave
@@ -62,7 +71,7 @@ class ReutersTrainer(Trainer):
 
             if self.iterations % self.log_interval == 1:
                 niter = epoch * len(self.train_loader) + batch_idx
-                self.writer.add_scalar('Train/Loss', loss.data[0], niter)
+                self.writer.add_scalar('Train/Loss', loss.data.item(), niter)
                 self.writer.add_scalar('Train/Accuracy', train_acc, niter)
                 print(self.log_template.format(time.time() - self.start,
                                           epoch, self.iterations, 1 + batch_idx, len(self.train_loader),
