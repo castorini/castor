@@ -85,9 +85,9 @@ class ReutersTrainer(Trainer):
         # model_outfile is actually a directory, using model_outfile to conform to Trainer naming convention
         os.makedirs(self.model_outfile, exist_ok=True)
         os.makedirs(os.path.join(self.model_outfile, self.train_loader.dataset.NAME), exist_ok=True)
-        print(header)
 
         for epoch in range(1, epochs + 1):
+            print('\n' + header)
             self.train_epoch(epoch)
 
             # Evaluate performance on validation set
@@ -100,7 +100,6 @@ class ReutersTrainer(Trainer):
             print('\n' + dev_header)
             print(self.dev_log_template.format(time.time() - self.start, epoch, self.iterations, epoch, epochs,
                                                dev_acc, dev_precision, dev_recall, dev_f1, dev_loss))
-            print('\n' + header)
 
             # Update validation results
             if dev_f1 > self.best_dev_f1:
