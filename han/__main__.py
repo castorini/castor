@@ -166,9 +166,8 @@ if __name__ == '__main__':
         evaluate_dataset('dev', Reuters, model, None, dev_iter, args.batch_size, args.gpu)
         evaluate_dataset('test', Reuters, model, None, test_iter, args.batch_size, args.gpu)
     elif args.dataset == 'AAPD':
-        train_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, train_iter, args.batch_size, args.gpu)
-        test_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, test_iter, args.batch_size, args.gpu)
-        dev_evaluator = EvaluatorFactory.get_evaluator(AAPD, model, None, dev_iter, args.batch_size, args.gpu)
+        evaluate_dataset('dev', AAPD, model, None, dev_iter, args.batch_size, args.gpu)
+        evaluate_dataset('test', AAPD, model, None, test_iter, args.batch_size, args.gpu)
     else:
         raise ValueError('Unrecognized dataset')
 
