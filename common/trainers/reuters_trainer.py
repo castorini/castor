@@ -105,7 +105,7 @@ class ReutersTrainer(Trainer):
             if dev_f1 > self.best_dev_f1:
                 self.iters_not_improved = 0
                 self.best_dev_f1 = dev_f1
-                torch.save(self.model.state_dict(), self.snapshot_path)
+                torch.save(self.model, self.snapshot_path)
             else:
                 self.iters_not_improved += 1
                 if self.iters_not_improved >= self.patience:
