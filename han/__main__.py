@@ -47,8 +47,9 @@ def get_logger():
     return logger
 
 
-def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device):
+def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device, single_label):
     saved_model_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, loader, batch_size, device)
+    saved_model_evaluator.single_label = single_label
     saved_model_evaluator.ignore_lengths = True
     scores, metric_names = saved_model_evaluator.get_scores()
     logger.info('Evaluation metrics for {}'.format(split_name))
@@ -150,33 +151,13 @@ if __name__ == '__main__':
         else:
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
+    # Calculate dev and test metrics
+    model.load_state_dict(torch.load(trainer.snapshot_path))
     if args.dataset not in dataset_map:
         raise ValueError('Unrecognized dataset')
     else:
-        evaluate_dataset('dev', dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu)
-        evaluate_dataset('test', dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu)
-
-    # Calculate dev and test metrics
-    for data_loader in [dev_iter, test_iter]:
-        predicted_labels = list()
-        target_labels = list()
-        for batch_idx, batch in enumerate(data_loader):
-            scores_rounded = F.sigmoid(model(batch.text)).round().long()
-            predicted_labels.extend(scores_rounded.cpu().detach().numpy())
-            target_labels.extend(batch.label.cpu().detach().numpy())
-        predicted_labels = np.array(predicted_labels)
-        target_labels = np.array(target_labels)
-        accuracy = metrics.accuracy_score(target_labels, predicted_labels)
-        precision = metrics.precision_score(target_labels, predicted_labels, average='micro')
-        recall = metrics.recall_score(target_labels, predicted_labels, average='micro')
-        f1 = metrics.f1_score(target_labels, predicted_labels, average='micro')
-        if data_loader == dev_iter:
-            print("Dev metrics:")
-        else:
-            print("Test metrics:")
-        print(accuracy, precision, recall, f1)
-
-
+        evaluate_dataset('dev', dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu, args.single_label)
+        evaluate_dataset('test', dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu, args.single_label)
 
     if args.onnx:
         device = torch.device('cuda') if torch.cuda.is_available() and args.cuda else torch.device('cpu')

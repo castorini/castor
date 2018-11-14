@@ -47,8 +47,9 @@ def get_logger():
     return logger
 
 
-def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device):
+def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device, single_label):
     saved_model_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, loader, batch_size, device)
+    saved_model_evaluator.single_label = single_label
     scores, metric_names = saved_model_evaluator.get_scores()
     logger.info('Evaluation metrics for {}'.format(split_name))
     logger.info('\t'.join([' '] + metric_names))
@@ -143,7 +144,7 @@ if __name__ == '__main__':
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
     # Calculate dev and test metrics
-    model.load_state_dict(torch.load(trainer.snapshot_path))
+    model = torch.load(trainer.snapshot_path)
     if model.beta_ema > 0:
         old_params = model.get_params()
         model.load_ema_params()
@@ -151,8 +152,8 @@ if __name__ == '__main__':
     if args.dataset not in dataset_map:
         raise ValueError('Unrecognized dataset')
     else:
-        evaluate_dataset('dev', dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu)
-        evaluate_dataset('test', dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu)
+        evaluate_dataset('dev', dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu, args.single_label)
+        evaluate_dataset('test', dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu, args.single_label)
 
     if model.beta_ema > 0:
         model.load_params(old_params)
