@@ -9,12 +9,12 @@ from torchtext.vocab import Vectors
 
 
 def char_quantize(string, max_length=1000):
-    identity = np.identity(len(Yelp2018CharQuantized.ALPHABET))
-    quantized_string = np.array([identity[Yelp2018CharQuantized.ALPHABET[char]] for char in list(string.lower()) if char in Yelp2018CharQuantized.ALPHABET], dtype=np.float32)
+    identity = np.identity(len(Yelp2014CharQuantized.ALPHABET))
+    quantized_string = np.array([identity[Yelp2014CharQuantized.ALPHABET[char]] for char in list(string.lower()) if char in Yelp2014CharQuantized.ALPHABET], dtype=np.float32)
     if len(quantized_string) > max_length:
         return quantized_string[:max_length]
     else:
-        return np.concatenate((quantized_string, np.zeros((max_length - len(quantized_string), len(Yelp2018CharQuantized.ALPHABET)), dtype=np.float32)))
+        return np.concatenate((quantized_string, np.zeros((max_length - len(quantized_string), len(Yelp2014CharQuantized.ALPHABET)), dtype=np.float32)))
 
 
 def process_labels(string):
@@ -26,8 +26,8 @@ def process_labels(string):
     return [float(x) for x in string]
 
 
-class Yelp2018(TabularDataset):
-    NAME = 'Yelp2018'
+class Yelp2014(TabularDataset):
+    NAME = 'Yelp2014'
     NUM_CLASSES = 10
     TEXT_FIELD = Field(batch_first=True, tokenize=clean_string, include_lengths=True)
     LABEL_FIELD = Field(sequential=False, use_vocab=False, batch_first=True, preprocessing=process_labels)
@@ -37,10 +37,10 @@ class Yelp2018(TabularDataset):
         return len(ex.text)
 
     @classmethod
-    def splits(cls, path, train=os.path.join('Yelp-Reviews-2018', 'data', 'yelp2018_train.tsv'),
-               validation=os.path.join('Yelp-Reviews-2018', 'data', 'yelp2018_validation.tsv'),
-               test=os.path.join('Yelp-Reviews-2018', 'data', 'yelp2018_test.tsv'), **kwargs):
-        return super(Yelp2018, cls).splits(
+    def splits(cls, path, train=os.path.join('Yelp-Reviews-2014', 'data', 'yelp2014_train.tsv'),
+               validation=os.path.join('Yelp-Reviews-2014', 'data', 'yelp2014_validation.tsv'),
+               test=os.path.join('Yelp-Reviews-2014', 'data', 'yelp2014_test.tsv'), **kwargs):
+        return super(Yelp2014, cls).splits(
             path, train=train, validation=validation, test=test,
             format='tsv', fields=[('label', cls.LABEL_FIELD), ('text', cls.TEXT_FIELD)]
         )
@@ -67,7 +67,7 @@ class Yelp2018(TabularDataset):
                                      sort_within_batch=True, device=device)
 
 
-class Yelp2018CharQuantized(Yelp2018):
+class Yelp2014CharQuantized(Yelp2014):
     ALPHABET = dict(map(lambda t: (t[1], t[0]), enumerate(list("""abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}"""))))
     TEXT_FIELD = Field(sequential=False, use_vocab=False, batch_first=True, preprocessing=char_quantize)
 
@@ -84,6 +84,6 @@ class Yelp2018CharQuantized(Yelp2018):
         return BucketIterator.splits((train, val, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
 
 
-class Yelp2018Hierarchical(Yelp2018):
+class Yelp2014Hierarchical(Yelp2014):
     In_FIELD = Field(batch_first=True, tokenize=clean_string)
     TEXT_FIELD = NestedField(In_FIELD, tokenize=split_sents)
