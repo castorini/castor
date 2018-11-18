@@ -14,7 +14,7 @@ from datasets.sst import SST2
 from datasets.reuters import Reuters
 from datasets.imdb import IMDB
 from datasets.aapd import AAPD
-from datasets.yelp2018 import Yelp2018
+from datasets.yelp2014 import Yelp2014
 from lstm_baseline.args import get_args
 from lstm_baseline.model import LSTMBaseline
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
         'Reuters': Reuters,
         'AAPD': AAPD,
         'IMDB': IMDB,
-        'Yelp2018': Yelp2018
+        'Yelp2014': Yelp2014
     }
 
     if args.dataset not in dataset_map:
