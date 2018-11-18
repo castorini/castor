@@ -14,6 +14,7 @@ from datasets.sst import SST2
 from datasets.reuters import Reuters
 from datasets.aapd import AAPD
 from datasets.imdb import IMDB
+from datasets.yelp2014 import Yelp2014
 from lstm_regularization.args import get_args
 from lstm_regularization.model import LSTMBaseline
 
@@ -80,7 +81,8 @@ if __name__ == '__main__':
         'SST-2': SST2,
         'Reuters': Reuters,
         'AAPD': AAPD,
-        'IMDB': IMDB
+        'IMDB': IMDB,
+        'Yelp2014': Yelp2014
     }
 
     if args.dataset not in dataset_map:
