@@ -13,6 +13,7 @@ from datasets.sst import SST2
 from datasets.reuters import ReutersHierarchical as Reuters
 from datasets.aapd import AAPDHierarchical as AAPD
 from datasets.imdb import IMDBHierarchical as IMDB
+from datasets.yelp2014 import  Yelp2014Hierarchical as Yelp2014
 from han.args import get_args
 from han.model import HAN
 import torch.nn.functional as F
@@ -81,7 +82,8 @@ if __name__ == '__main__':
         'SST-2': SST2,
         'Reuters': Reuters,
         'AAPD': AAPD,
-        'IMDB': IMDB
+        'IMDB': IMDB,
+        'Yelp2014': Yelp2014
     }
 
     if args.dataset not in dataset_map:
