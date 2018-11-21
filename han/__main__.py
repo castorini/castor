@@ -154,7 +154,7 @@ if __name__ == '__main__':
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
     # Calculate dev and test metrics
-    model.load_state_dict(torch.load(trainer.snapshot_path))
+    model = torch.load(trainer.snapshot_path)
     if args.dataset not in dataset_map:
         raise ValueError('Unrecognized dataset')
     else:
