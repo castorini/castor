@@ -62,4 +62,4 @@ class ReutersEvaluator(Evaluator):
         if hasattr(self.model, 'beta_ema') and self.model.beta_ema > 0:
             self.model.load_params(old_params)
 
-        return [accuracy, precision, recall, f1, avg_loss], ['accuracy', 'precision', 'recall', 'f1' 'cross_entropy_loss']
+        return [accuracy, precision, recall, f1, avg_loss], ['accuracy', 'precision', 'recall', 'f1', 'cross_entropy_loss']
