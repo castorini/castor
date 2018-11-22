@@ -13,6 +13,7 @@ from datasets.sst import SST2
 from datasets.reuters import ReutersHierarchical as Reuters
 from datasets.aapd import AAPDHierarchical as AAPD
 from datasets.imdb import IMDBHierarchical as IMDB
+from datasets.yelp2014 import  Yelp2014Hierarchical as Yelp2014
 from han.args import get_args
 from han.model import HAN
 import torch.nn.functional as F
@@ -82,7 +83,8 @@ if __name__ == '__main__':
         'SST-2': SST2,
         'Reuters': Reuters,
         'AAPD': AAPD,
-        'IMDB': IMDB
+        'IMDB': IMDB,
+        'Yelp2014': Yelp2014
     }
 
     if args.dataset not in dataset_map:
@@ -153,7 +155,7 @@ if __name__ == '__main__':
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
     # Calculate dev and test metrics
-    model.load_state_dict(torch.load(trainer.snapshot_path))
+    model = torch.load(trainer.snapshot_path)
     if args.dataset not in dataset_map:
         raise ValueError('Unrecognized dataset')
     else:
