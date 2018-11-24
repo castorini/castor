@@ -8,7 +8,7 @@ from torchtext.data.iterator import BucketIterator
 from torchtext.vocab import Vectors
 
 
-def char_quantize(string, max_length=1000):
+def char_quantize(string, max_length=500):
     identity = np.identity(len(IMDBCharQuantized.ALPHABET))
     quantized_string = np.array([identity[IMDBCharQuantized.ALPHABET[char]] for char in list(string.lower()) if char in IMDBCharQuantized.ALPHABET], dtype=np.float32)
     if len(quantized_string) > max_length:
