@@ -18,6 +18,7 @@ from han.args import get_args
 from han.model import HAN
 import torch.nn.functional as F
 
+
 class UnknownWordVecCache(object):
     """
     Caches the first randomly generated word vector for a certain size to make it is reused.
@@ -53,9 +54,9 @@ def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_si
     saved_model_evaluator.single_label = single_label
     saved_model_evaluator.ignore_lengths = True
     scores, metric_names = saved_model_evaluator.get_scores()
-    logger.info('Evaluation metrics for {}'.format(split_name))
-    logger.info('\t'.join([' '] + metric_names))
-    logger.info('\t'.join([split_name] + list(map(str, scores))))
+    print('Evaluation metrics for', split_name)
+    print(metric_names)
+    print(scores)
 
 
 if __name__ == '__main__':
