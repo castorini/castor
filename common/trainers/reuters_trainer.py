@@ -35,12 +35,12 @@ class ReutersTrainer(Trainer):
             self.optimizer.zero_grad()
             if hasattr(self.model, 'TAR') and self.model.TAR:
                 if 'ignore_lengths' in self.config and self.config['ignore_lengths']:
-                    scores, rnn_outs = self.model(batch.text, lengths=batch.text)
+                    scores, rnn_outs = self.model(batch.text)
                 else:
                     scores, rnn_outs = self.model(batch.text[0], lengths=batch.text[1])
             else:
                 if 'ignore_lengths' in self.config and self.config['ignore_lengths']:
-                    scores = self.model(batch.text, lengths=batch.text)
+                    scores = self.model(batch.text)
                 else:
                     scores = self.model(batch.text[0], lengths=batch.text[1])
 
