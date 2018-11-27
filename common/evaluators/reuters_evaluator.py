@@ -28,12 +28,12 @@ class ReutersEvaluator(Evaluator):
         for batch_idx, batch in enumerate(self.data_loader):
             if hasattr(self.model, 'TAR') and self.model.TAR:  # TAR condition
                 if self.ignore_lengths:
-                    scores, rnn_outs = self.model(batch.text, lengths=batch.text)
+                    scores, rnn_outs = self.model(batch.text)
                 else:
                     scores, rnn_outs = self.model(batch.text[0], lengths=batch.text[1])
             else:
                 if self.ignore_lengths:
-                    scores = self.model(batch.text, lengths=batch.text)
+                    scores = self.model(batch.text)
                 else:
                     scores = self.model(batch.text[0], lengths=batch.text[1])
 
