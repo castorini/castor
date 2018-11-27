@@ -51,8 +51,8 @@ def get_logger():
 def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device, single_label):
     saved_model_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, loader, batch_size, device)
     saved_model_evaluator.ignore_lengths = True
-    scores, metric_names = saved_model_evaluator.get_scores()
     saved_model_evaluator.single_label = single_label
+    scores, metric_names = saved_model_evaluator.get_scores()
     print('Evaluation metrics for', split_name)
     print(metric_names)
     print(scores)
