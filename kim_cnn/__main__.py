@@ -142,8 +142,10 @@ if __name__ == '__main__':
         'dev_log_interval': args.dev_every,
         'patience': args.patience,
         'model_outfile': args.save_path,  # actually a directory, using model_outfile to conform to Trainer naming convention
-        'logger': logger
+        'logger': logger,
+        'single_label': args.single_label
     }
+
     trainer = TrainerFactory.get_trainer(args.dataset, model, None, train_iter, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
 
     if not args.trained_model:
