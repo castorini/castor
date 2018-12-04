@@ -261,8 +261,8 @@ class ESIM(nn.Module):
         max_len = max(sent_lengths)
 
         for s_length in sent_lengths:
-            pad_mask = np.ones(max_len)
-            pad_mask[:s_length] = 0
+            pad_mask = np.zeros(max_len)
+            pad_mask[:s_length] = 1
             masks.append(pad_mask)
 
         masks = np.array(masks)
