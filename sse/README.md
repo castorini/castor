@@ -1,4 +1,4 @@
-# SSE (and "Lite" Variants)
+# SSE
 
 This is a PyTorch reimplementation of the following paper:
 
