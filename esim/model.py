@@ -156,17 +156,16 @@ class ESIM(nn.Module):
         self.max_sentence_length=max_sentence_length
         self.device = device
         self.dropout = nn.Dropout(p=dropout)
-        # self.word_embedding=nn.Embedding(vocab_size,embedding_size)
 
         self.lstm_intra=LSTM(torch.cuda.is_available(),embedding_size, num_units)
 
-        self.linear_layer_compare = nn.Sequential(nn.Linear(4*num_units*2, num_units), nn.ReLU(), nn.Dropout(p=0.5))
+        self.linear_layer_compare = nn.Sequential(nn.Linear(4*num_units*2, num_units), nn.ReLU(), nn.Dropout(p=dropout))
         #                                          nn.Dropout(p=0.2), nn.Linear(num_units, num_units), nn.ReLU())
 
         self.lstm_compare=LSTM(torch.cuda.is_available(), embedding_size, num_units)
 
-        self.linear_layer_aggregate = nn.Sequential(nn.Dropout(p=0.5), nn.Linear(4*num_units*2, num_units), nn.ReLU(),
-                                                    nn.Dropout(p=0.5), nn.Linear(num_units, num_classes))
+        self.linear_layer_aggregate = nn.Sequential(nn.Dropout(p=dropout), nn.Linear(4*num_units*2, num_units), nn.ReLU(),
+                                                    nn.Dropout(p=dropout), nn.Linear(num_units, num_classes))
 
         self.init_weight()
 
