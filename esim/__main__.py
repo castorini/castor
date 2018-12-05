@@ -68,7 +68,6 @@ if __name__ == '__main__':
                         help='Regularization for the optimizer (default: 0.0001)')
     parser.add_argument('--max-window-size', type=int, default=3,
                         help='windows sizes will be [1,max_window_size] and infinity (default: 3)')
-    parser.add_argument('--num_units', type=int, default=300, help='LSTM output dimension')
     parser.add_argument('--dropout', type=float, default=0.5, help='dropout probability (default: 0.1)')
     parser.add_argument('--maxlen', type=int, default=60, help='maximum length of text (default: 60)')
     parser.add_argument('--seed', type=int, default=1234, help='random seed (default: 1234)')
@@ -97,7 +96,7 @@ if __name__ == '__main__':
     filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     ext_feats = dataset_cls.EXT_FEATS if args.sparse_features else 0
 
-    model = ESIM(embedding_size=args.word_vectors_dim, device=args.device, num_units=args.num_units,
+    model = ESIM(embedding_size=args.word_vectors_dim, device=args.device, num_units=args.word_vectors_dim,
                   num_classes=dataset_cls.NUM_CLASSES, dropout=args.dropout, max_sentence_length=args.maxlen)
 
     model = model.to(device)
