@@ -20,12 +20,12 @@ The commands in this doc assume you are under the root directory of the Castor r
 To run SSE on the SICK dataset, use the following command. `--dropout 0` is for mimicking the original paper, although adding dropout can improve results. If you have any problems running it check the Troubleshooting section below.
 
 ```
-python -m sse sse.sick.model.castor --dataset sick --epochs 19 --dropout 0 --lr 0.0005
+python -m sse sse.sick.model.castor --dataset sick --epochs 19 --dropout 0.5 --lr 0.0002 --regularization 1e-4 
 ```
 
 | Implementation and config        | Pearson's r   | Spearman's p  | MSE        |
 | -------------------------------- |:-------------:|:-------------:|:----------:|
-| PyTorch using above config       |         |         |      |
+| PyTorch using above config       |  0.8812158      | 0.8292130938075161       |  0.22950001060962677    |
 
 ## TrecQA Dataset
 
