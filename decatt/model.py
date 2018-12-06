@@ -52,14 +52,14 @@ class DecAtt(nn.Module):
         self.linear_layer_project = nn.Linear(embedding_size, num_units, bias=False)
         #self.linear_layer_intra = nn.Sequential(nn.Linear(num_units, num_units), nn.ReLU(), nn.Linear(num_units, num_units), nn.ReLU())
 
-        self.linear_layer_attend = nn.Sequential(nn.Dropout(p=0.2), nn.Linear(num_units, num_units), nn.ReLU(),
-                                                 nn.Dropout(p=0.2), nn.Linear(num_units, num_units), nn.ReLU())
+        self.linear_layer_attend = nn.Sequential(nn.Dropout(p=dropout), nn.Linear(num_units, num_units), nn.ReLU(),
+                                                 nn.Dropout(p=dropout), nn.Linear(num_units, num_units), nn.ReLU())
 
-        self.linear_layer_compare = nn.Sequential(nn.Dropout(p=0.2), nn.Linear(num_units*2, num_units), nn.ReLU(),
-                                                  nn.Dropout(p=0.2), nn.Linear(num_units, num_units), nn.ReLU())
+        self.linear_layer_compare = nn.Sequential(nn.Dropout(p=dropout), nn.Linear(num_units*2, num_units), nn.ReLU(),
+                                                  nn.Dropout(p=dropout), nn.Linear(num_units, num_units), nn.ReLU())
 
-        self.linear_layer_aggregate = nn.Sequential(nn.Dropout(p=0.2), nn.Linear(num_units*2, num_units), nn.ReLU(),
-                                                    nn.Dropout(p=0.2), nn.Linear(num_units, num_units), nn.ReLU(),
+        self.linear_layer_aggregate = nn.Sequential(nn.Dropout(p=dropout), nn.Linear(num_units*2, num_units), nn.ReLU(),
+                                                    nn.Dropout(p=dropout), nn.Linear(num_units, num_units), nn.ReLU(),
                                                     nn.Linear(num_units, num_classes), nn.LogSoftmax())
         self.init_weight()
 

@@ -20,18 +20,18 @@ The commands in this doc assume you are under the root directory of the Castor r
 To run DecAtt on the SICK dataset, use the following command. `--dropout 0` is for mimicking the original paper, although adding dropout can improve results. If you have any problems running it check the Troubleshooting section below.
 
 ```
-python -m decatt decatt.sick.model_tune --dataset sick --epochs 25 --regularization 1e-4 --lr 0.001 --batch-size 64 --lr-reduce-factor 0.3 --dropout 0.2
+python -m decatt decatt.sick.model --dataset sick --epochs 500 --regularization 5e-4 --lr 0.001 --lr-reduce-factor 0.5 --dropout 0.1
 ```
 
 | Implementation and config        | Pearson's r   | Spearman's p  | MSE        |
 | -------------------------------- |:-------------:|:-------------:|:----------:|
-| PyTorch using above config       |        |        |    |
+| PyTorch using above config       |  0.80094564      |   0.7184082390455326     |  0.3711671233177185  |
 
 ## TrecQA Dataset
 
 To run DecAtt on the TrecQA dataset, use the following command:
 ```
-python -m decatt decatt.trecqa.model --dataset trecqa --epochs 5 --holistic-filters 200 --lr 0.00018 --regularization 0.0006405 --dropout 0
+python -m decatt decatt.trecqa.model --dataset trecqa --epochs 500 --regularization 5e-4 --lr 0.001 --lr-reduce-factor 0.5 --dropout 0.1
 ```
 
 | Implementation and config        | map    | mrr    |
