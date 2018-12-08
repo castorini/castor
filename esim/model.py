@@ -33,31 +33,11 @@ def norm_weight(nin, nout=None, scale=0.01, ortho=True):
         W = scale * np.random.randn(nin, nout)
     return W.astype('float32')
 
-def generate_mask_2(values, sent_sizes):
-    mask_matrix = np.zeros((len(sent_sizes), max(sent_sizes), values.size(2)))
-    for i in range(len(sent_sizes)):
-        mask_matrix[i][:sent_sizes[i]][:]=1
-    if torch.cuda.is_available():
-        mask_matrix = torch.Tensor(mask_matrix).cuda()
-    else:
-        mask_matrix = torch.Tensor(mask_matrix)
-    return values*Variable(mask_matrix)
-
-def generate_mask(lsent_sizes, rsent_sizes):
-    mask_matrix=np.zeros((len(lsent_sizes),max(lsent_sizes),max(rsent_sizes)))
-    for i in range(len(lsent_sizes)):
-        mask_matrix[i][:lsent_sizes[i]][:rsent_sizes[i]]=1
-    if torch.cuda.is_available():
-        mask_matrix = torch.Tensor(mask_matrix).cuda()
-    else:
-        mask_matrix = torch.Tensor(mask_matrix)
-    return Variable(mask_matrix)
-
 class LSTM_Cell(nn.Module):
 
-    def __init__(self, cuda, in_dim, mem_dim):
+    def __init__(self, device, in_dim, mem_dim):
         super(LSTM_Cell, self).__init__()
-        self.cudaFlag = cuda
+        self.device = device
         self.in_dim = in_dim
         self.mem_dim = mem_dim
 
@@ -92,13 +72,13 @@ class LSTM_Cell(nn.Module):
         return c, h
 
 class LSTM(nn.Module):
-    def __init__(self, cuda, in_dim, mem_dim):
+    def __init__(self, device, in_dim, mem_dim):
         super(LSTM, self).__init__()
-        self.cudaFlag = cuda
+        self.device = device
         self.in_dim = in_dim
         self.mem_dim = mem_dim
 
-        self.TreeCell = LSTM_Cell(cuda, in_dim, mem_dim)
+        self.TreeCell = LSTM_Cell(device, in_dim, mem_dim)
         self.output_module = None
 
     def forward(self, x, x_mask):
@@ -112,8 +92,8 @@ class LSTM(nn.Module):
         h = Variable(torch.zeros(x.size(1), x.size(2)))
         c = Variable(torch.zeros(x.size(1), x.size(2)))
         if torch.cuda.is_available():
-            h=h.cuda()
-            c=c.cuda()
+            h=h.to(self.device)
+            c=c.to(self.device)
         all_hidden=[]
         for step in range(x.size(0)):
             input=x[step] # #sample x dim_emb
@@ -157,12 +137,12 @@ class ESIM(nn.Module):
         self.device = device
         self.dropout = nn.Dropout(p=dropout)
 
-        self.lstm_intra=LSTM(torch.cuda.is_available(),embedding_size, num_units)
+        self.lstm_intra=LSTM(device, embedding_size, num_units)
 
         self.linear_layer_compare = nn.Sequential(nn.Linear(4*num_units*2, num_units), nn.ReLU(), nn.Dropout(p=dropout))
         #                                          nn.Dropout(p=0.2), nn.Linear(num_units, num_units), nn.ReLU())
 
-        self.lstm_compare=LSTM(torch.cuda.is_available(), embedding_size, num_units)
+        self.lstm_compare=LSTM(device, embedding_size, num_units)
 
         self.linear_layer_aggregate = nn.Sequential(nn.Dropout(p=dropout), nn.Linear(4*num_units*2, num_units), nn.ReLU(),
                                                     nn.Dropout(p=dropout), nn.Linear(num_units, num_classes))
@@ -184,7 +164,7 @@ class ESIM(nn.Module):
 
     def initialize_lstm(self):
         if torch.cuda.is_available():
-            init=torch.Tensor(np.concatenate([self.ortho_weight(),self.ortho_weight(),self.ortho_weight(),self.ortho_weight()], 0)).cuda()
+            init=torch.Tensor(np.concatenate([self.ortho_weight(),self.ortho_weight(),self.ortho_weight(),self.ortho_weight()], 0)).to(self.device)
         else:
             init = torch.Tensor(
                 np.concatenate([self.ortho_weight(), self.ortho_weight(), self.ortho_weight(), self.ortho_weight()], 0))
@@ -285,17 +265,15 @@ class ESIM(nn.Module):
         #x2 = self.word_embedding(x2)
         x2 = self.dropout(sent2)
         idx_1 = [i for i in range(x1.size(0) - 1, -1, -1)]
+        idx_1 = Variable(torch.LongTensor(idx_1))
         if torch.cuda.is_available():
-            idx_1 = Variable(torch.cuda.LongTensor(idx_1))
-        else:
-            idx_1 = Variable(torch.LongTensor(idx_1))
+            idx_1 = idx_1.to(self.device)
         x1_r=torch.index_select(x1,0,idx_1)
         x1_mask_r=torch.index_select(x1_mask,0,idx_1)
         idx_2=[i for i in range(x2.size(0) -1, -1, -1)]
+        idx_2 = Variable(torch.LongTensor(idx_2))
         if torch.cuda.is_available():
-            idx_2 = Variable(torch.cuda.LongTensor(idx_2))
-        else:
-            idx_2 = Variable(torch.LongTensor(idx_2))
+            idx_2 = Variable(torch.LongTensor(idx_2)).to(self.device)
         x2_r=torch.index_select(x2,0,idx_2)
         x2_mask_r=torch.index_select(x2_mask, 0, idx_2)
 
