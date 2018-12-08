@@ -20,12 +20,12 @@ The commands in this doc assume you are under the root directory of the Castor r
 To run ESIM on the SICK dataset, use the following command. `--dropout 0` is for mimicking the original paper, although adding dropout can improve results. If you have any problems running it check the Troubleshooting section below.
 
 ```
-python -m esim esim.sick.model.castor --dataset sick --epochs 19 --dropout 0 --lr 0.0005
+python -m esim esim.sick.model_tune --dataset sick --epochs 25 --regularization 1e-4 --lr 0.001 --batch-size 64 --lr-reduce-factor 0.3 --dropout 0.2
 ```
 
 | Implementation and config        | Pearson's r   | Spearman's p  | MSE        |
 | -------------------------------- |:-------------:|:-------------:|:----------:|
-| PyTorch using above config       |         |         |      |
+| PyTorch using above config       |     0.878273    |   0.823042214423      |  0.25375571846961975    |
 
 ## TrecQA Dataset
 
