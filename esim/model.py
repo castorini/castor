@@ -248,7 +248,7 @@ class ESIM(nn.Module):
         return torch.from_numpy(masks).float().to(self.device)
 
     #def forward(self, x1, x1_mask, x2, x2_mask):
-    def forward(self, sent1, sent2, ext_feats=None, word_to_doc_count=None, raw_sent1=None, raw_sent2=None):
+    def forward(self, sent1, sent2, ext_feats=None, word_to_doc_count=None, raw_sent1=None, raw_sent2=None, visualize=False):
         # idx = [i for i in range(embed_sent.size(1) - 1, -1, -1)]
         # if torch.cuda.is_available():
         #   idx = torch.cuda.LongTensor(idx)
@@ -291,6 +291,8 @@ class ESIM(nn.Module):
 
         # weight_matrix: #sample x #step1 x #step2
         weight_matrix = torch.matmul(ctx1.permute(1, 0, 2), ctx2.permute(1, 2, 0))
+        if visualize:
+            return weight_matrix
         weight_matrix_1 = torch.exp(weight_matrix - weight_matrix.max(1, keepdim=True)[0]).permute(1, 2, 0)
         weight_matrix_2 = torch.exp(weight_matrix - weight_matrix.max(2, keepdim=True)[0]).permute(1, 2, 0)
 
