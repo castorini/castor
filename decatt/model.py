@@ -18,7 +18,7 @@ class DecAtt(nn.Module):
         It applies feedforward MLPs to combinations of parts of the two sentences,
         without any recurrent structure.
     """
-    def __init__(self, num_units, num_classes, embedding_size, dropout, devic =0, 
+    def __init__(self, num_units, num_classes, embedding_size, dropout, device=0, 
                  training=True, project_input=True,
                  use_intra_attention=False, distance_biases=10, max_sentence_length=30):
         """
@@ -101,7 +101,7 @@ class DecAtt(nn.Module):
                 clipped_index = clipped_index.to(self.device)
             bias = self.bias_embedding(clipped_index)
             bias = torch.squeeze(bias)
-            raw_attentions + = bias
+            raw_attentions += bias
             attentions = self.attention_softmax3d(raw_attentions)
             attended = torch.matmul(attentions, embed_sent)
             result = torch.cat([embed_sent,attended],2)

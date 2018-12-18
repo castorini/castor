@@ -36,7 +36,7 @@ python -m decatt decatt.trecqa.model --dataset trecqa --epochs 500 --regularizat
 
 | Implementation and config        | map    | mrr    |
 | -------------------------------- |:------:|:------:|
-| PyTorch using above config       |   |   |
+| PyTorch using above config       | 0.6536  | 0.6848 |
 
 This are the TrecQA raw dataset results. The paper results are reported in [Noise-Contrastive Estimation for Answer Selection with Deep Neural Networks](https://dl.acm.org/citation.cfm?id=2983872).
 
@@ -46,11 +46,11 @@ You also need `trec_eval` for this dataset, similar to TrecQA.
 
 Then, you can run:
 ```
-python -m decatt decatt.wikiqa.model --epochs 10 --dataset wikiqa --epochs 5 --holistic-filters 100 --lr 0.00042 --regularization 0.0001683 --dropout 0
+python -m decatt decatt.wikiqa.model --dataset wikiqa --epochs 500 --regularization 5e-4 --lr 0.001 --lr-reduce-factor 0.5 --dropout 0.1
 ```
 | Implementation and config        | map    | mrr    |
 | -------------------------------- |:------:|:------:|
-| PyTorch using above config       |   |   |
+| PyTorch using above config       | 0.6462  | 0.6603  |
 
 
 To see all options available, use
