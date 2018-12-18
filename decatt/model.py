@@ -10,14 +10,6 @@ from torch.autograd import Variable
 
 
 class DecAtt(nn.Module):
-    """
-        Implementation of the multi feed forward network model described in
-        the paper "A Decomposable Attention Model for Natural Language
-        Inference" by Parikh et al., 2016.
-
-        It applies feedforward MLPs to combinations of parts of the two sentences,
-        without any recurrent structure.
-    """
     def __init__(self, num_units, num_classes, embedding_size, dropout, device=0, 
                  training=True, project_input=True,
                  use_intra_attention=False, distance_biases=10, max_sentence_length=30):
@@ -82,11 +74,8 @@ class DecAtt(nn.Module):
         return out.view(raw_attentions.size(0),raw_attentions.size(1),raw_attentions.size(2))
 
     def _transformation_input(self, embed_sent):
-        #embed_sent = torch.matmul(embed_sent,self.linear_layer_project)
-        #embed_sent = self.word_embedding(embed_sent)
         embed_sent = self.linear_layer_project(embed_sent)
         result = embed_sent
-        #result, (state, _) = self.lstm_intra(embed_sent)
         if self.intra_attention:
             f_intra = self.linear_layer_intra(embed_sent)
             f_intra_t = torch.transpose(f_intra, 1, 2)
@@ -173,10 +162,8 @@ class DecAtt(nn.Module):
         sent1 = self._transformation_input(sent1)
         sent2 = self._transformation_input(sent2)
         alpha, beta = self.attend(sent1, sent2, lsize_list, rsize_list)
-        v1 = self.compare(sent1,beta)
-        v2 = self.compare(sent2,alpha)
-        #v1 = generate_mask_2(v1, lsize_list)
-        #v2 = generate_mask_2(v2, rsize_list)
-        logits = self.aggregate(v1,v2)
+        v1 = self.compare(sent1, beta)
+        v2 = self.compare(sent2, alpha)
+        logits = self.aggregate(v1, v2)
         return logits
 
