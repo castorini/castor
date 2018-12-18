@@ -66,8 +66,6 @@ if __name__ == '__main__':
                         help='how many batches to wait before logging training status (default: 10)')
     parser.add_argument('--regularization', type=float, default=0.0001,
                         help='Regularization for the optimizer (default: 0.0001)')
-    parser.add_argument('--max-window-size', type=int, default=3,
-                        help='windows sizes will be [1,max_window_size] and infinity (default: 3)')
     parser.add_argument('--mlpD', type=int, default=1600, help='MLP dimension (default: 1600)')
     parser.add_argument('--dropout', type=float, default=0.1, help='dropout probability (default: 0.1)')
     parser.add_argument('--maxlen', type=int, default=30, help='maximum length of text (default: 60)')
@@ -94,7 +92,6 @@ if __name__ == '__main__':
     dataset_cls, embedding, train_loader, test_loader, dev_loader \
         = DatasetFactory.get_dataset(args.dataset, args.word_vectors_dir, args.word_vectors_file, args.batch_size, args.device)
 
-    filter_widths = list(range(1, args.max_window_size + 1)) + [np.inf]
     ext_feats = dataset_cls.EXT_FEATS if args.sparse_features else 0
 
     model = StackBiLSTMMaxout(d=args.word_vectors_dim, mlp_d=args.mlpD,
