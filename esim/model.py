@@ -1,13 +1,16 @@
 import sys
 import math
-import torch
 import numpy as np
+from datetime import datetime
+
+import torch
 import torch.nn as nn
-from esim.util import *
 import torch.nn.functional as F
 from torch.autograd import Variable
-from datetime import datetime
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+
+from esim.util import *
+
 
 def ortho_weight(ndim):
     """
