@@ -7,19 +7,14 @@ from torch.autograd import Variable
 
 
 def auto_rnn_bilstm(lstm: nn.LSTM, seqs, lengths):
-
     batch_size = seqs.size(1)
-
     state_shape = lstm.num_layers * 2, batch_size, lstm.hidden_size
-
     h0 = c0 = Variable(seqs.data.new(*state_shape).zero_())
     
     packed_pinputs, r_index = pack_for_rnn_seq(seqs, lengths)
-
     output, (hn, cn) = lstm(packed_pinputs, (h0, c0))
-
     output = unpack_from_rnn_seq(output, r_index)
-
+    
     return output
 
 def pack_for_rnn_seq(inputs, lengths):
