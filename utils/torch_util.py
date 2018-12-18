@@ -1,8 +1,10 @@
+import numpy as np
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-import numpy as np
+
 
 def auto_rnn_bilstm(lstm: nn.LSTM, seqs, lengths):
 

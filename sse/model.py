@@ -1,12 +1,15 @@
 import numpy as np
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 from utils import torch_util
+
 
 class StackBiLSTMMaxout(nn.Module):
     def __init__(self, h_size=[512, 1024, 2048], d=300, mlp_d=1600, dropout_r=0.1, max_l=60, num_classes=3):
-        super(StackBiLSTMMaxout, self).__init__()
+        super().__init__()
         
         self.arch = "SSE"
         self.lstm = nn.LSTM(input_size=d, hidden_size=h_size[0],

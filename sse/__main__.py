@@ -132,11 +132,8 @@ if __name__ == '__main__':
     trainer = TrainerFactory.get_trainer(args.dataset, model, embedding, train_loader, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
 
     if not args.skip_training:
-        total_params = 0
-        for param in model.parameters():
-            size = [s for s in param.size()]
-            total_params += np.prod(size)
-        logger.info('Total number of parameters: %s', total_params)
+        total_params = sum(param.numel() for param in model.parameters() if param.requires_grad)
+        logger.info('Total number of trainable parameters: %s', total_params)
         trainer.train(args.epochs)
 
     _, _, state_dict, _, _ = load_checkpoint(args.model_outfile)
