@@ -10,11 +10,11 @@ import torch.onnx
 
 from common.evaluation import EvaluatorFactory
 from common.train import TrainerFactory
+from datasets.aapd import AAPDHierarchical as AAPD
+from datasets.imdb import IMDBHierarchical as IMDB
 from datasets.sst import SST1
 from datasets.sst import SST2
 from datasets.reuters import ReutersHierarchical as Reuters
-from datasets.aapd import AAPDHierarchical as AAPD
-from datasets.imdb import IMDBHierarchical as IMDB
 from datasets.yelp2014 import  Yelp2014Hierarchical as Yelp2014
 from han.args import get_args
 from han.model import HAN
