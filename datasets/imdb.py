@@ -1,11 +1,13 @@
-import numpy as np
 import os
 import re
+
+import numpy as np
 import torch
-from datasets.reuters import clean_string, clean_string_fl, split_sents
 from torchtext.data import NestedField, Field, TabularDataset
 from torchtext.data.iterator import BucketIterator
 from torchtext.vocab import Vectors
+
+from datasets.reuters import clean_string, clean_string_fl, split_sents
 
 
 def char_quantize(string, max_length=500):

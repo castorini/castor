@@ -1,6 +1,7 @@
-import numpy as np
 import os
 import re
+
+import numpy as np
 import torch
 from torchtext.data import NestedField, Field, TabularDataset
 from torchtext.data.iterator import BucketIterator

@@ -10,8 +10,8 @@ def get_args():
     parser.add_argument('--epochs', type=int, default=30)
 
 
-    parser.add_argument('--word_num_hidden', type = int, default = 50)
-    parser.add_argument('--sentence_num_hidden', type = int, default = 50)
+    parser.add_argument('--word_num_hidden', type=int, default=50)
+    parser.add_argument('--sentence_num_hidden', type=int, default=50)
 
     parser.add_argument('--single_label', action='store_true')
     parser.add_argument('--batch_size', type=int, default=64)
