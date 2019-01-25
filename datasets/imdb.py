@@ -7,39 +7,16 @@ from torchtext.data import NestedField, Field, TabularDataset
 from torchtext.data.iterator import BucketIterator
 from torchtext.vocab import Vectors
 
-
-def clean_string(string):
-    """
-    Performs tokenization and string cleaning for the Reuters dataset
-    """
-    string = re.sub(r"[^A-Za-z0-9(),!?\'`]", " ", string)
-    string = re.sub(r"\s{2,}", " ", string)
-    return string.lower().strip().split()
+from datasets.reuters import clean_string, clean_string_fl, split_sents
 
 
-def split_sents(string):
-    string = re.sub(r"[!?]"," ", string)
-    return string.strip().split('.')
-
-
-def char_quantize(string, max_length=1000):
-    identity = np.identity(len(ReutersCharQuantized.ALPHABET))
-    quantized_string = np.array([identity[ReutersCharQuantized.ALPHABET[char]] for char in list(string.lower()) if char in ReutersCharQuantized.ALPHABET], dtype=np.float32)
+def char_quantize(string, max_length=500):
+    identity = np.identity(len(IMDBCharQuantized.ALPHABET))
+    quantized_string = np.array([identity[IMDBCharQuantized.ALPHABET[char]] for char in list(string.lower()) if char in IMDBCharQuantized.ALPHABET], dtype=np.float32)
     if len(quantized_string) > max_length:
         return quantized_string[:max_length]
     else:
-        return np.concatenate((quantized_string, np.zeros((max_length - len(quantized_string), len(ReutersCharQuantized.ALPHABET)), dtype=np.float32)))
-
-
-def clean_string_fl(string):
-    """
-    Returns only the title and first line (excluding the title) for every Reuters article, then calls clean_string
-    """
-    split_string = string.split('.')
-    if len(split_string) > 1:
-            return clean_string(split_string[0] + ". " + split_string[1])
-    else:
-        return clean_string(string)
+        return np.concatenate((quantized_string, np.zeros((max_length - len(quantized_string), len(IMDBCharQuantized.ALPHABET)), dtype=np.float32)))
 
 
 def process_labels(string):
@@ -51,9 +28,9 @@ def process_labels(string):
     return [float(x) for x in string]
 
 
-class Reuters(TabularDataset):
-    NAME = 'Reuters'
-    NUM_CLASSES = 90
+class IMDB(TabularDataset):
+    NAME = 'IMDB'
+    NUM_CLASSES = 10
     TEXT_FIELD = Field(batch_first=True, tokenize=clean_string, include_lengths=True)
     LABEL_FIELD = Field(sequential=False, use_vocab=False, batch_first=True, preprocessing=process_labels)
 
@@ -62,10 +39,10 @@ class Reuters(TabularDataset):
         return len(ex.text)
 
     @classmethod
-    def splits(cls, path, train=os.path.join('Reuters-21578', 'data', 'reuters_train.tsv'),
-               validation=os.path.join('Reuters-21578', 'data', 'reuters_validation.tsv'),
-               test=os.path.join('Reuters-21578', 'data','reuters_test.tsv'), **kwargs):
-        return super(Reuters, cls).splits(
+    def splits(cls, path, train=os.path.join('IMDB', 'data', 'imdb_train.tsv'),
+               validation=os.path.join('IMDB', 'data', 'imdb_validation.tsv'),
+               test=os.path.join('IMDB', 'data', 'imdb_test.tsv'), **kwargs):
+        return super(IMDB, cls).splits(
             path, train=train, validation=validation, test=test,
             format='tsv', fields=[('label', cls.LABEL_FIELD), ('text', cls.TEXT_FIELD)]
         )
@@ -92,7 +69,7 @@ class Reuters(TabularDataset):
                                      sort_within_batch=True, device=device)
 
 
-class ReutersCharQuantized(Reuters):
+class IMDBCharQuantized(IMDB):
     ALPHABET = dict(map(lambda t: (t[1], t[0]), enumerate(list("""abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}"""))))
     TEXT_FIELD = Field(sequential=False, use_vocab=False, batch_first=True, preprocessing=char_quantize)
 
@@ -109,6 +86,6 @@ class ReutersCharQuantized(Reuters):
         return BucketIterator.splits((train, val, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
 
 
-class ReutersHierarchical(Reuters):
+class IMDBHierarchical(IMDB):
     NESTING_FIELD = Field(batch_first=True, tokenize=clean_string)
     TEXT_FIELD = NestedField(NESTING_FIELD, tokenize=split_sents)

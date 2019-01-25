@@ -27,6 +27,8 @@ class TrainerFactory(object):
         'twitterurl': PIT2015Trainer,
         'Reuters': ReutersTrainer,
         'AAPD': ReutersTrainer,
+        'IMDB': ReutersTrainer,
+        'Yelp2014': ReutersTrainer,
         'snli': SNLITrainer,
         'sts2014': STS2014Trainer,
         'quora': QuoraTrainer

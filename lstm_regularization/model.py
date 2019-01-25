@@ -17,8 +17,9 @@ class LSTMBaseline(nn.Module):
         self.has_bottleneck_layer = config.bottleneck_layer
         self.mode = config.mode
         self.TAR = config.TAR
+        self.AR = config.AR
         self.beta_ema = config.beta_ema  ## Temporal averaging
-        self.wdrop = config.wdrop ## WEight dropping
+        self.wdrop = config.wdrop ## Weight dropping
         self.embed_droprate = config.embed_droprate ## Embedding dropout 
 
         input_channel = 1
@@ -83,11 +84,12 @@ class LSTMBaseline(nn.Module):
         x = self.dropout(x)
         if self.has_bottleneck_layer:
             x = F.relu(self.fc1(x))
-            if self.TAR:
+            # x = self.dropout(x)
+            if self.TAR or self.AR:
                 return self.fc2(x), rnn_outs.permute(1,0,2)
             return self.fc2(x)
         else:
-            if self.TAR:
+            if self.TAR or self.AR:
                 return self.fc1(x), rnn_outs.permute(1,0,2)
             return self.fc1(x)
 

@@ -12,7 +12,9 @@ from common.train import TrainerFactory
 from datasets.sst import SST1
 from datasets.sst import SST2
 from datasets.reuters import Reuters
+from datasets.imdb import IMDB
 from datasets.aapd import AAPD
+from datasets.yelp2014 import Yelp2014
 from lstm_baseline.args import get_args
 from lstm_baseline.model import LSTMBaseline
 
@@ -47,12 +49,13 @@ def get_logger():
     return logger
 
 
-def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device):
+def evaluate_dataset(split_name, dataset_cls, model, embedding, loader, batch_size, device, single_label):
     saved_model_evaluator = EvaluatorFactory.get_evaluator(dataset_cls, model, embedding, loader, batch_size, device)
+    saved_model_evaluator.single_label = single_label
     scores, metric_names = saved_model_evaluator.get_scores()
-    logger.info('Evaluation metrics for {}'.format(split_name))
-    logger.info('\t'.join([' '] + metric_names))
-    logger.info('\t'.join([split_name] + list(map(str, scores))))
+    print('Evaluation metrics for', split_name)
+    print(metric_names)
+    print(scores)
 
 
 if __name__ == '__main__':
@@ -78,7 +81,9 @@ if __name__ == '__main__':
         'SST-1': SST1,
         'SST-2': SST2,
         'Reuters': Reuters,
-        'AAPD': AAPD
+        'AAPD': AAPD,
+        'IMDB': IMDB,
+        'Yelp2014': Yelp2014
     }
 
     if args.dataset not in dataset_map:
@@ -118,6 +123,9 @@ if __name__ == '__main__':
         train_evaluator = EvaluatorFactory.get_evaluator(dataset_map[args.dataset], model, None, train_iter, args.batch_size, args.gpu)
         test_evaluator = EvaluatorFactory.get_evaluator(dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu)
         dev_evaluator = EvaluatorFactory.get_evaluator(dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu)
+        train_evaluator.single_label = args.single_label
+        test_evaluator.single_label = args.single_label
+        dev_evaluator.single_label = args.single_label
 
     trainer_config = {
         'optimizer': optimizer,
@@ -126,7 +134,8 @@ if __name__ == '__main__':
         'dev_log_interval': args.dev_every,
         'patience': args.patience,
         'model_outfile': args.save_path,   # actually a directory, using model_outfile to conform to Trainer naming convention
-        'logger': logger
+        'logger': logger,
+        'single_label': args.single_label
     }
     trainer = TrainerFactory.get_trainer(args.dataset, model, None, train_iter, trainer_config, train_evaluator, test_evaluator, dev_evaluator)
 
@@ -139,9 +148,9 @@ if __name__ == '__main__':
             model = torch.load(args.trained_model, map_location=lambda storage, location: storage)
 
     # Calculate dev and test metrics
-    model.load_state_dict(torch.load(trainer.snapshot_path))
+    model = torch.load(trainer.snapshot_path)
     if args.dataset not in dataset_map:
         raise ValueError('Unrecognized dataset')
     else:
-        evaluate_dataset('dev', dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu)
-        evaluate_dataset('test', dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu)
+        evaluate_dataset('dev', dataset_map[args.dataset], model, None, dev_iter, args.batch_size, args.gpu, args.single_label)
+        evaluate_dataset('test', dataset_map[args.dataset], model, None, test_iter, args.batch_size, args.gpu, args.single_label)
