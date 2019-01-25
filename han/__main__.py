@@ -2,8 +2,8 @@ from copy import deepcopy
 import logging
 import random
 
-from sklearn import metrics
 import numpy as np
+from sklearn import metrics
 import torch
 import torch.nn.functional as F
 import torch.onnx

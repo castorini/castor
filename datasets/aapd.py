@@ -78,5 +78,5 @@ class AAPDCharQuantized(AAPD):
         return BucketIterator.splits((train, val, test), batch_size=batch_size, repeat=False, shuffle=shuffle, device=device)
 
 class AAPDHierarchical(AAPD):
-    In_FIELD = Field(batch_first=True, tokenize=clean_string)
-    TEXT_FIELD = NestedField(In_FIELD, tokenize=split_sents)
+    NESTING_FIELD = Field(batch_first=True, tokenize=clean_string)
+    TEXT_FIELD = NestedField(NESTING_FIELD, tokenize=split_sents)

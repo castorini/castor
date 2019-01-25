@@ -110,5 +110,5 @@ class ReutersCharQuantized(Reuters):
 
 
 class ReutersHierarchical(Reuters):
-    In_FIELD = Field(batch_first=True, tokenize=clean_string)
-    TEXT_FIELD = NestedField(In_FIELD, tokenize=split_sents)
+    NESTING_FIELD = Field(batch_first=True, tokenize=clean_string)
+    TEXT_FIELD = NestedField(NESTING_FIELD, tokenize=split_sents)
