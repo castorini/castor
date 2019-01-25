@@ -12,9 +12,9 @@ from char_cnn.model import CharCNN
 from common.evaluation import EvaluatorFactory
 from common.train import TrainerFactory
 from datasets.aapd import AAPDCharQuantized as AAPD
-from datasets.yelp2014 import Yelp2014CharQuantized as Yelp2014
 from datasets.imdb import IMDBCharQuantized as IMDB
 from datasets.reuters import ReutersCharQuantized as Reuters
+from datasets.yelp2014 import Yelp2014CharQuantized as Yelp2014
 
 
 
