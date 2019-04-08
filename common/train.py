@@ -4,7 +4,6 @@ from .trainers.trecqa_trainer import TRECQATrainer
 from .trainers.wikiqa_trainer import WikiQATrainer
 from .trainers.pit2015_trainer import PIT2015Trainer
 from .trainers.sst_trainer import SSTTrainer
-from .trainers.reuters_trainer import ReutersTrainer
 from .trainers.snli_trainer import SNLITrainer
 from .trainers.sts2014_trainer import STS2014Trainer
 from .trainers.quora_trainer import QuoraTrainer
@@ -25,10 +24,6 @@ class TrainerFactory(object):
         'wikiqa': WikiQATrainer,
         'pit2015': PIT2015Trainer,
         'twitterurl': PIT2015Trainer,
-        'Reuters': ReutersTrainer,
-        'AAPD': ReutersTrainer,
-        'IMDB': ReutersTrainer,
-        'Yelp2014': ReutersTrainer,
         'snli': SNLITrainer,
         'sts2014': STS2014Trainer,
         'quora': QuoraTrainer
