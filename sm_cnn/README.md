@@ -12,12 +12,6 @@ Your repository root should be in your `PYTHONPATH` environment variable:
 export PYTHONPATH=$(pwd)
 ```
 
-To create the dataset:
-```bash
-cd Castor/sm_cnn/
-./create_dataset.sh
-```
-
 We use `trec_eval` for evaluation:
 
 ```bash
@@ -39,7 +33,7 @@ You can train the SM model for the 4 following configurations:
 To train on GPU 0 with static configuration:
 
 ```bash
-python train.py --mode static --gpu 0
+python train.py --mode static --device 0
 ```
 
 NB: pass `--no_cuda` to use CPU

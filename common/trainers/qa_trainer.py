@@ -15,10 +15,13 @@ class QATrainer(Trainer):
         for batch_idx, batch in enumerate(self.train_loader):
             self.optimizer.zero_grad()
 
-            # Select embedding
-            sent1, sent2 = self.get_sentence_embeddings(batch)
+            if hasattr(self.model, 'skip_embedding_lookup') and self.model.skip_embedding_lookup:
+                output = self.model(batch.sentence_1, batch.sentence_2, batch.ext_feats, batch.dataset.word_to_doc_cnt, batch.sentence_1_raw, batch.sentence_2_raw)
+            else:
+                # Select embedding
+                sent1, sent2 = self.get_sentence_embeddings(batch)
+                output = self.model(sent1, sent2, batch.ext_feats, batch.dataset.word_to_doc_cnt, batch.sentence_1_raw, batch.sentence_2_raw)
 
-            output = self.model(sent1, sent2, batch.ext_feats, batch.dataset.word_to_doc_cnt, batch.sentence_1_raw, batch.sentence_2_raw)
             loss = F.nll_loss(output, batch.label, size_average=False)
             total_loss += loss.item()
             loss.backward()

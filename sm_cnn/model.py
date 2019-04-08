@@ -1,17 +1,20 @@
+import numpy as np
 import torch
 import torch.nn as nn
-
 import torch.nn.functional as F
+import torch
 
-class SmPlusPlus(nn.Module):
+class SMCNN(nn.Module):
     def __init__(self, config):
-        super(SmPlusPlus, self).__init__()
+        super(SMCNN, self).__init__()
         output_channel = config.output_channel
         questions_num = config.questions_num
         answers_num = config.answers_num
-        words_dim = config.words_dim
+        words_dim = config.word_vectors_dim
         filter_width = config.filter_width
         self.mode = config.mode
+        self.arch = 'smcnn'
+        self.skip_embedding_lookup = True
 
         n_classes = config.target_class
         ext_feats_size = 4
@@ -43,7 +46,7 @@ class SmPlusPlus(nn.Module):
         dim = tensor.size()
         return tensor.view(dim[0], 1, dim[1], dim[2])
 
-    def forward(self, x_question, x_answer, x_ext):
+    def forward(self, x_question, x_answer, x_ext, word_to_doc_count=None, raw_sent1=None, raw_sent2=None):
         if self.mode == 'rand':
             question = self._unsqueeze(self.question_embed(x_question))
             answer = self._unsqueeze(self.answer_embed(x_answer)) # (batch, 1, sent_len, embed_dim)
